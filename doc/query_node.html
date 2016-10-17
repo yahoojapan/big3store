@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module query_node</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module query_node</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This module provides functions commonly shared by query node  
+modules.
+<p>Copyright © 2015-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+
+<p><b>Version:</b> 0.3</p>
+<p><b>Introduced in:</b> September, 2015</p>
+<p><b>Authors:</b> Iztok Savnik (<a href="mailto:iztok.savnik@famnit.upr.si"><tt>iztok.savnik@famnit.upr.si</tt></a>).</p>
+<p><b>See also:</b> <a href="b3s.html">b3s</a>, <a href="join_query_node.html">join_query_node</a>, <a href="query_tree.html">query_tree</a>, <a href="tp_query_node.html">tp_query_node</a>.</p>
+
+<h2><a name="description">Description</a></h2><p>This module provides functions commonly shared by query node  
+modules.</p>
+ 
+  <h3><a name="streams">streams</a></h3>
+ 
+  <p>(LINK: <a href="#streams">streams</a>)</p>
+ 
+  <p>The main function of query_node module is to provide interface to streams of  
+graphs implemented among the pairs of query nodes. Each pair of query nodes  
+is connected by N empty messages where N is defined by environment variable  
+*num_of_empty_msgs*. Empty messages functions as wagons of circular  
+"train" forming the stream between the query nodes. Child query node is allowed  
+to send a block to its parent only if it holds an empty message.</p>
+ 
+  <p>The streams are implemented by means of process queues holding messages from  
+other processes. The query node queues have two modes of work. Firstly, they  
+serve as standard queues where one can add the message to the beginning and  
+take it from the end of queue.  
+Secondly, data messages include blocks composed of lists of graphs. To be  
+able to process graphs in iterative manner, either when adding graphs to queue,  
+or, when retrieving graphs from queue, we need graph-based interface.</p>
+ 
+  <p>Graphs added to queue are first gathered in buffers which are moved into the queue  
+when full. From the opposite side, when reading from queue, data messages are  
+first unpacked and the block  
+is stored into the buffer. Graphs can then be iterativelly pulled from buffer---if  
+buffer is empty then another message is retrieved from queue.</p>
+ 
+  <h3><a name="operations_select_and_project">operations select and project</a></h3>
+ 
+  <p>(LINK: <a href="#operations_select_and_project">operations select and project</a>)</p>
+ 
+  <p>Each query node that is a part of some graph-pattern includes in addition to its  
+primary operation as, for example, join or triple-pattern access methods,  
+also the fuctionality of select and project operations.</p>
+ 
+  Module query_node provides the functions for processing operations project and select.
+  The function <a href="#project_prepare-1"><code>project_prepare/1</code></a> prepares the environment
+  for processing projections using function <a href="#eval_project-1"><code>eval_project/1</code></a>. The function
+  <a href="#eval_select-1"><code>eval_select/1</code></a> evaluates selection on current graph.
+ 
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-qn_attribute">qn_attribute()</a></h3>
+<p><tt>qn_attribute() = <a href="#type-qn_subject">qn_subject()</a> | <a href="#type-qn_predicate">qn_predicate()</a> | <a href="#type-qn_object">qn_object()</a></tt></p>
+<p>Query node attribute is triple component, S, P or O.
+ </p>
+
+<h3 class="typedecl"><a name="type-qn_binary_operation">qn_binary_operation()</a></h3>
+<p><tt>qn_binary_operation() = equal | less | lesseq | greater | greatereq | land | lor</tt></p>
+
+
+<h3 class="typedecl"><a name="type-qn_graph">qn_graph()</a></h3>
+<p><tt>qn_graph() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+<p>Mapping form <a href="#type-qn_id"><code>qn_id()</code></a>
+  to <a href="#type-qn_triple"><code>qn_triple()</code></a>.
+ </p>
+
+<h3 class="typedecl"><a name="type-qn_graph_pattern">qn_graph_pattern()</a></h3>
+<p><tt>qn_graph_pattern() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+<p>Mapping form <a href="#type-qn_id"><code>qn_id()</code></a> to <a href="#type-qn_triple_pattern"><code>qn_triple_pattern()</code></a>.
+ </p>
+
+<h3 class="typedecl"><a name="type-qn_id">qn_id()</a></h3>
+<p><tt>qn_id() = string() | integer()</tt></p>
+
+
+<h3 class="typedecl"><a name="type-qn_object">qn_object()</a></h3>
+<p><tt>qn_object() = string() | {<a href="#type-qn_object_value">qn_object_value()</a>, <a href="#type-qn_object_type">qn_object_type()</a>}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-qn_object_type">qn_object_type()</a></h3>
+<p><tt>qn_object_type() = undefined | code | integer | real | datetime | string</tt></p>
+
+
+<h3 class="typedecl"><a name="type-qn_object_value">qn_object_value()</a></h3>
+<p><tt>qn_object_value() = integer() | <a href="#type-real">real()</a> | <a href="calendar.html#type-datetime">calendar:datetime()</a> | string()</tt></p>
+
+
+<h3 class="typedecl"><a name="type-qn_opsym">qn_opsym()</a></h3>
+<p><tt>qn_opsym() = tp | join | leftjoin | union | differ</tt></p>
+<p>Atom describing query operation can be one of presented.
+ </p>
+
+<h3 class="typedecl"><a name="type-qn_predicate">qn_predicate()</a></h3>
+<p><tt>qn_predicate() = string() | integer()</tt></p>
+
+
+<h3 class="typedecl"><a name="type-qn_project_list">qn_project_list()</a></h3>
+<p><tt>qn_project_list() = [<a href="#type-qn_var">qn_var()</a>]</tt></p>
+<p>Project list is a list of variables to be eliminated from graph pattern.
+ </p>
+
+<h3 class="typedecl"><a name="type-qn_select_predicate">qn_select_predicate()</a></h3>
+<p><tt>qn_select_predicate() = {<a href="#type-qn_unary_operation">qn_unary_operation()</a>, <a href="#type-qn_term">qn_term()</a> | <a href="#type-qn_select_predicate">qn_select_predicate()</a>} | {<a href="#type-qn_term">qn_term()</a> | <a href="#type-qn_select_predicate">qn_select_predicate()</a>, <a href="#type-qn_binary_operation">qn_binary_operation()</a>, <a href="#type-qn_term">qn_term()</a> | <a href="#type-qn_select_predicate">qn_select_predicate()</a>}</tt></p>
+<p>Selection predicate is an expression composed of pairs of terms connected
+  by some operation.
+ </p>
+
+<h3 class="typedecl"><a name="type-qn_side">qn_side()</a></h3>
+<p><tt>qn_side() = outer | inner</tt></p>
+<p>The side of query node is its position in relation to parent.
+ </p>
+
+<h3 class="typedecl"><a name="type-qn_subject">qn_subject()</a></h3>
+<p><tt>qn_subject() = string() | integer()</tt></p>
+
+
+<h3 class="typedecl"><a name="type-qn_term">qn_term()</a></h3>
+<p><tt>qn_term() = <a href="#type-qn_var">qn_var()</a> | string()</tt></p>
+<p>Query term used for expressing selection conditions.
+ </p>
+
+<h3 class="typedecl"><a name="type-qn_triple">qn_triple()</a></h3>
+<p><tt>qn_triple() = {<a href="#type-qn_id">qn_id()</a>, <a href="#type-qn_subject">qn_subject()</a>, <a href="#type-qn_predicate">qn_predicate()</a>, <a href="#type-qn_object">qn_object()</a>}</tt></p>
+<p>Every triple has id. Graphs can be represented as sets of triples. Relationship
+  between triples and graphs is therefore expressed by means of reification, i.e., sets
+  of triples relating triple ids with graphs. This model allows for expressing
+  semantically more complex relationships, as, for instance, in CycL.
+ </p>
+
+<h3 class="typedecl"><a name="type-qn_triple_pattern">qn_triple_pattern()</a></h3>
+<p><tt>qn_triple_pattern() = {<a href="#type-qn_id">qn_id()</a> | <a href="#type-qn_var">qn_var()</a>, <a href="#type-qn_subject">qn_subject()</a> | <a href="#type-qn_var">qn_var()</a>, <a href="#type-qn_predicate">qn_predicate()</a> | <a href="#type-qn_var">qn_var()</a>, <a href="#type-qn_object">qn_object()</a> | <a href="#type-qn_var">qn_var()</a>}</tt></p>
+<p>Triple patterns are triples (with id) that include variables. Type of triple
+  pattern follows format of qn_triple().
+ </p>
+
+<h3 class="typedecl"><a name="type-qn_unary_operation">qn_unary_operation()</a></h3>
+<p><tt>qn_unary_operation() = lnot</tt></p>
+
+
+<h3 class="typedecl"><a name="type-qn_var">qn_var()</a></h3>
+<p><tt>qn_var() = string()</tt></p>
+
+
+<h3 class="typedecl"><a name="type-qn_var_val_map">qn_var_val_map()</a></h3>
+<p><tt>qn_var_val_map() = [{<a href="#type-qn_var">qn_var()</a>, string()}]</tt></p>
+<p>Mapping between
+  variables and their values.
+ </p>
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#difference_lists-2">difference_lists/2*</a></td><td>Compute difference between two lists.</td></tr>
+<tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#eval_attribute-1">eval_attribute/1*</a></td><td>Convert an instance of qn_attribute() to a value of a given Erlang type.</td></tr>
+<tr><td valign="top"><a href="#eval_project-1">eval_project/1*</a></td><td>Compute projection of graph by retaining values of varables specified  
+by the list PL and deleting triples that do not contain these variables.</td></tr>
+<tr><td valign="top"><a href="#eval_select-1">eval_select/1*</a></td><td>Compute selection predicate on a given graph Graph and return  
+result as boolean().</td></tr>
+<tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#project_prepare-1">project_prepare/1*</a></td><td>From list of variables that are retained in the projected graph  
+prepare list of variables to be projected out.</td></tr>
+<tr><td valign="top"><a href="#qn_test_-0">qn_test_/0*</a></td><td>Unit tests.</td></tr>
+<tr><td valign="top"><a href="#qt_site-1">qt_site/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#queue_block_end-1">queue_block_end/1*</a></td><td>Determines if Queue buffer holding a block of triples is at the end.</td></tr>
+<tr><td valign="top"><a href="#queue_empty-1">queue_empty/1*</a></td><td>Check if (input|output) queue Queue is empty and return results as boolean().</td></tr>
+<tr><td valign="top"><a href="#queue_flush-1">queue_flush/1*</a></td><td>Flush output queue.</td></tr>
+<tr><td valign="top"><a href="#queue_get-1">queue_get/1*</a></td><td>Read a triple Triple from input queue Queue.</td></tr>
+<tr><td valign="top"><a href="#queue_init-3">queue_init/3*</a></td><td>Initializes queue Queue of type Type by setting appropriate PD entries.</td></tr>
+<tr><td valign="top"><a href="#queue_prepared-1">queue_prepared/1*</a></td><td>Check if queue Queue incudes messages prepared to be read from or
+  sent to remote process.</td></tr>
+<tr><td valign="top"><a href="#queue_put-2">queue_put/2*</a></td><td>Write graph Graph to output queue Queue.</td></tr>
+<tr><td valign="top"><a href="#queue_read-1">queue_read/1*</a></td><td>Read message from queue Queue.</td></tr>
+<tr><td valign="top"><a href="#queue_t1-0">queue_t1/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#queue_test_-0">queue_test_/0*</a></td><td>Test function for join query node queues.</td></tr>
+<tr><td valign="top"><a href="#queue_write-2">queue_write/2*</a></td><td>Write message Msg to queue named Queue.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="difference_lists-2">difference_lists/2 *</a></h3>
+<div class="spec">
+<p><tt>difference_lists(L, L1) -&gt; any()</tt></p>
+</div><p><p>Compute difference between two lists.</p>
+ 
+  difference_list(L1,L2) -&gt; L3</p>
+
+<h3 class="function"><a name="error_msg-3">error_msg/3 *</a></h3>
+<div class="spec">
+<p><tt>error_msg(FunName::atom(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
+</div><p>Report an error issue to the error_logger.
+ </p>
+
+<h3 class="function"><a name="eval_attribute-1">eval_attribute/1 *</a></h3>
+<div class="spec">
+<p><tt>eval_attribute(Atr) -&gt; any()</tt></p>
+</div><p><p>Convert an instance of qn_attribute() to a value of a given Erlang type.</p>
+ 
+  eval_attribute(Atr::qn_attribute())) -&gt; string() | integer() | real() | timedate()</p>
+
+<h3 class="function"><a name="eval_project-1">eval_project/1 *</a></h3>
+<div class="spec">
+<p><tt>eval_project(X1) -&gt; any()</tt></p>
+</div><p><p>Compute projection of graph by retaining values of varables specified  
+by the list PL and deleting triples that do not contain these variables.</p>
+ 
+  eval_project(PL::query_tree:qn_project_list()) -&gt; maps:map()
+ </p>
+
+<h3 class="function"><a name="eval_select-1">eval_select/1 *</a></h3>
+<div class="spec">
+<p><tt>eval_select(S) -&gt; any()</tt></p>
+</div><p><p>Compute selection predicate on a given graph Graph and return  
+result as boolean(). Predicate is parameter SelectPred.</p>
+ 
+  eval_select(SelectPred::query_tree:qn_select_predicate()) -&gt; any()
+ </p>
+
+<h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
+<div class="spec">
+<p><tt>info_msg(FunName::atom(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="project_prepare-1">project_prepare/1 *</a></h3>
+<div class="spec">
+<p><tt>project_prepare(PL) -&gt; any()</tt></p>
+</div><p><p>From list of variables that are retained in the projected graph  
+prepare list of variables to be projected out. Input list of variables  
+is the parameter PL. Output is stored as PD entry project_out.</p>
+ 
+  project_prepare(PL::query_tree:qn_project_list()) -&gt; ok|fail
+ </p>
+
+<h3 class="function"><a name="qn_test_-0">qn_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>qn_test_() -&gt; any()</tt></p>
+</div><p>Unit tests.
+ </p>
+
+<h3 class="function"><a name="qt_site-1">qt_site/1 *</a></h3>
+<div class="spec">
+<p><tt>qt_site(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="queue_block_end-1">queue_block_end/1 *</a></h3>
+<div class="spec">
+<p><tt>queue_block_end(Queue::atom()) -&gt; boolean()</tt><br></p>
+</div><p>Determines if Queue buffer holding a block of triples is at the end.
+  Method queue_get() must be called before calling queue_block_end()
+  to intialize the queue buffer.
+ </p>
+
+<h3 class="function"><a name="queue_empty-1">queue_empty/1 *</a></h3>
+<div class="spec">
+<p><tt>queue_empty(Queue::atom()) -&gt; boolean()</tt><br></p>
+</div><p>Check if (input|output) queue Queue is empty and return results as boolean().
+  Input queue is empty then there are no more triples in the queue.
+  Output queue is empty if there are no complete messages prepared to be sent.
+ </p>
+
+<h3 class="function"><a name="queue_flush-1">queue_flush/1 *</a></h3>
+<div class="spec">
+<p><tt>queue_flush(Queue::atom()) -&gt; ok | fail</tt><br></p>
+</div><p>Flush output queue. Output queue buffer is packed and inserted into
+  queue. Queue buffer is set empty and counter of graphs in the buffer is
+  set to 0.
+ </p>
+
+<h3 class="function"><a name="queue_get-1">queue_get/1 *</a></h3>
+<div class="spec">
+<p><tt>queue_get(Queue::atom()) -&gt; {From::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>, Graph::<a href="#type-qn_graph">qn_graph()</a>} | fail</tt><br></p>
+</div><p>Read a triple Triple from input queue Queue. Input queue is a queue
+  that receives data messages from some other process. Data messages include
+  lists of Graphs. Access to graphs received from some other process is
+  provided by using function queue_get() and queue_put(). There are two
+  input queues in join query node: from_outer and from_inner.
+ </p>
+
+<h3 class="function"><a name="queue_init-3">queue_init/3 *</a></h3>
+<div class="spec">
+<p><tt>queue_init(Queue::atom(), Type::(input | output | none), MsgHead::atom()) -&gt; ok | fail</tt><br></p>
+</div><p><p>Initializes queue Queue of type Type by setting appropriate PD entries.</p>
+ 
+  <p>Input queues accept queue_write() to enter complete messages including blocks  
+of elements into the queue, and, queue_get() to retrieve elements that  
+constitute message blocks.</p>
+ 
+  <p>Output queues use queue_put() to enter elements into the queue, and,  
+queue_read() to read messages including blocks of elements from queue.</p>
+ 
+  Queues of type plain are simple queues that use queue_write() to enter messages
+  and queue_read() to retrieve messages from queues.
+ </p>
+
+<h3 class="function"><a name="queue_prepared-1">queue_prepared/1 *</a></h3>
+<div class="spec">
+<p><tt>queue_prepared(Queue::atom()) -&gt; boolean()</tt><br></p>
+</div><p>Check if queue Queue incudes messages prepared to be read from or
+  sent to remote process.
+ </p>
+
+<h3 class="function"><a name="queue_put-2">queue_put/2 *</a></h3>
+<div class="spec">
+<p><tt>queue_put(Queue::atom(), Graph::<a href="#type-qn_graph">qn_graph()</a>) -&gt; ok | fail</tt><br></p>
+</div><p>Write graph Graph to output queue Queue. Output queue of query
+  nodes is a queue that gathers graphs from local process and then
+  packs list of graphs into messages to be sent to remote process.
+  There is only one output queue of join query node: to_parent.
+ </p>
+
+<h3 class="function"><a name="queue_read-1">queue_read/1 *</a></h3>
+<div class="spec">
+<p><tt>queue_read(Queue::atom()) -&gt; Msg::term()</tt><br></p>
+</div><p>Read message from queue Queue. Functions queue_write and
+  queue_read deal with queue of messages solely, and do not touch individual
+  graphs that can be included in messages.
+ </p>
+
+<h3 class="function"><a name="queue_t1-0">queue_t1/0 *</a></h3>
+<div class="spec">
+<p><tt>queue_t1() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="queue_test_-0">queue_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>queue_test_() -&gt; any()</tt></p>
+</div><p>Test function for join query node queues.
+ </p>
+
+<h3 class="function"><a name="queue_write-2">queue_write/2 *</a></h3>
+<div class="spec">
+<p><tt>queue_write(Queue::atom(), Msg::term()) -&gt; ok</tt><br></p>
+</div><p>Write message Msg to queue named Queue. Functions queue_write and
+  queue_read deal with queue of messages solevly, and do not touch individual
+  graphs that can be included in messages.
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Aug 25 2016, 11:26:42.</i></p>
+</body>
+</html>

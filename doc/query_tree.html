@@ -1,0 +1,707 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module query_tree</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module query_tree</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Query tree module implements process that serves as front-end  
+of query tree represented as tree of inter-connected processes running  
+on array of servers.
+<p>Copyright © 2014-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+
+<p><b>Version:</b> 0.3</p>
+<p><b>Introduced in:</b> May, 2014</p>
+<p><b>Authors:</b> Iztok Savnik (<a href="mailto:iztok.savnik@famnit.upr.si"><tt>iztok.savnik@famnit.upr.si</tt></a>), Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
+
+<h2><a name="description">Description</a></h2><p>Query tree module implements process that serves as front-end  
+of query tree represented as tree of inter-connected processes running  
+on array of servers. Message start initializes query tree. Message  
+eval starts evaluation of query tree.</p>
+ 
+  <p>Query tree process determines the location of each query node in terms  
+of column and row in array of servers. Each query node is executed on  
+location determined by query tree process.  
+Firstly, the column of query node is computed by using distribution function  
+that translates triple-pattern to columns in array of servers.  
+Secondly, rows in given columns are selected dynamically based on  
+CPU load of servers in columns.</p>
+ 
+  <p>Query of type qt_query() presented to query tree process as parameter of  
+message start is converted into tree data structure stored as process  
+dictionary entry query_tree. First element of  
+list representing qt_query() is triple-pattern of the left-most query  
+node. Last element of list is triple-pattern of the upper-most and  
+right-most query node. All other triple-patterns are placed as inner  
+query nodes in order between left-most and upper-right-most.</p>
+ 
+ 
+  <table bgcolor="lemonchiffon">
+  <tr><th>Section Index</th></tr>
+  <tr><td><a href="#property_list">property list</a></td></tr>
+  <tr><td><a href="#type_qt_query_node()">type qt_query_node()</a></td></tr>
+  <tr><td><a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></td></tr>
+  <tr><td><a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></td></tr>
+  <tr><td><a href="#existent_shortcuts">existent shortcuts</a></td></tr>
+  </table>
+ 
+  <h3><a name="property_list">property list</a></h3>
+ 
+  <p>(LINK: <a href="#property_list">property list</a>)</p>
+ 
+  <p>The gen_server process uses following properties holded by <a href="#type-qt_state"><code>qt_state()</code></a>.</p>
+ 
+  <table border="3">
+  <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+ 
+  <tr> <td>created</td> <td>boolean()</td> <td>true denotes that
+  process dictionary was created and used. false denotes that
+  completely new process.</td> </tr>
+ 
+  <tr> <td>tree_id</td> <td>string()</td> <td>query tree identifier</td> </tr>
+ 
+  <tr> <td>state</td> <td>atom()</td> <td>active | inactive | eos</td> </tr>
+ 
+  <tr> <td>gp</td> <td>maps:map()</td> <td>graph pattern of query tree
+  represented as mapping from <code><a href="query_node.html#type-qn_id">query_node:qn_id()</a></code> to
+  <code><a href="query_node.html#type-qn_triple_pattern">query_node:qn_triple_pattern()</a></code></td> </tr>
+ 
+  <tr> <td>node_pids</td> <td>maps:map()</td> <td>mapping from <code><a href="query_node.html#type-qn_id">query_node:qn_id()</a></code> to
+  [<code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code>]</td> </tr>
+ 
+  <tr> <td>self</td> <td><a href="node_state.html#type-ns_pid"><code>node_state:ns_pid()</code></a></td> <td>location of query
+  tree process</td> </tr>
+ 
+  <tr> <td>session_id</td> <td>integer()</td> <td>session identifier</td> </tr>
+ 
+  <tr> <td>invoker</td> <td><a href="node_state.html#type-ns_pid"><code>node_state:ns_pid()</code></a></td> <td>location of parent query
+  node process</td> </tr>
+ 
+  <tr> <td>query</td> <td><a href="#type-qt_query"><code>qt_query()</code></a></td> <td>current
+  query in flat form</td> </tr>
+ 
+  <tr> <td>query_tree</td> <td><a href="#type-qt_query_node"><code>qt_query_node()</code></a></td> <td>query
+  tree of input query of type <a href="#qt_query()">qt_query()</a></td> </tr>
+ 
+  <tr> <td>roots</td> <td><a href="node_state.html#type-ns_pid_list"><code>node_state:ns_pid_list()</code></a></td> <td>long pids of
+  roots of query tree</td> </tr>
+ 
+  <tr> <td>queue_result</td> <td>queue()</td> <td>temporary storage for
+  results of query evaluation</td> </tr>
+ 
+  <tr> <td>b3s_state_pid</td> <td><code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code></td>
+  <td>process id of b3s_state.</td> </tr>
+ 
+  <tr> <td>benchmark_task_pid</td> <td><code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code></td> <td>process id of executing benchmark
+  task.</td> </tr>
+ 
+  <tr> <td>result_record_max</td> <td>integer()</td> <td>Max number
+  of records to be reported.</td> </tr>
+ 
+  <tr> <td>pid_start</td> <td>maps:map()</td> <td>mapping from term()
+  to erlang:timestamp().</td> </tr>
+ 
+  <tr> <td>pid_elapse</td> <td>maps:map()</td> <td>mapping from
+  term() to integer() (in microseconds).</td> </tr>
+ 
+  <tr> <td>result_freq</td> <td>maps:map()</td> <td>mapping from
+  pid() to integer().</td> </tr>
+ 
+  <tr> <td>start_date_time</td> <td>calendar:datetime()</td>
+  <td>started date and time of the process.</td> </tr>
+ 
+  </table>
+ 
+ 
+  <h3><a name="type_qt_query_node()">type qt_query_node()</a></h3>
+ 
+  <p>(LINK: <a href="#type_qt_query_node()">type qt_query_node()</a>)</p>
+ 
+  <p>Query tree used for internal representation of query is based on maps.  
+Each node of query tree is a map storing all properties of query node to  
+be run as (tp|join)_query_node process. The properties of query nodes  
+follow structure and properties of (tp|join)_query_node processes.</p>
+ 
+  <table border="3">
+  <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+ 
+  <tr> <td>node_id</td> <td>string()</td> <td>query node identifier</td> </tr>
+ 
+  <tr> <td>state</td> <td>atom()</td> <td>active | inactive | eos</td> </tr>
+ 
+  <tr> <td>gp</td> <td>maps:map()</td> <td>graph pattern of query tree
+  represented as mapping from <code><a href="query_node.html#type-qn_id">query_node:qn_id()</a></code> to
+  <code><a href="query_node.html#type-qn_triple_pattern">query_node:qn_triple_pattern()</a></code></td> </tr>
+ 
+  <tr> <td>select_pred</td> <td><a href="query_node.html#type-qn_select_predicate"><code>query_node:qn_select_predicate()</code></a></td>
+  <td>select expression represented as abstract syntax tree including
+  operations on strings, booleans and integers</td> </tr>
+ 
+  <tr> <td>project_list</td> <td><a href="query_node.html#type-qn_project_list"><code>query_node:qn_project_list()</code></a></td>
+  <td>list of variables to be included in graphs computed in
+  a given query node. Only the triples that include values of specified
+  variables are included in result. </td> </tr>
+ 
+  <tr> <td>location</td> <td>[<a href="node_state.html#type-ns_pid"><code>node_state:ns_pid()</code></a>]</td>
+  <td>list of locations of query node processes</td> </tr>
+ 
+  <tr> <td>invoker</td> <td><a href="node_state.html#type-ns_pid"><code>node_state:ns_pid()</code></a></td> <td>process id of parent query
+  node</td> </tr>
+ 
+  <tr> <td>query</td> <td><a href="#type-qt_query"><code>qt_query()</code></a></td> <td>query represented
+  by given qt_query_node()</td> </tr>
+ 
+  <tr> <td>outer</td> <td>qt_query_node()</td> <td>outer sub-tree of
+  given query tree</td> </tr>
+ 
+  <tr> <td>inner</td> <td>qt_query_node()</td> <td>inner sub-tree of
+  given query tree</td> </tr>
+ 
+  <tr> <td>outer_pids</td> <td>[<a href="node_state.html#type-ns_pid"><code>node_state:ns_pid()</code></a>]</td> <td>process ids of outer
+  children query nodes</td> </tr>
+ 
+  <tr> <td>inner_pids</td> <td>[<a href="node_state.html#type-ns_pid"><code>node_state:ns_pid()</code></a>]</td> <td>process ids of inner
+  children query nodes</td> </tr>
+ 
+  <tr> <td>join_vars</td> <td>[<a href="query_node.html#type-qn_var"><code>query_node:qn_var()</code></a>]</td> <td>list of
+  variables used for joining</td> </tr>
+ 
+  <tr> <td>var_pos</td> <td>maps:map()</td> <td>mapping from <a href="query_node.html#type-qn_var"><code>query_node:qn_var()</code></a> to <a href="join_query_node.html#type-jqn_var_position"><code>join_query_node:jqn_var_position()</code></a>;
+  general form, to be used only in gp</td> </tr>
+ 
+  <tr> <td>vars</td> <td>maps:map()</td> <td>mapping from <a href="query_node.html#type-qn_var"><code>query_node:qn_var()</code></a> to integer()</td>; to be used only in tp</tr>
+ 
+  <tr> <td>var_values</td> <td>maps:map()</td> <td>mapping from
+  <a href="query_node.html#type-qn_var"><code>query_node:qn_var()</code></a> to string() (not used)</td> </tr>
+ 
+  <tr> <td>inner_outer</td> <td>inner | outer</td> <td>Position to
+  its parent query node.</td> </tr>
+ 
+  </table>
+ 
+ 
+  <h3><a name="handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>)</p>
+ 
+  <h4><a name="{start,_Query,_Self,_Invoker,_TreeId,_SessionId}">{start, Query, Self, Invoker, TreeId, SessionId}</a></h4>
+ 
+  <p>Initialization of join query node process. All parameters are
+  saved to process dictionary.
+  (LINK: <a href="#{start,_Query,_Self,_Invoker,_TreeId,_SessionId_}">{start, Query, Self, Invoker, TreeId, SessionId }</a>)</p>
+ 
+  <p>Query is <a href="#type-qt_query"><code>qt_query()</code></a>, Self is <a href="node_state.html#type-ns_pid"><code>node_state:ns_pid()</code></a>. Invoker is <a href="node_state.html#type-ns_pid"><code>node_state:ns_pid()</code></a>, TreeId is integer(), SessionId is integer().
+  This request is implemented by <a href="#hc_start-5"><code>hc_start/5</code></a>.</p>
+ 
+  <h4><a name="{eval}">{eval}</a></h4>
+ 
+  <p>Initiate evaluation of query tree by sending root query node message eval.
+  After sending eval, N empty messages are sent to the root of query tree, and
+  results are expected in the form of data_outer messages from root of
+  query tree.
+  (LINK: <a href="#{eval}">{eval}</a>)</p>
+ 
+  <p>This request is implemented by <a href="#hc_eval-0"><code>hc_eval/0</code></a>.</p>
+ 
+  <h4><a name="{get,_Name}">{get, Name}</a></h4>
+ 
+  <p>Return the value of specified property name. If Name=all then return complete
+  process dictionary. Variable Name is an atom().
+  (LINK: <a href="#{get_property,_Name}">{get_property, Name}</a>).</p>
+ 
+  <p>This request is implemented by <a href="#hc_get_property-1"><code>hc_get_property/1</code></a>.</p>
+ 
+  <h3><a name="handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a>)</p>
+ 
+  <h4><a name="{data_outer,_Pid,_Graph}">{data_outer, Pid, Graph}</a></h4>
+ 
+  <p>Root of query tree is sending results to its initiator query_tree process.
+  Each graph received from root of query tree as data_outer message
+  is presented to caller process.
+  (LINK: <a href="#{data_outer,_Pid,_Graph}">{data_outer, Pid, Graph}</a>)</p>
+ 
+  <p>Pid is node_state:ns_pid() and Graph is query_node:qn_graph().
+  This request is implemented by <a href="#hc_data_outer-3"><code>hc_data_outer/3</code></a>.</p>
+ 
+  <h3><a name="existent_shortcuts">existent shortcuts</a></h3>
+ 
+  <p>(LINK: <a href="#existent_shortcuts">existent shortcuts</a>)</p>
+ 
+  <p>Existent shortcuts in the implementation of query_tree.</p>
+ 
+  <table border="3">
+  <tr><th>Num</th><th>Function</th><th>Description</th></tr>
+ 
+  <tr> <td>1.</td> <td>hc_start()</td> <td>We suppose that prop_clm returns
+  single column for a given predicate. However, data structures as well as
+  modules tp_query_node and join_query_node are implemented to support
+  accessing multiple tp_query_node access methods.</td> </tr>
+ 
+  <tr> <td>2.</td> <td>hc_start()</td> <td>Load balancing among the row nodes
+  for a given column is currently implemented by selecting random row. Next
+  version will dynamically gather statistics about running query nodes and
+  relations among sessions and locations of runnning query nodes.</td> </tr>
+ 
+  </table>
+ 
+ 
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-qt_bin_query">qt_bin_query()</a></h3>
+<p><tt>qt_bin_query() = {<a href="query_node.html#type-qn_opsyn">query_node:qn_opsyn()</a>, <a href="#type-qt_query">qt_query()</a>, <a href="#type-qt_query">qt_query()</a>, <a href="query_node.html#type-qn_select_predicate">query_node:qn_select_predicate()</a>, <a href="query_node.html#type-qn_project_list">query_node:qn_project_list()</a>}</tt></p>
+<p>Binary query is built from algebra operations join, leftjoin, union
+  or differ. Query operation is described by tuple including operation symbol,
+  two input streams of graphs which are results of qt_query()
+  select predicate and project list.
+ </p>
+
+<h3 class="typedecl"><a name="type-qt_query">qt_query()</a></h3>
+<p><tt>qt_query() = <a href="#type-qt_bin_query">qt_bin_query()</a> | <a href="#type-qt_tp_query">qt_tp_query()</a></tt></p>
+<p>Query provided to query_tree module is built from algebra operations
+  tp (triple pattern), join, leftjoin, union or differ.
+  Query is either binary query or triple pattern query.
+ </p>
+
+<h3 class="typedecl"><a name="type-qt_query_node">qt_query_node()</a></h3>
+<p><tt>qt_query_node() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+<p><p>Query node is represented as map
+  storing properties that resemble those of {tp|join}_query_node
+  processes. All properties must be prepared before creating the
+  tree of {tp|join}_query_node processes.
+  qt_query_node() map is presented in detail in
+  <a href="#Type_qt_query_node()">Type qt_query_node()</a>.</p>
+ 
+ </p>
+
+<h3 class="typedecl"><a name="type-qt_state">qt_state()</a></h3>
+<p><tt>qt_state() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+<p>Map
+  structure that manages properties for operating the gen_server
+  process.
+ </p>
+
+<h3 class="typedecl"><a name="type-qt_tp_query">qt_tp_query()</a></h3>
+<p><tt>qt_tp_query() = {<a href="query_node.html#type-qn_opsyn">query_node:qn_opsyn()</a>, <a href="query_node.html#type-qn_triple_pattern">query_node:qn_triple_pattern()</a>, <a href="query_node.html#type-qn_select_predicate">query_node:qn_select_predicate()</a>, <a href="query_node.html#type-qn_project_list">query_node:qn_project_list()</a>}</tt></p>
+<p>Triple pattern query describes access method defined for given
+  triple pattern, select predicate and project list.
+ </p>
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#child_spec-1">child_spec/1</a></td><td>Return child spec for this process.</td></tr>
+<tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Process code change action.</td></tr>
+<tr><td valign="top"><a href="#dT-1">dT/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#dTML-1">dTML/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#dTMLL-1">dTMLL/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#dTMap-1">dTMap/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#eI-1">eI/1</a></td><td>Encoding / decoding string, triple and triple pattern.</td></tr>
+<tr><td valign="top"><a href="#eT-1">eT/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#eTP-1">eTP/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#encode_select_expr-1">encode_select_expr/1*</a></td><td>Encodes all URIs and strings (identifiers) in selection predicate
+  of a given query node to integer keys.</td></tr>
+<tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#generate_long_qnid-1">generate_long_qnid/1*</a></td><td>Generate long ID of query node.</td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle synchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
+<tr><td valign="top"><a href="#hc_data_outer-2">hc_data_outer/2*</a></td><td>Processing data message from root of query tree process.</td></tr>
+<tr><td valign="top"><a href="#hc_eval-0">hc_eval/0*</a></td><td>Initiate evaluation of query tree by sending eval message
+  to all roots of query tree.</td></tr>
+<tr><td valign="top"><a href="#hc_eval_test_-0">hc_eval_test_/0*</a></td><td>Test function for hc_eval.</td></tr>
+<tr><td valign="top"><a href="#hc_read-0">hc_read/0*</a></td><td>Processing request to read block from resut queue and send it back to caller.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_start-5">hc_start/5*</a></td><td>Initialize query tree process.</td></tr>
+<tr><td valign="top"><a href="#hc_start_test_-0">hc_start_test_/0*</a></td><td>Test function for hc_start.</td></tr>
+<tr><td valign="top"><a href="#hcet_site-1">hcet_site/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_t01-0">hcet_t01/0*</a></td><td>Test 01 of hc_eval.</td></tr>
+<tr><td valign="top"><a href="#hcet_t01h-0">hcet_t01h/0*</a></td><td>Test 01h of hc_eval.</td></tr>
+<tr><td valign="top"><a href="#hcet_t02-0">hcet_t02/0*</a></td><td>Test 01 of hc_eval.</td></tr>
+<tr><td valign="top"><a href="#hcet_t03-0">hcet_t03/0*</a></td><td>Test 03 of hc_eval.</td></tr>
+<tr><td valign="top"><a href="#hcs_comp_qn_entries-2">hcs_comp_qn_entries/2*</a></td><td>Given input query tree:  
+1) construct graph patterns for all query nodes and store it in gp     
+(single triple pattern is also stored in gp to simplify merging gp-s);  
+2) extract variables and their positions in triple patterns to construct     
+var_pos; and  
+3) extract common variables of joins and prepare join_vars.</td></tr>
+<tr><td valign="top"><a href="#hcs_create_processes-2">hcs_create_processes/2*</a></td><td>For each query node of QT select optimal rows of columns
+  associated with given predicate of triple-pattern.</td></tr>
+<tr><td valign="top"><a href="#hcs_ids_to_nodes-3">hcs_ids_to_nodes/3*</a></td><td>Define ids for each node of parameter query tree QT.</td></tr>
+<tr><td valign="top"><a href="#hcs_query_to_tree-1">hcs_query_to_tree/1*</a></td><td>Transforms graph pattern expressed as list of triple patterns  
+(stored in PD as 'query')  
+to left-deep query tree.</td></tr>
+<tr><td valign="top"><a href="#hcs_select_nodes-2">hcs_select_nodes/2*</a></td><td>Select concrete node (data server) for a given root of query  
+tree.</td></tr>
+<tr><td valign="top"><a href="#hcs_start_query-2">hcs_start_query/2*</a></td><td>Initiate all query nodes of a given query tree by sending
+  start message beginning with leafs and progressing towards the
+  root of query tree.</td></tr>
+<tr><td valign="top"><a href="#hcssn_predicate_based-2">hcssn_predicate_based/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcssn_random-2">hcssn_random/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcst_log_cnt-1">hcst_log_cnt/1*</a></td><td>Log wathever you get as parameter and count number of entries.</td></tr>
+<tr><td valign="top"><a href="#hcst_site-1">hcst_site/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcst_t01-0">hcst_t01/0*</a></td><td>Test 01 of hc_start.</td></tr>
+<tr><td valign="top"><a href="#hcst_t02-0">hcst_t02/0*</a></td><td>Test 02 of hc_start.</td></tr>
+<tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a join_query_node process.</td></tr>
+<tr><td valign="top"><a href="#intersect_lists-2">intersect_lists/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#load_queue_result-1">load_queue_result/1*</a></td><td>Load queue_result from query tree QT and check if there is end_of_stram
+  at the end of queue.</td></tr>
+<tr><td valign="top"><a href="#merge_maps-2">merge_maps/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#send_N_empty-1">send_N_empty/1*</a></td><td>Send N empty messages to Pid.</td></tr>
+<tr><td valign="top"><a href="#send_N_empty_1-2">send_N_empty_1/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#spawn_process-2">spawn_process/2</a></td><td>Spawns process which is an instance of given module with given identifier
+  at given node.</td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="child_spec-1">child_spec/1</a></h3>
+<div class="spec">
+<p><tt>child_spec(Id::atom()) -&gt; <a href="supervisor.html#type-child_spec">supervisor:child_spec()</a></tt><br></p>
+</div><p>Return child spec for this process. It can be used in
+  supervisor:init/0 callback implementation.
+ </p>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><tt>code_change(OldVsn::term(), State::<a href="#type-qt_state">qt_state()</a>, Extra::term()) -&gt; {ok, <a href="#type-qt_state">qt_state()</a>}</tt><br></p>
+</div><p>Process code change action.
+ </p>
+
+<h3 class="function"><a name="dT-1">dT/1</a></h3>
+<div class="spec">
+<p><tt>dT(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="dTML-1">dTML/1</a></h3>
+<div class="spec">
+<p><tt>dTML(L) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="dTMLL-1">dTMLL/1</a></h3>
+<div class="spec">
+<p><tt>dTMLL(L) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="dTMap-1">dTMap/1</a></h3>
+<div class="spec">
+<p><tt>dTMap(M) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="eI-1">eI/1</a></h3>
+<div class="spec">
+<p><tt>eI(X) -&gt; any()</tt></p>
+</div><p>Encoding / decoding string, triple and triple pattern.
+ </p>
+
+<h3 class="function"><a name="eT-1">eT/1</a></h3>
+<div class="spec">
+<p><tt>eT(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="eTP-1">eTP/1</a></h3>
+<div class="spec">
+<p><tt>eTP(X) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="encode_select_expr-1">encode_select_expr/1 *</a></h3>
+<div class="spec">
+<p><tt>encode_select_expr(SP::<a href="query_node.html#type-qn_select_predicate">query_node:qn_select_predicate()</a>) -&gt; <a href="query_node.html#type-qn_select_predicate">query_node:qn_select_predicate()</a></tt><br></p>
+</div><p>Encodes all URIs and strings (identifiers) in selection predicate
+  of a given query node to integer keys. Identifiers of selection predicate
+  parse tree are encoded in left depth-first order, recursively.
+ </p>
+
+<h3 class="function"><a name="error_msg-3">error_msg/3 *</a></h3>
+<div class="spec">
+<p><tt>error_msg(FunName::atom(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
+</div><p>Report an error issue to the error_logger.
+ </p>
+
+<h3 class="function"><a name="generate_long_qnid-1">generate_long_qnid/1 *</a></h3>
+<div class="spec">
+<p><tt>generate_long_qnid(Id) -&gt; any()</tt></p>
+</div><p>Generate long ID of query node.
+ </p>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><tt>handle_call(Request::term(), From::{pid(), term()}, State::<a href="#type-qt_state">qt_state()</a>) -&gt; {reply, term(), <a href="#type-qt_state">qt_state()</a>}</tt><br></p>
+</div><p>Handle synchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><tt>handle_cast(Request::term(), State::<a href="#type-qt_state">qt_state()</a>) -&gt; {noreply, <a href="#type-qt_state">qt_state()</a>}</tt><br></p>
+</div><p>Handle asynchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><tt>handle_info(Info::term(), State::<a href="#type-qt_state">qt_state()</a>) -&gt; {noreply, <a href="#type-qt_state">qt_state()</a>}</tt><br></p>
+</div><p>Handle exceptional query requests.
+ </p>
+
+<h3 class="function"><a name="hc_data_outer-2">hc_data_outer/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_data_outer(From::pid(), Block::[<a href="query_node.html#type-qn_graph">query_node:qn_graph()</a>]) -&gt; ok</tt><br></p>
+</div><p>Processing data message from root of query tree process.
+ </p>
+
+<h3 class="function"><a name="hc_eval-0">hc_eval/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_eval() -&gt; ok</tt><br></p>
+</div><p>Initiate evaluation of query tree by sending eval message
+  to all roots of query tree. In the case query has
+  two or more triple patterns then query tree has one root.
+  In the case that query is one triple pattern then query can
+  have more roots.
+ </p>
+
+<h3 class="function"><a name="hc_eval_test_-0">hc_eval_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_eval_test_() -&gt; any()</tt></p>
+</div><p>Test function for hc_eval.
+ </p>
+
+<h3 class="function"><a name="hc_read-0">hc_read/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_read() -&gt; [<a href="query_node.html#type-qn_graph">query_node:qn_graph()</a>] | end_of_stream</tt><br></p>
+</div><p>Processing request to read block from resut queue and send it back to caller.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd-2">hc_restore_pd/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd(X1::[{atom(), term()}] | undefined, State::<a href="#type-qt_state">qt_state()</a>) -&gt; ok</tt><br></p>
+</div><p>Restore process dictionaries from state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd_1-1">hc_restore_pd_1/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd_1(T) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_save_pd-0">hc_save_pd/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_save_pd() -&gt; <a href="#type-qt_state">qt_state()</a></tt><br></p>
+</div><p>Save process all dictionary contents into state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_start-5">hc_start/5 *</a></h3>
+<div class="spec">
+<p><tt>hc_start(Query::<a href="#type-qt_query">qt_query()</a>, Self::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>, Invoker::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>, TreeId::integer(), SessionId::integer()) -&gt; ok</tt><br></p>
+</div><p>Initialize query tree process. Convert query represented as a list of
+  triple-patterns, filters, option statements and set operations into query tree
+  data structure internal to query_tree process. Determine node locations for
+  triple-patterns, and other operations. Compute all properties needed to construct
+  query tree by means of distributed processes. Finally, create processes for
+  query nodes and send start messages to all processes comprising query.
+ </p>
+
+<h3 class="function"><a name="hc_start_test_-0">hc_start_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_start_test_() -&gt; any()</tt></p>
+</div><p>Test function for hc_start.
+ </p>
+
+<h3 class="function"><a name="hcet_site-1">hcet_site/1 *</a></h3>
+<div class="spec">
+<p><tt>hcet_site(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_t01-0">hcet_t01/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_t01() -&gt; any()</tt></p>
+</div><p>Test 01 of hc_eval.
+ </p>
+
+<h3 class="function"><a name="hcet_t01h-0">hcet_t01h/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_t01h() -&gt; any()</tt></p>
+</div><p>Test 01h of hc_eval.
+ </p>
+
+<h3 class="function"><a name="hcet_t02-0">hcet_t02/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_t02() -&gt; any()</tt></p>
+</div><p>Test 01 of hc_eval.
+ </p>
+
+<h3 class="function"><a name="hcet_t03-0">hcet_t03/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_t03() -&gt; any()</tt></p>
+</div><p>Test 03 of hc_eval.
+ </p>
+
+<h3 class="function"><a name="hcs_comp_qn_entries-2">hcs_comp_qn_entries/2 *</a></h3>
+<div class="spec">
+<p><tt>hcs_comp_qn_entries(OP, QT) -&gt; any()</tt></p>
+</div><p><p>Given input query tree:  
+1) construct graph patterns for all query nodes and store it in gp     
+(single triple pattern is also stored in gp to simplify merging gp-s);  
+2) extract variables and their positions in triple patterns to construct     
+var_pos; and  
+3) extract common variables of joins and prepare join_vars.</p>
+ 
+  hcs_comp_qn_entries(Type::atom(), QT::qt_query_node()) -&gt; qt_query_node()
+ </p>
+
+<h3 class="function"><a name="hcs_create_processes-2">hcs_create_processes/2 *</a></h3>
+<div class="spec">
+<p><tt>hcs_create_processes(OP::<a href="query_node.html#type-qn_opsym">query_node:qn_opsym()</a>, QT::<a href="#type-qt_query_node">qt_query_node()</a>) -&gt; <a href="#type-qt_query_node">qt_query_node()</a></tt><br></p>
+</div><p>For each query node of QT select optimal rows of columns
+  associated with given predicate of triple-pattern. Spawn query node
+  at selected node. Join node is assigned to one of it's inner
+  query nodes. Therefore, current physical structure of query tree is
+  pipeline.
+ </p>
+
+<h3 class="function"><a name="hcs_ids_to_nodes-3">hcs_ids_to_nodes/3 *</a></h3>
+<div class="spec">
+<p><tt>hcs_ids_to_nodes(OP::tp | gp, QT::<a href="#type-qt_query_node">qt_query_node()</a>, N::integer()) -&gt; <a href="#type-qt_query_node">qt_query_node()</a></tt><br></p>
+</div><p>Define ids for each node of parameter query tree QT. Nodes are
+  numbered in depth-first post-order i.e. number first left sub-tree, then
+  number right sub-tree, and, finally root, recursively.
+ </p>
+
+<h3 class="function"><a name="hcs_query_to_tree-1">hcs_query_to_tree/1 *</a></h3>
+<div class="spec">
+<p><tt>hcs_query_to_tree(X1::<a href="#type-qt_query">qt_query()</a>) -&gt; <a href="#type-qt_query_node">qt_query_node()</a></tt><br></p>
+</div><p><p>Transforms graph pattern expressed as list of triple patterns  
+(stored in PD as 'query')  
+to left-deep query tree. The last triple pattern in the list is  
+transformed to the leftmost outer triple pattern in tree. The first  
+triple pattern in list is transformed to the highest inner triple  
+pattern of query tree.</p>
+ 
+  <i>Note</i>: triple patterns will be augmented with projection and
+  selection lists attached to particular triple pattern.
+ </p>
+
+<h3 class="function"><a name="hcs_select_nodes-2">hcs_select_nodes/2 *</a></h3>
+<div class="spec">
+<p><tt>hcs_select_nodes(OP::gp | tp, QT::qt_query_node) -&gt; [node()]</tt><br></p>
+</div><p><p>Select concrete node (data server) for a given root of query  
+tree. Given triple-pattern query node  
+determine first column and then choose the row by means of selected  
+scheduler.</p>
+ 
+  <p>Available schedulers are: random, optimal based on  
+statistical data about executed query nodes (not yet), and affinity  
+scheduler with two levels of scheduling tending to use the same  
+nodes (data servers) for query nodes from the same session (not yet).</p>
+ 
+  Join query node is, for the time being, executed at the
+  same node as inner triple-pattern.
+ </p>
+
+<h3 class="function"><a name="hcs_start_query-2">hcs_start_query/2 *</a></h3>
+<div class="spec">
+<p><tt>hcs_start_query(Type::atom(), QT::<a href="#type-qt_query_node">qt_query_node()</a>) -&gt; ok</tt><br></p>
+</div><p>Initiate all query nodes of a given query tree by sending
+  start message beginning with leafs and progressing towards the
+  root of query tree.
+ </p>
+
+<h3 class="function"><a name="hcssn_predicate_based-2">hcssn_predicate_based/2 *</a></h3>
+<div class="spec">
+<p><tt>hcssn_predicate_based(X1, QT) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcssn_random-2">hcssn_random/2 *</a></h3>
+<div class="spec">
+<p><tt>hcssn_random(X1, TP) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcst_log_cnt-1">hcst_log_cnt/1 *</a></h3>
+<div class="spec">
+<p><tt>hcst_log_cnt(Val) -&gt; any()</tt></p>
+</div><p>Log wathever you get as parameter and count number of entries.
+ </p>
+
+<h3 class="function"><a name="hcst_site-1">hcst_site/1 *</a></h3>
+<div class="spec">
+<p><tt>hcst_site(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcst_t01-0">hcst_t01/0 *</a></h3>
+<div class="spec">
+<p><tt>hcst_t01() -&gt; any()</tt></p>
+</div><p>Test 01 of hc_start.
+ </p>
+
+<h3 class="function"><a name="hcst_t02-0">hcst_t02/0 *</a></h3>
+<div class="spec">
+<p><tt>hcst_t02() -&gt; any()</tt></p>
+</div><p>Test 02 of hc_start.
+ </p>
+
+<h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
+<div class="spec">
+<p><tt>info_msg(FunName::atom(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(X1::[]) -&gt; {ok, <a href="#type-qt_state">qt_state()</a>}</tt><br></p>
+</div><p>Initialize a join_query_node process.
+ </p>
+
+<h3 class="function"><a name="intersect_lists-2">intersect_lists/2 *</a></h3>
+<div class="spec">
+<p><tt>intersect_lists(L1, L) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="load_queue_result-1">load_queue_result/1 *</a></h3>
+<div class="spec">
+<p><tt>load_queue_result(QT) -&gt; any()</tt></p>
+</div><p>Load queue_result from query tree QT and check if there is end_of_stram
+  at the end of queue. If end_of_stream found return complete queue queue_result,
+  otherwise wait for more data.
+ </p>
+
+<h3 class="function"><a name="merge_maps-2">merge_maps/2 *</a></h3>
+<div class="spec">
+<p><tt>merge_maps(M1, M2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="send_N_empty-1">send_N_empty/1 *</a></h3>
+<div class="spec">
+<p><tt>send_N_empty(Pid) -&gt; any()</tt></p>
+</div><p>Send N empty messages to Pid. N is stored in config.
+ </p>
+
+<h3 class="function"><a name="send_N_empty_1-2">send_N_empty_1/2 *</a></h3>
+<div class="spec">
+<p><tt>send_N_empty_1(Pid, N) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="spawn_process-2">spawn_process/2</a></h3>
+<div class="spec">
+<p><tt>spawn_process(Id::atom(), Node::node()) -&gt; <a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></tt><br></p>
+</div><p>Spawns process which is an instance of given module with given identifier
+  at given node.
+ </p>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason::term(), State::<a href="#type-qt_state">qt_state()</a>) -&gt; none()</tt><br></p>
+</div><p>Process termination.
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Aug 25 2016, 11:26:42.</i></p>
+</body>
+</html>

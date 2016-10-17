@@ -1,0 +1,1000 @@
+	<London_Reefs>	<hasLatitude>	"8.85"^^<degrees>	8.85
+	<London_Reefs>	<hasLongitude>	"112.53333"^^<degrees>	112.53333
+	<London_Reefs>	rdfs:subClassOf	<geoclass_reefs>	
+	<London_Reefs>	<hasGeonamesEntityId>	"1879967"	
+	<London_Reefs>	rdfs:label	"Recif Ouest du London"	
+	<London_Reefs>	rdfs:label	"Recifs London"	
+	<London_Reefs>	rdfs:label	"Récif Ouest du London"	
+	<London_Reefs>	rdfs:label	"Récifs London"	
+	<London_Reefs>	rdfs:label	"Yin-ch'ing Ch'un-chiao"	
+	<London_Reefs>	rdfs:label	"Yinqing Qunjiao"	
+	<Peru-Chile_Trench>	<hasLatitude>	"-26.00005"^^<degrees>	-26.00005
+	<Peru-Chile_Trench>	<hasLongitude>	"-73.99997"^^<degrees>	-73.99997
+	<Peru-Chile_Trench>	rdfs:subClassOf	<geoclass_trench>	
+	<Peru-Chile_Trench>	<hasGeonamesEntityId>	"6363106"	
+	<Peru-Chile_Trench>	rdfs:label	"Arica Trench"	
+	<Peru-Chile_Trench>	rdfs:label	"Atacama Graben"	
+	<Peru-Chile_Trench>	rdfs:label	"Atacama Trench"	
+	<Peru-Chile_Trench>	rdfs:label	"Atakamskij Zhelob"	
+	<Peru-Chile_Trench>	rdfs:label	"Atakamskiy Zhelob"	
+	<Peru-Chile_Trench>	rdfs:label	"Chile Trench"	
+	<Peru-Chile_Trench>	rdfs:label	"Chile-Peru Trench"	
+	<Peru-Chile_Trench>	rdfs:label	"Peruansko-Chilijskij Zhelob"	
+	<Peru-Chile_Trench>	rdfs:label	"Peruansko-Chiliyskiy Zhelob"	
+	<Peru-Chile_Trench>	rdfs:label	"South American Trench"	
+	<Peru-Chile_Trench>	rdfs:label	"Атакамский Желоб"	
+	<Peru-Chile_Trench>	rdfs:label	"Перуанско-Чилийский Желоб"	
+	<Nishi_Kaitoku_Seamount>	<hasLatitude>	"25.89996"^^<degrees>	25.89996
+	<Nishi_Kaitoku_Seamount>	<hasLongitude>	"139.80006"^^<degrees>	139.80006
+	<Nishi_Kaitoku_Seamount>	rdfs:subClassOf	<geoclass_seamount>	
+	<Nishi_Kaitoku_Seamount>	<hasGeonamesEntityId>	"6698751"	
+	<Nishi_Kaitoku_Seamount>	rdfs:label	"Nishikaitoku-kaizan"	
+	<Nishi_Kaitoku_Seamount>	rdfs:label	"Nisi-Kaitoku Seamount"	
+	<Nishi_Kaitoku_Seamount>	rdfs:label	"xi hai de hai shan"	
+	<Nishi_Kaitoku_Seamount>	rdfs:label	"西海徳海山"	
+	<Jenkins_Canyon>	<hasLatitude>	"-62.44994"^^<degrees>	-62.44994
+	<Jenkins_Canyon>	<hasLongitude>	"-61.19998"^^<degrees>	-61.19998
+	<Jenkins_Canyon>	rdfs:subClassOf	<geoclass_canyon>	
+	<Jenkins_Canyon>	<hasGeonamesEntityId>	"6821057"	
+	<Demer_Canyon>	<hasLatitude>	"-62.33328"^^<degrees>	-62.33328
+	<Demer_Canyon>	<hasLongitude>	"-60.63337"^^<degrees>	-60.63337
+	<Demer_Canyon>	rdfs:subClassOf	<geoclass_canyon>	
+	<Demer_Canyon>	<hasGeonamesEntityId>	"6821058"	
+	<Anyongbok_Seamount>	<hasLatitude>	"37.49989"^^<degrees>	37.49989
+	<Anyongbok_Seamount>	<hasLongitude>	"131.34985"^^<degrees>	131.34985
+	<Anyongbok_Seamount>	rdfs:subClassOf	<geoclass_seamount>	
+	<Anyongbok_Seamount>	<hasGeonamesEntityId>	"6822232"	
+	<Anyongbok_Seamount>	rdfs:label	"Anyongbok-haesan"	
+	<Anyongbok_Seamount>	rdfs:label	"an-yongboghaesan"	
+	<Anyongbok_Seamount>	rdfs:label	"안용복해산"	
+	<Kangwŏn_Plateau>	<hasLatitude>	"37.99999"^^<degrees>	37.99999
+	<Kangwŏn_Plateau>	<hasLongitude>	"130.0"^^<degrees>	130.0
+	<Kangwŏn_Plateau>	rdfs:subClassOf	<geoclass_plateau>	
+	<Kangwŏn_Plateau>	<hasGeonamesEntityId>	"6822233"	
+	<Kangwŏn_Plateau>	rdfs:label	"Gangwon Plateau"	
+	<Kangwŏn_Plateau>	rdfs:label	"Gangwon-daeji"	
+	<Kangwŏn_Plateau>	rdfs:label	"Kangwon-daeji"	
+	<Kangwŏn_Plateau>	rdfs:label	"gang-wondaeji"	
+	<Kangwŏn_Plateau>	rdfs:label	"강원대지"	
+	<Hup’o_Bank>	<hasLatitude>	"36.66666"^^<degrees>	36.66666
+	<Hup’o_Bank>	<hasLongitude>	"129.75002"^^<degrees>	129.75002
+	<Hup’o_Bank>	rdfs:subClassOf	<geoclass_bank>	
+	<Hup’o_Bank>	<hasGeonamesEntityId>	"6822234"	
+	<Hup’o_Bank>	rdfs:label	"Hup'o-t'oe"	
+	<Hup’o_Bank>	rdfs:label	"Hupo-doe"	
+	<Hup’o_Bank>	rdfs:label	"hupotoe"	
+	<Hup’o_Bank>	rdfs:label	"후포퇴"	
+	<Igyuwŏn_Ridge>	<hasLatitude>	"37.54998"^^<degrees>	37.54998
+	<Igyuwŏn_Ridge>	<hasLongitude>	"130.45001"^^<degrees>	130.45001
+	<Igyuwŏn_Ridge>	rdfs:subClassOf	<geoclass_ridge>	
+	<Igyuwŏn_Ridge>	<hasGeonamesEntityId>	"6823174"	
+	<Igyuwŏn_Ridge>	rdfs:label	"Igyuwon Seamount"	
+	<Igyuwŏn_Ridge>	rdfs:label	"Igyuwon-haesan"	
+	<Igyuwŏn_Ridge>	rdfs:label	"igyuwonhaesan"	
+	<Igyuwŏn_Ridge>	rdfs:label	"이규원해산"	
+	<Kiminu_Seamount>	<hasLatitude>	"37.39999"^^<degrees>	37.39999
+	<Kiminu_Seamount>	<hasLongitude>	"130.13342"^^<degrees>	130.13342
+	<Kiminu_Seamount>	rdfs:subClassOf	<geoclass_seamount>	
+	<Kiminu_Seamount>	<hasGeonamesEntityId>	"6823431"	
+	<Kiminu_Seamount>	rdfs:label	"Kiminu-haesan"	
+	<Kiminu_Seamount>	rdfs:label	"gim-in-uhaesan"	
+	<Kiminu_Seamount>	rdfs:label	"김인우해산"	
+	<Onnuri_Basin>	<hasLatitude>	"37.74999"^^<degrees>	37.74999
+	<Onnuri_Basin>	<hasLongitude>	"129.85"^^<degrees>	129.85
+	<Onnuri_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Onnuri_Basin>	<hasGeonamesEntityId>	"6823432"	
+	<Onnuri_Basin>	rdfs:label	"Onnuri-bunji"	
+	<Onnuri_Basin>	rdfs:label	"onnulibunji"	
+	<Onnuri_Basin>	rdfs:label	"온누리분지"	
+	<Saenal_Basin>	<hasLatitude>	"38.23332"^^<degrees>	38.23332
+	<Saenal_Basin>	<hasLongitude>	"130.41664"^^<degrees>	130.41664
+	<Saenal_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Saenal_Basin>	<hasGeonamesEntityId>	"6823433"	
+	<Saenal_Basin>	rdfs:label	"Saenal-bunji"	
+	<Saenal_Basin>	rdfs:label	"saenalbunji"	
+	<Saenal_Basin>	rdfs:label	"새날분지"	
+	<Usan_Escarpment>	<hasLatitude>	"38.13326"^^<degrees>	38.13326
+	<Usan_Escarpment>	<hasLongitude>	"130.84999"^^<degrees>	130.84999
+	<Usan_Escarpment>	rdfs:subClassOf	<geoclass_escarpment>	
+	<Usan_Escarpment>	<hasGeonamesEntityId>	"6823434"	
+	<Usan_Escarpment>	rdfs:label	"Usan-haejeojeolbyeok"	
+	<Usan_Escarpment>	rdfs:label	"Usan-haejojolbyok"	
+	<Usan_Escarpment>	rdfs:label	"Usan-haejŏjŏlbyŏk"	
+	<Usan_Escarpment>	rdfs:label	"usanhaejeojeolbyeog"	
+	<Usan_Escarpment>	rdfs:label	"우산해저절벽"	
+	<Usan_Trough>	<hasLatitude>	"38.16661"^^<degrees>	38.16661
+	<Usan_Trough>	<hasLongitude>	"130.66672"^^<degrees>	130.66672
+	<Usan_Trough>	rdfs:subClassOf	<geoclass_trough>	
+	<Usan_Trough>	<hasGeonamesEntityId>	"6823435"	
+	<Usan_Trough>	rdfs:label	"Usan-haegok"	
+	<Usan_Trough>	rdfs:label	"usanhaegog"	
+	<Usan_Trough>	rdfs:label	"우산해곡"	
+	<Peru_Trench>	<hasLatitude>	"-10.66668"^^<degrees>	-10.66668
+	<Peru_Trench>	<hasLongitude>	"-79.84998"^^<degrees>	-79.84998
+	<Peru_Trench>	rdfs:subClassOf	<geoclass_trench>	
+	<Peru_Trench>	<hasGeonamesEntityId>	"6823603"	
+	<Graf_Wilczek_Knoll>	<hasLatitude>	"-49.14991"^^<degrees>	-49.14991
+	<Graf_Wilczek_Knoll>	<hasLongitude>	"61.08333"^^<degrees>	61.08333
+	<Graf_Wilczek_Knoll>	rdfs:subClassOf	<geoclass_knoll>	
+	<Graf_Wilczek_Knoll>	<hasGeonamesEntityId>	"6823608"	
+	<IPY_Seamount>	<hasLatitude>	"-42.55"^^<degrees>	-42.55
+	<IPY_Seamount>	<hasLongitude>	"43.63333"^^<degrees>	43.63333
+	<IPY_Seamount>	rdfs:subClassOf	<geoclass_seamount>	
+	<IPY_Seamount>	<hasGeonamesEntityId>	"6823611"	
+	<Malahoff_Seamount>	<hasLatitude>	"18.19996"^^<degrees>	18.19996
+	<Malahoff_Seamount>	<hasLongitude>	"-157.45003"^^<degrees>	-157.45003
+	<Malahoff_Seamount>	rdfs:subClassOf	<geoclass_seamount>	
+	<Malahoff_Seamount>	<hasGeonamesEntityId>	"6823612"	
+	<Walker_Seamount>	<hasLatitude>	"18.09997"^^<degrees>	18.09997
+	<Walker_Seamount>	<hasLongitude>	"-158.21669"^^<degrees>	-158.21669
+	<Walker_Seamount>	rdfs:subClassOf	<geoclass_seamount>	
+	<Walker_Seamount>	<hasGeonamesEntityId>	"6823613"	
+	<Amami_Sankaku_Basin>	<hasLatitude>	"27.83343"^^<degrees>	27.83343
+	<Amami_Sankaku_Basin>	<hasLongitude>	"133.99995"^^<degrees>	133.99995
+	<Amami_Sankaku_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Amami_Sankaku_Basin>	<hasGeonamesEntityId>	"6823614"	
+	<Amami_Sankaku_Basin>	rdfs:label	"Amamisankaku-kaibon"	
+	<Amami_Sankaku_Basin>	rdfs:label	"yan mei san jiao hai pen"	
+	<Amami_Sankaku_Basin>	rdfs:label	"奄美三角海盆"	
+	<Okidaitō_Escarpment>	<hasLatitude>	"21.66664"^^<degrees>	21.66664
+	<Okidaitō_Escarpment>	<hasLongitude>	"131.75005"^^<degrees>	131.75005
+	<Okidaitō_Escarpment>	rdfs:subClassOf	<geoclass_escarpment>	
+	<Okidaitō_Escarpment>	<hasGeonamesEntityId>	"6823615"	
+	<Gordin_Guyot>	<hasLatitude>	"16.96664"^^<degrees>	16.96664
+	<Gordin_Guyot>	<hasLongitude>	"150.73332"^^<degrees>	150.73332
+	<Gordin_Guyot>	rdfs:subClassOf	<geoclass_tablemount>	
+	<Gordin_Guyot>	<hasGeonamesEntityId>	"6823616"	
+	<Skornyakova_Guyot>	<hasLatitude>	"15.86664"^^<degrees>	15.86664
+	<Skornyakova_Guyot>	<hasLongitude>	"149.88326"^^<degrees>	149.88326
+	<Skornyakova_Guyot>	rdfs:subClassOf	<geoclass_tablemount>	
+	<Skornyakova_Guyot>	<hasGeonamesEntityId>	"6823617"	
+	<Vulkanolog_Guyot>	<hasLatitude>	"17.98332"^^<degrees>	17.98332
+	<Vulkanolog_Guyot>	<hasLongitude>	"151.99995"^^<degrees>	151.99995
+	<Vulkanolog_Guyot>	rdfs:subClassOf	<geoclass_tablemount>	
+	<Vulkanolog_Guyot>	<hasGeonamesEntityId>	"6823618"	
+	<Zatonsky_Guyot>	<hasLatitude>	"12.76662"^^<degrees>	12.76662
+	<Zatonsky_Guyot>	<hasLongitude>	"157.83331"^^<degrees>	157.83331
+	<Zatonsky_Guyot>	rdfs:subClassOf	<geoclass_tablemount>	
+	<Zatonsky_Guyot>	<hasGeonamesEntityId>	"6823622"	
+	<Gorynych_Knolls>	<hasLatitude>	"77.89998"^^<degrees>	77.89998
+	<Gorynych_Knolls>	<hasLongitude>	"5.34998"^^<degrees>	5.34998
+	<Gorynych_Knolls>	rdfs:subClassOf	<geoclass_knolls>	
+	<Gorynych_Knolls>	<hasGeonamesEntityId>	"6823625"	
+	<Litvin_Seamount>	<hasLatitude>	"77.7"^^<degrees>	77.7
+	<Litvin_Seamount>	<hasLongitude>	"6.71667"^^<degrees>	6.71667
+	<Litvin_Seamount>	rdfs:subClassOf	<geoclass_seamount>	
+	<Litvin_Seamount>	<hasGeonamesEntityId>	"6823626"	
+	<Pogrebitsky_Seamount>	<hasLatitude>	"77.48328"^^<degrees>	77.48328
+	<Pogrebitsky_Seamount>	<hasLongitude>	"8.46674"^^<degrees>	8.46674
+	<Pogrebitsky_Seamount>	rdfs:subClassOf	<geoclass_seamount>	
+	<Pogrebitsky_Seamount>	<hasGeonamesEntityId>	"6823627"	
+	<Svyatogor_Ridge>	<hasLatitude>	"78.23332"^^<degrees>	78.23332
+	<Svyatogor_Ridge>	<hasLongitude>	"5.78335"^^<degrees>	5.78335
+	<Svyatogor_Ridge>	rdfs:subClassOf	<geoclass_ridge>	
+	<Svyatogor_Ridge>	<hasGeonamesEntityId>	"6823628"	
+	<Svyatogor_Ridge>	rdfs:label	"Svyatogor Rise"	
+	<Adare_Basin>	<hasLatitude>	"-70.99996"^^<degrees>	-70.99996
+	<Adare_Basin>	<hasLongitude>	"175.00005"^^<degrees>	175.00005
+	<Adare_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Adare_Basin>	<hasGeonamesEntityId>	"6823676"	
+	<Central_Basin>	<hasLatitude>	"-72.30004"^^<degrees>	-72.30004
+	<Central_Basin>	<hasLongitude>	"178.00006"^^<degrees>	178.00006
+	<Central_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Central_Basin>	<hasGeonamesEntityId>	"6823678"	
+	<Davey_Bank>	<hasLatitude>	"-76.05002"^^<degrees>	-76.05002
+	<Davey_Bank>	<hasLongitude>	"166.29996"^^<degrees>	166.29996
+	<Davey_Bank>	rdfs:subClassOf	<geoclass_bank>	
+	<Davey_Bank>	<hasGeonamesEntityId>	"6823679"	
+	<Minami_Okinawa_Escarpment>	<hasLatitude>	"22.49992"^^<degrees>	22.49992
+	<Minami_Okinawa_Escarpment>	<hasLongitude>	"129.41678"^^<degrees>	129.41678
+	<Minami_Okinawa_Escarpment>	rdfs:subClassOf	<geoclass_escarpment>	
+	<Minami_Okinawa_Escarpment>	<hasGeonamesEntityId>	"6825487"	
+	<Getsuyō_Seamount>	<hasLatitude>	"29.29995"^^<degrees>	29.29995
+	<Getsuyō_Seamount>	<hasLongitude>	"140.45007"^^<degrees>	140.45007
+	<Getsuyō_Seamount>	rdfs:subClassOf	<geoclass_seamount>	
+	<Getsuyō_Seamount>	<hasGeonamesEntityId>	"6843602"	
+	<Akhziv_Canyon>	<hasLatitude>	"33.08333"^^<degrees>	33.08333
+	<Akhziv_Canyon>	<hasLongitude>	"35.05"^^<degrees>	35.05
+	<Akhziv_Canyon>	rdfs:subClassOf	<geoclass_canyon>	
+	<Akhziv_Canyon>	<hasGeonamesEntityId>	"6957939"	
+	<Amery_Terrace>	<hasLatitude>	"25.95"^^<degrees>	25.95
+	<Amery_Terrace>	<hasLongitude>	"-91.7"^^<degrees>	-91.7
+	<Amery_Terrace>	rdfs:subClassOf	<geoclass_terrace>	
+	<Amery_Terrace>	<hasGeonamesEntityId>	"6957940"	
+	<Austin_Basin>	<hasLatitude>	"26.6"^^<degrees>	26.6
+	<Austin_Basin>	<hasLongitude>	"-94.96667"^^<degrees>	-94.96667
+	<Austin_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Austin_Basin>	<hasGeonamesEntityId>	"6957941"	
+	<Bates_Hill>	<hasLatitude>	"26.21667"^^<degrees>	26.21667
+	<Bates_Hill>	<hasLongitude>	"-95.15"^^<degrees>	-95.15
+	<Bates_Hill>	rdfs:subClassOf	<geoclass_hill>	
+	<Bates_Hill>	<hasGeonamesEntityId>	"6957942"	
+	<Berryhill_Basin>	<hasLatitude>	"27.3"^^<degrees>	27.3
+	<Berryhill_Basin>	<hasLongitude>	"-93.53333"^^<degrees>	-93.53333
+	<Berryhill_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Berryhill_Basin>	<hasGeonamesEntityId>	"6957943"	
+	<Bowie_Basin>	<hasLatitude>	"27.55"^^<degrees>	27.55
+	<Bowie_Basin>	<hasLongitude>	"-94.16667"^^<degrees>	-94.16667
+	<Bowie_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Bowie_Basin>	<hasGeonamesEntityId>	"6957944"	
+	<Braunstein_Mound>	<hasLatitude>	"27.1"^^<degrees>	27.1
+	<Braunstein_Mound>	<hasLongitude>	"-93.91667"^^<degrees>	-93.91667
+	<Braunstein_Mound>	rdfs:subClassOf	<geoclass_mound>	
+	<Braunstein_Mound>	<hasGeonamesEntityId>	"6957945"	
+	<Caddo_Mound>	<hasLatitude>	"27.66667"^^<degrees>	27.66667
+	<Caddo_Mound>	<hasLongitude>	"-92.05"^^<degrees>	-92.05
+	<Caddo_Mound>	rdfs:subClassOf	<geoclass_mound>	
+	<Caddo_Mound>	<hasGeonamesEntityId>	"6957946"	
+	<Carancahua_Mound>	<hasLatitude>	"27.16667"^^<degrees>	27.16667
+	<Carancahua_Mound>	<hasLongitude>	"-94.7"^^<degrees>	-94.7
+	<Carancahua_Mound>	rdfs:subClassOf	<geoclass_mound>	
+	<Carancahua_Mound>	<hasGeonamesEntityId>	"6957947"	
+	<Cherokee_Mound>	<hasLatitude>	"27.61667"^^<degrees>	27.61667
+	<Cherokee_Mound>	<hasLongitude>	"-92.5"^^<degrees>	-92.5
+	<Cherokee_Mound>	rdfs:subClassOf	<geoclass_mound>	
+	<Cherokee_Mound>	<hasGeonamesEntityId>	"6957948"	
+	<Coushatta_Mound>	<hasLatitude>	"27.7"^^<degrees>	27.7
+	<Coushatta_Mound>	<hasLongitude>	"-92.4"^^<degrees>	-92.4
+	<Coushatta_Mound>	rdfs:subClassOf	<geoclass_mound>	
+	<Coushatta_Mound>	<hasGeonamesEntityId>	"6957949"	
+	<Crockett_Basin>	<hasLatitude>	"26.85"^^<degrees>	26.85
+	<Crockett_Basin>	<hasLongitude>	"-94.65"^^<degrees>	-94.65
+	<Crockett_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Crockett_Basin>	<hasGeonamesEntityId>	"6957950"	
+	<Alamo_Mound>	<hasLatitude>	"27.45"^^<degrees>	27.45
+	<Alamo_Mound>	<hasLongitude>	"-94.88333"^^<degrees>	-94.88333
+	<Alamo_Mound>	rdfs:subClassOf	<geoclass_mound>	
+	<Alamo_Mound>	<hasGeonamesEntityId>	"6957951"	
+	<Burk_Basin>	<hasLatitude>	"27.18333"^^<degrees>	27.18333
+	<Burk_Basin>	<hasLongitude>	"-93.83333"^^<degrees>	-93.83333
+	<Burk_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Burk_Basin>	<hasGeonamesEntityId>	"6957952"	
+	<Curray_Basin>	<hasLatitude>	"27.26667"^^<degrees>	27.26667
+	<Curray_Basin>	<hasLongitude>	"-93.31667"^^<degrees>	-93.31667
+	<Curray_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Curray_Basin>	<hasGeonamesEntityId>	"6957953"	
+	<Flawn_Basin>	<hasLatitude>	"27.13333"^^<degrees>	27.13333
+	<Flawn_Basin>	<hasLongitude>	"-94.93333"^^<degrees>	-94.93333
+	<Flawn_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Flawn_Basin>	<hasGeonamesEntityId>	"6957954"	
+	<Frye_Basin>	<hasLatitude>	"27.35"^^<degrees>	27.35
+	<Frye_Basin>	<hasLongitude>	"-93.7"^^<degrees>	-93.7
+	<Frye_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Frye_Basin>	<hasGeonamesEntityId>	"6957955"	
+	<Gealy_Basin>	<hasLatitude>	"27.43333"^^<degrees>	27.43333
+	<Gealy_Basin>	<hasLongitude>	"-94.0"^^<degrees>	-94.0
+	<Gealy_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Gealy_Basin>	<hasGeonamesEntityId>	"6957956"	
+	<Geyer_Mound>	<hasLatitude>	"27.16667"^^<degrees>	27.16667
+	<Geyer_Mound>	<hasLongitude>	"-94.78333"^^<degrees>	-94.78333
+	<Geyer_Mound>	rdfs:subClassOf	<geoclass_mound>	
+	<Geyer_Mound>	<hasGeonamesEntityId>	"6957957"	
+	<Goose_Egg_Hill>	<hasLatitude>	"25.9"^^<degrees>	25.9
+	<Goose_Egg_Hill>	<hasLongitude>	"-91.91667"^^<degrees>	-91.91667
+	<Goose_Egg_Hill>	rdfs:subClassOf	<geoclass_hill>	
+	<Goose_Egg_Hill>	<hasGeonamesEntityId>	"6957958"	
+	<Gyre_Basin>	<hasLatitude>	"27.33333"^^<degrees>	27.33333
+	<Gyre_Basin>	<hasLongitude>	"-94.18333"^^<degrees>	-94.18333
+	<Gyre_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Gyre_Basin>	<hasGeonamesEntityId>	"6957959"	
+	<Horseshoe_Basin>	<hasLatitude>	"27.0"^^<degrees>	27.0
+	<Horseshoe_Basin>	<hasLongitude>	"-94.25"^^<degrees>	-94.25
+	<Horseshoe_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Horseshoe_Basin>	<hasGeonamesEntityId>	"6957960"	
+	<Houston_Basin>	<hasLatitude>	"27.06667"^^<degrees>	27.06667
+	<Houston_Basin>	<hasLongitude>	"-95.43333"^^<degrees>	-95.43333
+	<Houston_Basin>	rdfs:subClassOf	<geoclass_basin>	
+	<Houston_Basin>	<hasGeonamesEntityId>	"6957961"	
+	<Fred_Spiess_Seamount>	<hasLatitude>	"32.1"^^<degrees>	32.1
+	<Fred_Spiess_Seamount>	<hasLongitude>	"-127.25"^^<degrees>	-127.25
+	<Fred_Spiess_Seamount>	rdfs:subClassOf	<geoclass_seamount>	
+	<Fred_Spiess_Seamount>	<hasGeonamesEntityId>	"7077951"	
+	<Spiess_Seamount_Chain>	<hasLatitude>	"31.0"^^<degrees>	31.0
+	<Spiess_Seamount_Chain>	<hasLongitude>	"-124.6"^^<degrees>	-124.6
+	<Spiess_Seamount_Chain>	rdfs:subClassOf	<geoclass_seamounts>	
+	<Spiess_Seamount_Chain>	<hasGeonamesEntityId>	"7077952"	
+	<Costa_de_Xurius>	<hasLatitude>	"42.5"^^<degrees>	42.5
+	<Costa_de_Xurius>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Costa_de_Xurius>	rdfs:subClassOf	<geoclass_slope>	
+	<Costa_de_Xurius>	<hasGeonamesEntityId>	"3038814"	
+	<Font_de_la_Xona>	<hasLatitude>	"42.55003"^^<degrees>	42.55003
+	<Font_de_la_Xona>	<hasLongitude>	"1.44986"^^<degrees>	1.44986
+	<Font_de_la_Xona>	rdfs:subClassOf	<geoclass_spring>	
+	<Font_de_la_Xona>	<hasGeonamesEntityId>	"3038815"	
+	<Xixerella>	<hasLatitude>	"42.55327"^^<degrees>	42.55327
+	<Xixerella>	<hasLongitude>	"1.48736"^^<degrees>	1.48736
+	<Xixerella>	rdfs:subClassOf	<geoclass_populated_place>	
+	<Xixerella>	<hasGeonamesEntityId>	"3038816"	
+	<Xixerella>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Xixerella>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Xixerella>	rdfs:subClassOf	<geoclass_administrative_division>	
+	<Xixerella>	<hasGeonamesEntityId>	"3038817"	
+	<Riu_Xic>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Riu_Xic>	<hasLongitude>	"1.68333"^^<degrees>	1.68333
+	<Riu_Xic>	rdfs:subClassOf	<geoclass_stream>	
+	<Riu_Xic>	<hasGeonamesEntityId>	"3038818"	
+	<Pas_del_Xic>	<hasLatitude>	"42.5"^^<degrees>	42.5
+	<Pas_del_Xic>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Pas_del_Xic>	rdfs:subClassOf	<geoclass_trail>	
+	<Pas_del_Xic>	<hasGeonamesEntityId>	"3038819"	
+	<Roc_del_Xeig>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Roc_del_Xeig>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Roc_del_Xeig>	rdfs:subClassOf	<geoclass_rock>	
+	<Roc_del_Xeig>	<hasGeonamesEntityId>	"3038820"	
+	<Collada_del_Xeig>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Collada_del_Xeig>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Collada_del_Xeig>	rdfs:subClassOf	<geoclass_peak>	
+	<Collada_del_Xeig>	<hasGeonamesEntityId>	"3038821"	
+	<Fonts_Vives>	<hasLatitude>	"42.5"^^<degrees>	42.5
+	<Fonts_Vives>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Fonts_Vives>	rdfs:subClassOf	<geoclass_spring>	
+	<Fonts_Vives>	<hasGeonamesEntityId>	"3038822"	
+	<Roc_de_Vista>	<hasLatitude>	"42.5"^^<degrees>	42.5
+	<Roc_de_Vista>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Roc_de_Vista>	rdfs:subClassOf	<geoclass_rock>	
+	<Roc_de_Vista>	<hasGeonamesEntityId>	"3038823"	
+	<Obaga_de_Vista>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Obaga_de_Vista>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Obaga_de_Vista>	rdfs:subClassOf	<geoclass_slope>	
+	<Obaga_de_Vista>	<hasGeonamesEntityId>	"3038824"	
+	<Coll_de_Vista>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Coll_de_Vista>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Coll_de_Vista>	rdfs:subClassOf	<geoclass_spur>	
+	<Coll_de_Vista>	<hasGeonamesEntityId>	"3038825"	
+	<Coll_de_Vista>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Coll_de_Vista>	<hasLongitude>	"1.43333"^^<degrees>	1.43333
+	<Coll_de_Vista>	rdfs:subClassOf	<geoclass_pass>	
+	<Coll_de_Vista>	<hasGeonamesEntityId>	"3038826"	
+	<Coll_de_Vista>	rdfs:label	"Coll de Vista"	
+	<Visanseny>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Visanseny>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Visanseny>	rdfs:subClassOf	<geoclass_locality>	
+	<Visanseny>	<hasGeonamesEntityId>	"3038827"	
+	<Visanseny>	rdfs:label	"Visanceny"	
+	<Roc_de_la_Vinya>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Roc_de_la_Vinya>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Roc_de_la_Vinya>	rdfs:subClassOf	<geoclass_rock>	
+	<Roc_de_la_Vinya>	<hasGeonamesEntityId>	"3038828"	
+	<Canal_de_la_Vinya>	<hasLatitude>	"42.51667"^^<degrees>	42.51667
+	<Canal_de_la_Vinya>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Canal_de_la_Vinya>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_de_la_Vinya>	<hasGeonamesEntityId>	"3038829"	
+	<Bosc_de_Villar>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Bosc_de_Villar>	<hasLongitude>	"1.55"^^<degrees>	1.55
+	<Bosc_de_Villar>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_de_Villar>	<hasGeonamesEntityId>	"3038830"	
+	<Torrent_de_Vila>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Torrent_de_Vila>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Torrent_de_Vila>	rdfs:subClassOf	<geoclass_stream>	
+	<Torrent_de_Vila>	<hasGeonamesEntityId>	"3038831"	
+	<Vila>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Vila>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Vila>	rdfs:subClassOf	<geoclass_populated_place>	
+	<Vila>	<hasGeonamesEntityId>	"3038832"	
+	<Vila>	rdfs:label	"Casas Vila"	
+	<Basers_de_Vicenç>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Basers_de_Vicenç>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Basers_de_Vicenç>	rdfs:subClassOf	<geoclass_cliff>	
+	<Basers_de_Vicenç>	<hasGeonamesEntityId>	"3038833"	
+	<Pla_de_Viàs>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Pla_de_Viàs>	<hasLongitude>	"1.66667"^^<degrees>	1.66667
+	<Pla_de_Viàs>	rdfs:subClassOf	<geoclass_upland>	
+	<Pla_de_Viàs>	<hasGeonamesEntityId>	"3038834"	
+	<Vial_del_Cardaire>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Vial_del_Cardaire>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Vial_del_Cardaire>	rdfs:subClassOf	<geoclass_locality>	
+	<Vial_del_Cardaire>	<hasGeonamesEntityId>	"3038835"	
+	<Font_del_Vi>	<hasLatitude>	"42.51667"^^<degrees>	42.51667
+	<Font_del_Vi>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Font_del_Vi>	rdfs:subClassOf	<geoclass_spring>	
+	<Font_del_Vi>	<hasGeonamesEntityId>	"3038836"	
+	<Font_Verda>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Font_Verda>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Font_Verda>	rdfs:subClassOf	<geoclass_spring>	
+	<Font_Verda>	<hasGeonamesEntityId>	"3038837"	
+	<Costa_Verda>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Costa_Verda>	<hasLongitude>	"1.66667"^^<degrees>	1.66667
+	<Costa_Verda>	rdfs:subClassOf	<geoclass_slope>	
+	<Costa_Verda>	<hasGeonamesEntityId>	"3038838"	
+	<Costa_Verda>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Costa_Verda>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Costa_Verda>	rdfs:subClassOf	<geoclass_slope>	
+	<Costa_Verda>	<hasGeonamesEntityId>	"3038839"	
+	<Serrat_de_Ventader>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Serrat_de_Ventader>	<hasLongitude>	"1.43333"^^<degrees>	1.43333
+	<Serrat_de_Ventader>	rdfs:subClassOf	<geoclass_mountain>	
+	<Serrat_de_Ventader>	<hasGeonamesEntityId>	"3038840"	
+	<Bony_de_Vellatocina>	<hasLatitude>	"42.61667"^^<degrees>	42.61667
+	<Bony_de_Vellatocina>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Bony_de_Vellatocina>	rdfs:subClassOf	<geoclass_peak>	
+	<Bony_de_Vellatocina>	<hasGeonamesEntityId>	"3038841"	
+	<Pleta_Vella>	<hasLatitude>	"42.51667"^^<degrees>	42.51667
+	<Pleta_Vella>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Pleta_Vella>	rdfs:subClassOf	<geoclass_grazing_area>	
+	<Pleta_Vella>	<hasGeonamesEntityId>	"3038842"	
+	<Solà_Vell>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Solà_Vell>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Solà_Vell>	rdfs:subClassOf	<geoclass_slope>	
+	<Solà_Vell>	<hasGeonamesEntityId>	"3038843"	
+	<Port_Vell>	<hasLatitude>	"42.65"^^<degrees>	42.65
+	<Port_Vell>	<hasLongitude>	"1.55"^^<degrees>	1.55
+	<Port_Vell>	rdfs:subClassOf	<geoclass_pass>	
+	<Port_Vell>	<hasGeonamesEntityId>	"3038844"	
+	<Port_Negre_del_Pallars>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Port_Negre_del_Pallars>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Port_Negre_del_Pallars>	rdfs:subClassOf	<geoclass_pass>	
+	<Port_Negre_del_Pallars>	<hasGeonamesEntityId>	"3038845"	
+	<Port_Negre_del_Pallars>	rdfs:label	"Port Vell"	
+	<Bancal_Vedeller>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Bancal_Vedeller>	<hasLongitude>	"1.46667"^^<degrees>	1.46667
+	<Bancal_Vedeller>	rdfs:subClassOf	<geoclass_trail>	
+	<Bancal_Vedeller>	<hasGeonamesEntityId>	"3038846"	
+	<Vedat_del_Xeig>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Vedat_del_Xeig>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Vedat_del_Xeig>	rdfs:subClassOf	<geoclass_locality>	
+	<Vedat_del_Xeig>	<hasGeonamesEntityId>	"3038847"	
+	<Vedat_dels_Plans>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Vedat_dels_Plans>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Vedat_dels_Plans>	rdfs:subClassOf	<geoclass_administrative_division>	
+	<Vedat_dels_Plans>	<hasGeonamesEntityId>	"3038848"	
+	<Vedat_de_Coll_de_les_Cases>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Vedat_de_Coll_de_les_Cases>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Vedat_de_Coll_de_les_Cases>	rdfs:subClassOf	<geoclass_locality>	
+	<Vedat_de_Coll_de_les_Cases>	<hasGeonamesEntityId>	"3038849"	
+	<Serra_del_Vedat>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Serra_del_Vedat>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Serra_del_Vedat>	rdfs:subClassOf	<geoclass_ridge>	
+	<Serra_del_Vedat>	<hasGeonamesEntityId>	"3038850"	
+	<Planades_del_Vedat>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Planades_del_Vedat>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Planades_del_Vedat>	rdfs:subClassOf	<geoclass_upland>	
+	<Planades_del_Vedat>	<hasGeonamesEntityId>	"3038851"	
+	<Veda_de_Sorteny>	<hasLatitude>	"42.61667"^^<degrees>	42.61667
+	<Veda_de_Sorteny>	<hasLongitude>	"1.55"^^<degrees>	1.55
+	<Veda_de_Sorteny>	rdfs:subClassOf	<geoclass_locality>	
+	<Veda_de_Sorteny>	<hasGeonamesEntityId>	"3038852"	
+	<Veda_del_Castellar>	<hasLatitude>	"42.63333"^^<degrees>	42.63333
+	<Veda_del_Castellar>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Veda_del_Castellar>	rdfs:subClassOf	<geoclass_administrative_division>	
+	<Veda_del_Castellar>	<hasGeonamesEntityId>	"3038853"	
+	<Canal_de_les_Veces>	<hasLatitude>	"42.51667"^^<degrees>	42.51667
+	<Canal_de_les_Veces>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Canal_de_les_Veces>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_de_les_Veces>	<hasGeonamesEntityId>	"3038854"	
+	<Coma_de_Varilles>	<hasLatitude>	"42.63333"^^<degrees>	42.63333
+	<Coma_de_Varilles>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Coma_de_Varilles>	rdfs:subClassOf	<geoclass_valley>	
+	<Coma_de_Varilles>	<hasGeonamesEntityId>	"3038855"	
+	<Portella_de_les_Vaques>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Portella_de_les_Vaques>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Portella_de_les_Vaques>	rdfs:subClassOf	<geoclass_pass>	
+	<Portella_de_les_Vaques>	<hasGeonamesEntityId>	"3038856"	
+	<Pas_de_les_Vaques>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Pas_de_les_Vaques>	<hasLongitude>	"1.7"^^<degrees>	1.7
+	<Pas_de_les_Vaques>	rdfs:subClassOf	<geoclass_pass>	
+	<Pas_de_les_Vaques>	<hasGeonamesEntityId>	"3038857"	
+	<Collada_de_les_Vaques>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Collada_de_les_Vaques>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Collada_de_les_Vaques>	rdfs:subClassOf	<geoclass_pass>	
+	<Collada_de_les_Vaques>	<hasGeonamesEntityId>	"3038858"	
+	<Roc_del_Vaquer>	<hasLatitude>	"42.63333"^^<degrees>	42.63333
+	<Roc_del_Vaquer>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Roc_del_Vaquer>	rdfs:subClassOf	<geoclass_cliff>	
+	<Roc_del_Vaquer>	<hasGeonamesEntityId>	"3038859"	
+	<Valls_de_la_Coma>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Valls_de_la_Coma>	<hasLongitude>	"1.63333"^^<degrees>	1.63333
+	<Valls_de_la_Coma>	rdfs:subClassOf	<geoclass_locality>	
+	<Valls_de_la_Coma>	<hasGeonamesEntityId>	"3038860"	
+	<Vall_d'Incles>	<hasLatitude>	"42.58386"^^<degrees>	42.58386
+	<Vall_d'Incles>	<hasLongitude>	"1.66331"^^<degrees>	1.66331
+	<Vall_d'Incles>	rdfs:subClassOf	<geoclass_locality>	
+	<Vall_d'Incles>	<hasGeonamesEntityId>	"3038861"	
+	<Vall_de_Soldeu>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Vall_de_Soldeu>	<hasLongitude>	"1.68333"^^<degrees>	1.68333
+	<Vall_de_Soldeu>	rdfs:subClassOf	<geoclass_locality>	
+	<Vall_de_Soldeu>	<hasGeonamesEntityId>	"3038862"	
+	<Riu_de_la_Vall_del_Riu>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Riu_de_la_Vall_del_Riu>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Riu_de_la_Vall_del_Riu>	rdfs:subClassOf	<geoclass_stream>	
+	<Riu_de_la_Vall_del_Riu>	<hasGeonamesEntityId>	"3038863"	
+	<Estany_Gran_de_la_Vall_del_Riu>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Estany_Gran_de_la_Vall_del_Riu>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Estany_Gran_de_la_Vall_del_Riu>	rdfs:subClassOf	<geoclass_lake>	
+	<Estany_Gran_de_la_Vall_del_Riu>	<hasGeonamesEntityId>	"3038864"	
+	<Cascada_de_la_Vall_del_Riu>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Cascada_de_la_Vall_del_Riu>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Cascada_de_la_Vall_del_Riu>	rdfs:subClassOf	<geoclass_waterfall>	
+	<Cascada_de_la_Vall_del_Riu>	<hasGeonamesEntityId>	"3038865"	
+	<Canals_de_la_Vall_del_Riu>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Canals_de_la_Vall_del_Riu>	<hasLongitude>	"1.6"^^<degrees>	1.6
+	<Canals_de_la_Vall_del_Riu>	rdfs:subClassOf	<geoclass_ravine>	
+	<Canals_de_la_Vall_del_Riu>	<hasGeonamesEntityId>	"3038866"	
+	<Camí_de_la_Vall_del_Riu>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Camí_de_la_Vall_del_Riu>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Camí_de_la_Vall_del_Riu>	rdfs:subClassOf	<geoclass_trail>	
+	<Camí_de_la_Vall_del_Riu>	<hasGeonamesEntityId>	"3038867"	
+	<Bosc_de_la_Vall_del_Riu>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Bosc_de_la_Vall_del_Riu>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Bosc_de_la_Vall_del_Riu>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_de_la_Vall_del_Riu>	<hasGeonamesEntityId>	"3038868"	
+	<Vall_del_Riu>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Vall_del_Riu>	<hasLongitude>	"1.6"^^<degrees>	1.6
+	<Vall_del_Riu>	rdfs:subClassOf	<geoclass_administrative_division>	
+	<Vall_del_Riu>	<hasGeonamesEntityId>	"3038869"	
+	<Coll_de_Vall_Civera>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Coll_de_Vall_Civera>	<hasLongitude>	"1.66667"^^<degrees>	1.66667
+	<Coll_de_Vall_Civera>	rdfs:subClassOf	<geoclass_pass>	
+	<Coll_de_Vall_Civera>	<hasGeonamesEntityId>	"3038870"	
+	<Coll_de_Vall_Civera>	rdfs:label	"Coll de Valcibera"	
+	<Coll_de_Vall_Civera>	rdfs:label	"Collado de Vall-Civera"	
+	<Coll_de_Vall_Civera>	rdfs:label	"Port de Vall Civera"	
+	<Obac_de_la_Vall>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Obac_de_la_Vall>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Obac_de_la_Vall>	rdfs:subClassOf	<geoclass_slope>	
+	<Obac_de_la_Vall>	<hasGeonamesEntityId>	"3038871"	
+	<Riu_Valira_d'Orient>	<hasLatitude>	"42.51667"^^<degrees>	42.51667
+	<Riu_Valira_d'Orient>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Riu_Valira_d'Orient>	rdfs:subClassOf	<geoclass_stream>	
+	<Riu_Valira_d'Orient>	<hasGeonamesEntityId>	"3038872"	
+	<Riu_Valira_d'Orient>	rdfs:label	"Rio Balira del Orien"	
+	<Riu_Valira_d'Orient>	rdfs:label	"Río Balira del Orien"	
+	<Riu_Valira_del_Nord>	<hasLatitude>	"42.51667"^^<degrees>	42.51667
+	<Riu_Valira_del_Nord>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Riu_Valira_del_Nord>	rdfs:subClassOf	<geoclass_stream>	
+	<Riu_Valira_del_Nord>	<hasGeonamesEntityId>	"3038873"	
+	<Riu_Valira_del_Nord>	rdfs:label	"Riu Valira d'Ordino"	
+	<Riu_Valira_del_Nord>	rdfs:label	"Riu Valira del Nort"	
+	<Riu_Valira_del_Nord>	rdfs:label	"Valira del Nord"	
+	<Riu_Valira_del_Nord>	rdfs:label	"Valira del Norte"	
+	<Estanys_de_la_Val_del_Riu>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Estanys_de_la_Val_del_Riu>	<hasLongitude>	"1.6"^^<degrees>	1.6
+	<Estanys_de_la_Val_del_Riu>	rdfs:subClassOf	<geoclass_lakes>	
+	<Estanys_de_la_Val_del_Riu>	<hasGeonamesEntityId>	"3038874"	
+	<Vaca_Morta>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Vaca_Morta>	<hasLongitude>	"1.76667"^^<degrees>	1.76667
+	<Vaca_Morta>	rdfs:subClassOf	<geoclass_locality>	
+	<Vaca_Morta>	<hasGeonamesEntityId>	"3038875"	
+	<Riu_d'_Urina>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Riu_d'_Urina>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Riu_d'_Urina>	rdfs:subClassOf	<geoclass_stream>	
+	<Riu_d'_Urina>	<hasGeonamesEntityId>	"3038876"	
+	<Serrat_de_la_Uïna>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Serrat_de_la_Uïna>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Serrat_de_la_Uïna>	rdfs:subClassOf	<geoclass_ridge>	
+	<Serrat_de_la_Uïna>	<hasGeonamesEntityId>	"3038877"	
+	<Obaga_de_la_Tuta>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Obaga_de_la_Tuta>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Obaga_de_la_Tuta>	rdfs:subClassOf	<geoclass_slope>	
+	<Obaga_de_la_Tuta>	<hasGeonamesEntityId>	"3038878"	
+	<Cova_de_la_Tuta>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Cova_de_la_Tuta>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Cova_de_la_Tuta>	rdfs:subClassOf	<geoclass_cave>	
+	<Cova_de_la_Tuta>	<hasGeonamesEntityId>	"3038879"	
+	<Roca_del_Tut>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Roca_del_Tut>	<hasLongitude>	"1.46667"^^<degrees>	1.46667
+	<Roca_del_Tut>	rdfs:subClassOf	<geoclass_rock>	
+	<Roca_del_Tut>	<hasGeonamesEntityId>	"3038880"	
+	<Coll_de_Turer>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Coll_de_Turer>	<hasLongitude>	"1.46667"^^<degrees>	1.46667
+	<Coll_de_Turer>	rdfs:subClassOf	<geoclass_peak>	
+	<Coll_de_Turer>	<hasGeonamesEntityId>	"3038881"	
+	<Font_del_Tudó>	<hasLatitude>	"42.43333"^^<degrees>	42.43333
+	<Font_del_Tudó>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Font_del_Tudó>	rdfs:subClassOf	<geoclass_spring>	
+	<Font_del_Tudó>	<hasGeonamesEntityId>	"3038882"	
+	<Estany_de_les_Truites>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Estany_de_les_Truites>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Estany_de_les_Truites>	rdfs:subClassOf	<geoclass_lake>	
+	<Estany_de_les_Truites>	<hasGeonamesEntityId>	"3038883"	
+	<Serra_de_Tristaina>	<hasLatitude>	"42.65"^^<degrees>	42.65
+	<Serra_de_Tristaina>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Serra_de_Tristaina>	rdfs:subClassOf	<geoclass_ridge>	
+	<Serra_de_Tristaina>	<hasGeonamesEntityId>	"3038884"	
+	<Serra_de_Tristaina>	rdfs:label	"Serra de Tristaina"	
+	<Riu_de_Tristaina>	<hasLatitude>	"42.61667"^^<degrees>	42.61667
+	<Riu_de_Tristaina>	<hasLongitude>	"1.55"^^<degrees>	1.55
+	<Riu_de_Tristaina>	rdfs:subClassOf	<geoclass_stream>	
+	<Riu_de_Tristaina>	<hasGeonamesEntityId>	"3038885"	
+	<Pic_de_Tristaina>	<hasLatitude>	"42.65265"^^<degrees>	42.65265
+	<Pic_de_Tristaina>	<hasLongitude>	"1.49242"^^<degrees>	1.49242
+	<Pic_de_Tristaina>	rdfs:subClassOf	<geoclass_peak>	
+	<Pic_de_Tristaina>	<hasGeonamesEntityId>	"3038886"	
+	<Pic_de_Tristaina>	rdfs:label	"Pic de Triatagne"	
+	<Pic_de_Tristaina>	rdfs:label	"Pic de Tristagne"	
+	<Pic_de_Tristaina>	rdfs:label	"Pic de Tristaina"	
+	<Pic_de_Tristaina>	rdfs:label	"Pic des Tri-Stagnes"	
+	<Pic_de_Tristaina>	rdfs:label	"Tristaina"	
+	<Clot_de_Tres_Torrents>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Clot_de_Tres_Torrents>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Clot_de_Tres_Torrents>	rdfs:subClassOf	<geoclass_ravine>	
+	<Clot_de_Tres_Torrents>	<hasGeonamesEntityId>	"3038887"	
+	<Bony_de_Tres_Corts>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Bony_de_Tres_Corts>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Bony_de_Tres_Corts>	rdfs:subClassOf	<geoclass_spur>	
+	<Bony_de_Tres_Corts>	<hasGeonamesEntityId>	"3038888"	
+	<Canal_dels_Trèmols>	<hasLatitude>	"42.5"^^<degrees>	42.5
+	<Canal_dels_Trèmols>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Canal_dels_Trèmols>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_dels_Trèmols>	<hasGeonamesEntityId>	"3038889"	
+	<Travenc>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Travenc>	<hasLongitude>	"1.68333"^^<degrees>	1.68333
+	<Travenc>	rdfs:subClassOf	<geoclass_locality>	
+	<Travenc>	<hasGeonamesEntityId>	"3038890"	
+	<Pleta_de_la_Trava>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Pleta_de_la_Trava>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Pleta_de_la_Trava>	rdfs:subClassOf	<geoclass_grazing_area>	
+	<Pleta_de_la_Trava>	<hasGeonamesEntityId>	"3038891"	
+	<Coll_de_la_Trava>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Coll_de_la_Trava>	<hasLongitude>	"1.46667"^^<degrees>	1.46667
+	<Coll_de_la_Trava>	rdfs:subClassOf	<geoclass_spur>	
+	<Coll_de_la_Trava>	<hasGeonamesEntityId>	"3038892"	
+	<Canal_de_la_Trava>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Canal_de_la_Trava>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Canal_de_la_Trava>	rdfs:subClassOf	<geoclass_ravine>	
+	<Canal_de_la_Trava>	<hasGeonamesEntityId>	"3038893"	
+	<Bosc_de_la_Trava>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Bosc_de_la_Trava>	<hasLongitude>	"1.63333"^^<degrees>	1.63333
+	<Bosc_de_la_Trava>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_de_la_Trava>	<hasGeonamesEntityId>	"3038894"	
+	<Font_dels_Traginers>	<hasLatitude>	"42.43333"^^<degrees>	42.43333
+	<Font_dels_Traginers>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Font_dels_Traginers>	rdfs:subClassOf	<geoclass_spring>	
+	<Font_dels_Traginers>	<hasGeonamesEntityId>	"3038895"	
+	<Pla_de_les_Toves>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Pla_de_les_Toves>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Pla_de_les_Toves>	rdfs:subClassOf	<geoclass_upland>	
+	<Pla_de_les_Toves>	<hasGeonamesEntityId>	"3038896"	
+	<Torrent_del_Tossalroi>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Torrent_del_Tossalroi>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Torrent_del_Tossalroi>	rdfs:subClassOf	<geoclass_stream>	
+	<Torrent_del_Tossalroi>	<hasGeonamesEntityId>	"3038897"	
+	<Tossal_Gran>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Tossal_Gran>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Tossal_Gran>	rdfs:subClassOf	<geoclass_locality>	
+	<Tossal_Gran>	<hasGeonamesEntityId>	"3038898"	
+	<Tossalet_i_Vinyals>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Tossalet_i_Vinyals>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Tossalet_i_Vinyals>	rdfs:subClassOf	<geoclass_locality>	
+	<Tossalet_i_Vinyals>	<hasGeonamesEntityId>	"3038899"	
+	<Bosc_del_Tossal_de_les_Poselles>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Bosc_del_Tossal_de_les_Poselles>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Bosc_del_Tossal_de_les_Poselles>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_del_Tossal_de_les_Poselles>	<hasGeonamesEntityId>	"3038900"	
+	<Tossal>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Tossal>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Tossal>	rdfs:subClassOf	<geoclass_locality>	
+	<Tossal>	<hasGeonamesEntityId>	"3038901"	
+	<Tosquers>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Tosquers>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Tosquers>	rdfs:subClassOf	<geoclass_slope>	
+	<Tosquers>	<hasGeonamesEntityId>	"3038902"	
+	<Canal_del_Tosquer>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Canal_del_Tosquer>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Canal_del_Tosquer>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_del_Tosquer>	<hasGeonamesEntityId>	"3038903"	
+	<Bosc_del_Tosquer>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Bosc_del_Tosquer>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Bosc_del_Tosquer>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_del_Tosquer>	<hasGeonamesEntityId>	"3038904"	
+	<Bosc_del_Tosquer>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Bosc_del_Tosquer>	<hasLongitude>	"1.6"^^<degrees>	1.6
+	<Bosc_del_Tosquer>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_del_Tosquer>	<hasGeonamesEntityId>	"3038905"	
+	<Bosc_de_la_Tosca>	<hasLatitude>	"42.43333"^^<degrees>	42.43333
+	<Bosc_de_la_Tosca>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Bosc_de_la_Tosca>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_de_la_Tosca>	<hasGeonamesEntityId>	"3038906"	
+	<Tosa_d'Incles>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Tosa_d'Incles>	<hasLongitude>	"1.68333"^^<degrees>	1.68333
+	<Tosa_d'Incles>	rdfs:subClassOf	<geoclass_administrative_division>	
+	<Tosa_d'Incles>	<hasGeonamesEntityId>	"3038907"	
+	<Cap_de_Tosa_d'Entor>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Cap_de_Tosa_d'Entor>	<hasLongitude>	"1.65"^^<degrees>	1.65
+	<Cap_de_Tosa_d'Entor>	rdfs:subClassOf	<geoclass_peak>	
+	<Cap_de_Tosa_d'Entor>	<hasGeonamesEntityId>	"3038908"	
+	<Tosa_de_les_Mussoles>	<hasLatitude>	"42.61667"^^<degrees>	42.61667
+	<Tosa_de_les_Mussoles>	<hasLongitude>	"1.68333"^^<degrees>	1.68333
+	<Tosa_de_les_Mussoles>	rdfs:subClassOf	<geoclass_locality>	
+	<Tosa_de_les_Mussoles>	<hasGeonamesEntityId>	"3038909"	
+	<Pic_de_la_Tosa_de_Juclar>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Pic_de_la_Tosa_de_Juclar>	<hasLongitude>	"1.71667"^^<degrees>	1.71667
+	<Pic_de_la_Tosa_de_Juclar>	rdfs:subClassOf	<geoclass_peak>	
+	<Pic_de_la_Tosa_de_Juclar>	<hasGeonamesEntityId>	"3038910"	
+	<Collada_de_la_Tosa_de_Caraup>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Collada_de_la_Tosa_de_Caraup>	<hasLongitude>	"1.65"^^<degrees>	1.65
+	<Collada_de_la_Tosa_de_Caraup>	rdfs:subClassOf	<geoclass_spur>	
+	<Collada_de_la_Tosa_de_Caraup>	<hasGeonamesEntityId>	"3038911"	
+	<Planell_de_la_Tosa>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Planell_de_la_Tosa>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Planell_de_la_Tosa>	rdfs:subClassOf	<geoclass_upland>	
+	<Planell_de_la_Tosa>	<hasGeonamesEntityId>	"3038912"	
+	<Canals_de_la_Tosa>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Canals_de_la_Tosa>	<hasLongitude>	"1.7"^^<degrees>	1.7
+	<Canals_de_la_Tosa>	rdfs:subClassOf	<geoclass_ravine>	
+	<Canals_de_la_Tosa>	<hasGeonamesEntityId>	"3038913"	
+	<Canal_de_la_Tosa>	<hasLatitude>	"42.5"^^<degrees>	42.5
+	<Canal_de_la_Tosa>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Canal_de_la_Tosa>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_de_la_Tosa>	<hasGeonamesEntityId>	"3038914"	
+	<Bosc_de_la_Tosa>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Bosc_de_la_Tosa>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Bosc_de_la_Tosa>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_de_la_Tosa>	<hasGeonamesEntityId>	"3038915"	
+	<Canal_Torta>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Canal_Torta>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Canal_Torta>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_Torta>	<hasGeonamesEntityId>	"3038916"	
+	<Canal_Torta>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Canal_Torta>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Canal_Torta>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_Torta>	<hasGeonamesEntityId>	"3038917"	
+	<Torrent_Tort>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Torrent_Tort>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Torrent_Tort>	rdfs:subClassOf	<geoclass_stream>	
+	<Torrent_Tort>	<hasGeonamesEntityId>	"3038918"	
+	<Torretinyà>	<hasLatitude>	"42.45"^^<degrees>	42.45
+	<Torretinyà>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Torretinyà>	rdfs:subClassOf	<geoclass_locality>	
+	<Torretinyà>	<hasGeonamesEntityId>	"3038919"	
+	<Prat_d'en_Torres>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Prat_d'en_Torres>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Prat_d'en_Torres>	rdfs:subClassOf	<geoclass_grazing_area>	
+	<Prat_d'en_Torres>	<hasGeonamesEntityId>	"3038920"	
+	<Canals_de_Torrent_Pregó>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Canals_de_Torrent_Pregó>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Canals_de_Torrent_Pregó>	rdfs:subClassOf	<geoclass_stream>	
+	<Canals_de_Torrent_Pregó>	<hasGeonamesEntityId>	"3038921"	
+	<Canal_de_Torrentinyà>	<hasLatitude>	"42.45"^^<degrees>	42.45
+	<Canal_de_Torrentinyà>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Canal_de_Torrentinyà>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_de_Torrentinyà>	<hasGeonamesEntityId>	"3038922"	
+	<Torrentill>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Torrentill>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Torrentill>	rdfs:subClassOf	<geoclass_stream>	
+	<Torrentill>	<hasGeonamesEntityId>	"3038923"	
+	<Camí_de_Torrent_Forcat>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Camí_de_Torrent_Forcat>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Camí_de_Torrent_Forcat>	rdfs:subClassOf	<geoclass_trail>	
+	<Camí_de_Torrent_Forcat>	<hasGeonamesEntityId>	"3038924"	
+	<Canal_del_Torrent_Cauber>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Canal_del_Torrent_Cauber>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Canal_del_Torrent_Cauber>	rdfs:subClassOf	<geoclass_ravine>	
+	<Canal_del_Torrent_Cauber>	<hasGeonamesEntityId>	"3038925"	
+	<Torre_dels_Soldats>	<hasLatitude>	"42.45"^^<degrees>	42.45
+	<Torre_dels_Soldats>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Torre_dels_Soldats>	rdfs:subClassOf	<geoclass_peak>	
+	<Torre_dels_Soldats>	<hasGeonamesEntityId>	"3038926"	
+	<Torre_dels_Soldats>	rdfs:label	"Pic Monturull"	
+	<Torre_dels_Soldats>	rdfs:label	"Torre dels Soldats"	
+	<Torrapuis>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Torrapuis>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Torrapuis>	rdfs:subClassOf	<geoclass_locality>	
+	<Torrapuis>	<hasGeonamesEntityId>	"3038927"	
+	<Pic_de_Torradella>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Pic_de_Torradella>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Pic_de_Torradella>	rdfs:subClassOf	<geoclass_peak>	
+	<Pic_de_Torradella>	<hasGeonamesEntityId>	"3038928"	
+	<Pala_de_la_Torradella>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Pala_de_la_Torradella>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Pala_de_la_Torradella>	rdfs:subClassOf	<geoclass_slope>	
+	<Pala_de_la_Torradella>	<hasGeonamesEntityId>	"3038929"	
+	<Obaga_de_Torradella>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Obaga_de_Torradella>	<hasLongitude>	"1.63333"^^<degrees>	1.63333
+	<Obaga_de_Torradella>	rdfs:subClassOf	<geoclass_slope>	
+	<Obaga_de_Torradella>	<hasGeonamesEntityId>	"3038930"	
+	<Canals_de_Torradella>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Canals_de_Torradella>	<hasLongitude>	"1.63333"^^<degrees>	1.63333
+	<Canals_de_Torradella>	rdfs:subClassOf	<geoclass_stream>	
+	<Canals_de_Torradella>	<hasGeonamesEntityId>	"3038931"	
+	<Borda_del_Torner>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Borda_del_Torner>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Borda_del_Torner>	rdfs:subClassOf	<geoclass_farm>	
+	<Borda_del_Torner>	<hasGeonamesEntityId>	"3038932"	
+	<Planell_de_la_Tora>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Planell_de_la_Tora>	<hasLongitude>	"1.6"^^<degrees>	1.6
+	<Planell_de_la_Tora>	rdfs:subClassOf	<geoclass_upland>	
+	<Planell_de_la_Tora>	<hasGeonamesEntityId>	"3038933"	
+	<Clots_de_la_Tora>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Clots_de_la_Tora>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Clots_de_la_Tora>	rdfs:subClassOf	<geoclass_ravine>	
+	<Clots_de_la_Tora>	<hasGeonamesEntityId>	"3038934"	
+	<Prat_del_Toni>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Prat_del_Toni>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Prat_del_Toni>	rdfs:subClassOf	<geoclass_grazing_area>	
+	<Prat_del_Toni>	<hasGeonamesEntityId>	"3038935"	
+	<Molí_del_Tomàs>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Molí_del_Tomàs>	<hasLongitude>	"1.65"^^<degrees>	1.65
+	<Molí_del_Tomàs>	rdfs:subClassOf	<geoclass_mill>	
+	<Molí_del_Tomàs>	<hasGeonamesEntityId>	"3038936"	
+	<Cortals_de_Tolse>	<hasLatitude>	"42.45"^^<degrees>	42.45
+	<Cortals_de_Tolse>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Cortals_de_Tolse>	rdfs:subClassOf	<geoclass_corral>	
+	<Cortals_de_Tolse>	<hasGeonamesEntityId>	"3038937"	
+	<Bosc_de_Tolse>	<hasLatitude>	"42.45"^^<degrees>	42.45
+	<Bosc_de_Tolse>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Bosc_de_Tolse>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_de_Tolse>	<hasGeonamesEntityId>	"3038938"	
+	<Tolse>	<hasLatitude>	"42.45"^^<degrees>	42.45
+	<Tolse>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Tolse>	rdfs:subClassOf	<geoclass_huts>	
+	<Tolse>	<hasGeonamesEntityId>	"3038939"	
+	<Basera_dels_Tolls_de_l'Olla>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Basera_dels_Tolls_de_l'Olla>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Basera_dels_Tolls_de_l'Olla>	rdfs:subClassOf	<geoclass_cliff>	
+	<Basera_dels_Tolls_de_l'Olla>	<hasGeonamesEntityId>	"3038940"	
+	<Tolls_de_l'Olla>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Tolls_de_l'Olla>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Tolls_de_l'Olla>	rdfs:subClassOf	<geoclass_locality>	
+	<Tolls_de_l'Olla>	<hasGeonamesEntityId>	"3038941"	
+	<Torrent_del_Tirader>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Torrent_del_Tirader>	<hasLongitude>	"1.6"^^<degrees>	1.6
+	<Torrent_del_Tirader>	rdfs:subClassOf	<geoclass_stream>	
+	<Torrent_del_Tirader>	<hasGeonamesEntityId>	"3038942"	
+	<Canal_del_Timbarro>	<hasLatitude>	"42.5"^^<degrees>	42.5
+	<Canal_del_Timbarro>	<hasLongitude>	"1.46667"^^<degrees>	1.46667
+	<Canal_del_Timbarro>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_del_Timbarro>	<hasGeonamesEntityId>	"3038943"	
+	<Terres_de_Serra>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Terres_de_Serra>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Terres_de_Serra>	rdfs:subClassOf	<geoclass_locality>	
+	<Terres_de_Serra>	<hasGeonamesEntityId>	"3038944"	
+	<Terres_de_Sant_Miguel>	<hasLatitude>	"42.5"^^<degrees>	42.5
+	<Terres_de_Sant_Miguel>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Terres_de_Sant_Miguel>	rdfs:subClassOf	<geoclass_locality>	
+	<Terres_de_Sant_Miguel>	<hasGeonamesEntityId>	"3038945"	
+	<Terres_del_Torrent_Pregó>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Terres_del_Torrent_Pregó>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Terres_del_Torrent_Pregó>	rdfs:subClassOf	<geoclass_locality>	
+	<Terres_del_Torrent_Pregó>	<hasGeonamesEntityId>	"3038946"	
+	<Terres_del_Solà>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Terres_del_Solà>	<hasLongitude>	"1.55"^^<degrees>	1.55
+	<Terres_del_Solà>	rdfs:subClassOf	<geoclass_locality>	
+	<Terres_del_Solà>	<hasGeonamesEntityId>	"3038947"	
+	<Terres_de_Jacques>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Terres_de_Jacques>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Terres_de_Jacques>	rdfs:subClassOf	<geoclass_locality>	
+	<Terres_de_Jacques>	<hasGeonamesEntityId>	"3038948"	
+	<Obaga_de_les_Terres_de_Casamanya>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Obaga_de_les_Terres_de_Casamanya>	<hasLongitude>	"1.55"^^<degrees>	1.55
+	<Obaga_de_les_Terres_de_Casamanya>	rdfs:subClassOf	<geoclass_slope>	
+	<Obaga_de_les_Terres_de_Casamanya>	<hasGeonamesEntityId>	"3038949"	
+	<Canal_del_Terrer_Roig>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Canal_del_Terrer_Roig>	<hasLongitude>	"1.46667"^^<degrees>	1.46667
+	<Canal_del_Terrer_Roig>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_del_Terrer_Roig>	<hasGeonamesEntityId>	"3038950"	
+	<Terrer_Roig>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Terrer_Roig>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Terrer_Roig>	rdfs:subClassOf	<geoclass_locality>	
+	<Terrer_Roig>	<hasGeonamesEntityId>	"3038951"	
+	<Clots_dels_Terregalls>	<hasLatitude>	"42.61667"^^<degrees>	42.61667
+	<Clots_dels_Terregalls>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Clots_dels_Terregalls>	rdfs:subClassOf	<geoclass_headwaters>	
+	<Clots_dels_Terregalls>	<hasGeonamesEntityId>	"3038952"	
+	<Terregalls>	<hasLatitude>	"42.5"^^<degrees>	42.5
+	<Terregalls>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Terregalls>	rdfs:subClassOf	<geoclass_locality>	
+	<Terregalls>	<hasGeonamesEntityId>	"3038953"	
+	<Terra_del_Pou>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Terra_del_Pou>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Terra_del_Pou>	rdfs:subClassOf	<geoclass_locality>	
+	<Terra_del_Pou>	<hasGeonamesEntityId>	"3038954"	
+	<Terra_Bogada>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Terra_Bogada>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Terra_Bogada>	rdfs:subClassOf	<geoclass_locality>	
+	<Terra_Bogada>	<hasGeonamesEntityId>	"3038955"	
+	<Canal_del_Teixó>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Canal_del_Teixó>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Canal_del_Teixó>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_del_Teixó>	<hasGeonamesEntityId>	"3038956"	
+	<Coma_de_Teix>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Coma_de_Teix>	<hasLongitude>	"1.46667"^^<degrees>	1.46667
+	<Coma_de_Teix>	rdfs:subClassOf	<geoclass_slope>	
+	<Coma_de_Teix>	<hasGeonamesEntityId>	"3038957"	
+	<Font_de_les_Taules>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Font_de_les_Taules>	<hasLongitude>	"1.55"^^<degrees>	1.55
+	<Font_de_les_Taules>	rdfs:subClassOf	<geoclass_spring>	
+	<Font_de_les_Taules>	<hasGeonamesEntityId>	"3038958"	
+	<Coma_Tarterosa>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Coma_Tarterosa>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Coma_Tarterosa>	rdfs:subClassOf	<geoclass_ravine>	
+	<Coma_Tarterosa>	<hasGeonamesEntityId>	"3038959"	
+	<Bosc_de_la_Tarterosa>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Bosc_de_la_Tarterosa>	<hasLongitude>	"1.65"^^<degrees>	1.65
+	<Bosc_de_la_Tarterosa>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_de_la_Tarterosa>	<hasGeonamesEntityId>	"3038960"	
+	<Tarter_Gran>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Tarter_Gran>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Tarter_Gran>	rdfs:subClassOf	<geoclass_locality>	
+	<Tarter_Gran>	<hasGeonamesEntityId>	"3038961"	
+	<Tartera_Gran>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Tartera_Gran>	<hasLongitude>	"1.46667"^^<degrees>	1.46667
+	<Tartera_Gran>	rdfs:subClassOf	<geoclass_locality>	
+	<Tartera_Gran>	<hasGeonamesEntityId>	"3038962"	
+	<Pont_del_Tarter>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Pont_del_Tarter>	<hasLongitude>	"1.65"^^<degrees>	1.65
+	<Pont_del_Tarter>	rdfs:subClassOf	<geoclass_bridge>	
+	<Pont_del_Tarter>	<hasGeonamesEntityId>	"3038963"	
+	<Coll_de_la_Tàpia>	<hasLatitude>	"42.46667"^^<degrees>	42.46667
+	<Coll_de_la_Tàpia>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Coll_de_la_Tàpia>	rdfs:subClassOf	<geoclass_pass>	
+	<Coll_de_la_Tàpia>	<hasGeonamesEntityId>	"3038964"	
+	<Canal_Tancada>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Canal_Tancada>	<hasLongitude>	"1.55"^^<degrees>	1.55
+	<Canal_Tancada>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_Tancada>	<hasGeonamesEntityId>	"3038965"	
+	<Roc_del_Tampuent>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Roc_del_Tampuent>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Roc_del_Tampuent>	rdfs:subClassOf	<geoclass_rock>	
+	<Roc_del_Tampuent>	<hasGeonamesEntityId>	"3038966"	
+	<Basers_de_les_Tallades>	<hasLatitude>	"42.5"^^<degrees>	42.5
+	<Basers_de_les_Tallades>	<hasLongitude>	"1.46667"^^<degrees>	1.46667
+	<Basers_de_les_Tallades>	rdfs:subClassOf	<geoclass_cliff>	
+	<Basers_de_les_Tallades>	<hasGeonamesEntityId>	"3038967"	
+	<Bosc_de_la_Tallada_Nova>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Bosc_de_la_Tallada_Nova>	<hasLongitude>	"1.48333"^^<degrees>	1.48333
+	<Bosc_de_la_Tallada_Nova>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_de_la_Tallada_Nova>	<hasGeonamesEntityId>	"3038968"	
+	<Camí_de_la_Tallada>	<hasLatitude>	"42.48333"^^<degrees>	42.48333
+	<Camí_de_la_Tallada>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Camí_de_la_Tallada>	rdfs:subClassOf	<geoclass_trail>	
+	<Camí_de_la_Tallada>	<hasGeonamesEntityId>	"3038969"	
+	<Canal_del_Tabanell>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Canal_del_Tabanell>	<hasLongitude>	"1.51667"^^<degrees>	1.51667
+	<Canal_del_Tabanell>	rdfs:subClassOf	<geoclass_stream>	
+	<Canal_del_Tabanell>	<hasGeonamesEntityId>	"3038970"	
+	<Bosc_del_Tabanell>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Bosc_del_Tabanell>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Bosc_del_Tabanell>	rdfs:subClassOf	<geoclass_forest>	
+	<Bosc_del_Tabanell>	<hasGeonamesEntityId>	"3038971"	
+	<Suriguera>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Suriguera>	<hasLongitude>	"1.61667"^^<degrees>	1.61667
+	<Suriguera>	rdfs:subClassOf	<geoclass_slope>	
+	<Suriguera>	<hasGeonamesEntityId>	"3038972"	
+	<Sudornar>	<hasLatitude>	"42.58333"^^<degrees>	42.58333
+	<Sudornar>	<hasLongitude>	"1.45"^^<degrees>	1.45
+	<Sudornar>	rdfs:subClassOf	<geoclass_slope>	
+	<Sudornar>	<hasGeonamesEntityId>	"3038973"	
+	<Font_del_Sucre>	<hasLatitude>	"42.51667"^^<degrees>	42.51667
+	<Font_del_Sucre>	<hasLongitude>	"1.46667"^^<degrees>	1.46667
+	<Font_del_Sucre>	rdfs:subClassOf	<geoclass_spring>	
+	<Font_del_Sucre>	<hasGeonamesEntityId>	"3038974"	
+	<Costa_de_la_Sucarana>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Costa_de_la_Sucarana>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Costa_de_la_Sucarana>	rdfs:subClassOf	<geoclass_slope>	
+	<Costa_de_la_Sucarana>	<hasGeonamesEntityId>	"3038975"	
+	<Canya_de_la_Sucarana>	<hasLatitude>	"42.6"^^<degrees>	42.6
+	<Canya_de_la_Sucarana>	<hasLongitude>	"1.5"^^<degrees>	1.5
+	<Canya_de_la_Sucarana>	rdfs:subClassOf	<geoclass_gorge>	
+	<Canya_de_la_Sucarana>	<hasGeonamesEntityId>	"3038976"	
+	<Borda_del_Sucarana>	<hasLatitude>	"42.55"^^<degrees>	42.55
+	<Borda_del_Sucarana>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Borda_del_Sucarana>	rdfs:subClassOf	<geoclass_huts>	
+	<Borda_del_Sucarana>	<hasGeonamesEntityId>	"3038977"	
+	<Riu_de_Sorteny>	<hasLatitude>	"42.61667"^^<degrees>	42.61667
+	<Riu_de_Sorteny>	<hasLongitude>	"1.55"^^<degrees>	1.55
+	<Riu_de_Sorteny>	rdfs:subClassOf	<geoclass_stream>	
+	<Riu_de_Sorteny>	<hasGeonamesEntityId>	"3038978"	
+	<Pla_de_Sorteny>	<hasLatitude>	"42.61667"^^<degrees>	42.61667
+	<Pla_de_Sorteny>	<hasLongitude>	"1.56667"^^<degrees>	1.56667
+	<Pla_de_Sorteny>	rdfs:subClassOf	<geoclass_upland>	
+	<Pla_de_Sorteny>	<hasGeonamesEntityId>	"3038979"	
+	<Marrades_de_Sorteny>	<hasLatitude>	"42.61667"^^<degrees>	42.61667
+	<Marrades_de_Sorteny>	<hasLongitude>	"1.55"^^<degrees>	1.55
+	<Marrades_de_Sorteny>	rdfs:subClassOf	<geoclass_trail>	
+	<Marrades_de_Sorteny>	<hasGeonamesEntityId>	"3038980"	
+	<Sorteny>	<hasLatitude>	"42.61667"^^<degrees>	42.61667
+	<Sorteny>	<hasLongitude>	"1.58333"^^<degrees>	1.58333
+	<Sorteny>	rdfs:subClassOf	<geoclass_administrative_division>	
+	<Sorteny>	<hasGeonamesEntityId>	"3038981"	
+	<Riu_de_les_Soronelles>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Riu_de_les_Soronelles>	<hasLongitude>	"1.65"^^<degrees>	1.65
+	<Riu_de_les_Soronelles>	rdfs:subClassOf	<geoclass_stream>	
+	<Riu_de_les_Soronelles>	<hasGeonamesEntityId>	"3038982"	
+	<Collada_de_les_Soronelles>	<hasLatitude>	"42.53333"^^<degrees>	42.53333
+	<Collada_de_les_Soronelles>	<hasLongitude>	"1.65"^^<degrees>	1.65
+	<Collada_de_les_Soronelles>	rdfs:subClassOf	<geoclass_pass>	
+	<Collada_de_les_Soronelles>	<hasGeonamesEntityId>	"3038983"	
+	<Pic_de_les_Sorobilles>	<hasLatitude>	"42.56667"^^<degrees>	42.56667
+	<Pic_de_les_Sorobilles>	<hasLongitude>	"1.53333"^^<degrees>	1.53333
+	<Pic_de_les_Sorobilles>	rdfs:subClassOf	<geoclass_peak>	
+	<Pic_de_les_Sorobilles>	<hasGeonamesEntityId>	"3038984"	

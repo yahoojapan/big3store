@@ -1,0 +1,349 @@
+	<hasWebsite>	<hasConfidence>	"0.9740"^^xsd:decimal	0.9740
+	<happenedIn>	rdfs:range	<yagoGeoEntity>	
+	<hasImdb>	rdfs:range	<yagoIdentifier>	
+	rdfs:range	rdfs:range	rdfs:Class	
+	<hasLanguageCode>	rdfs:range	xsd:string	
+	<wasDestroyedOnDate>	rdfs:range	xsd:date	
+	<hasChild>	rdfs:domain	<wordnet_person_100007846>	
+	<hasGivenName>	rdfs:domain	<wordnet_person_100007846>	
+	<objectStartRelation>	rdfs:domain	owl:Thing	
+	<isCitizenOf>	rdfs:domain	<wordnet_person_100007846>	
+	<wroteMusicFor>	rdfs:range	<wordnet_movie_106613686>	
+	<hasWebsite>	rdfs:range	<yagoURL>	
+	rdfs:range	rdfs:domain	rdf:Property	
+	<hasAirportCode>	rdfs:subPropertyOf	rdfs:label	
+	<hasGini>	rdfs:range	<yago0to100>	
+	<hasGDP>	rdfs:domain	<wordnet_location_100027167>	
+	<created>	rdfs:domain	<yagoLegalActor>	
+	<hasGeonamesClassId>	rdfs:range	<yagoIdentifier>	
+	<dealsWith>	rdfs:range	<wordnet_location_100027167>	
+	<hasCurrency>	rdfs:domain	<wordnet_location_100027167>	
+	<hasFamilyName>	<hasConfidence>	"0.9259"^^xsd:decimal	0.9259
+	<hasConfidence>	rdfs:domain	rdf:Property	
+	<hasImport>	rdfs:range	<yagoMonetaryValue>	
+	<hasISBN>	rdfs:domain	owl:Thing	
+	<hasWikipediaAnchorText>	rdfs:domain	rdf:Resource	
+	<hasGini>	rdfs:domain	<wordnet_location_100027167>	
+	<hasFamilyName>	rdfs:domain	<wordnet_person_100007846>	
+	<occursSince>	rdfs:domain	rdf:Statement	
+	<startsExistingOnDate>	rdfs:range	xsd:date	
+	<hasContext>	rdfs:domain	owl:Thing	
+	<hasRevenue>	<hasConfidence>	"0.9296"^^xsd:decimal	0.9296
+	<hasEconomicGrowth>	<hasConfidence>	"0.9418"^^xsd:decimal	0.9418
+	<hasLongitude>	rdfs:range	<degrees>	
+	<wasBornOnDate>	rdfs:subPropertyOf	<startsExistingOnDate>	
+	<hasWikipediaArticleLength>	rdfs:domain	rdf:Resource	
+	<hasNumberOfPeople>	rdfs:range	xsd:nonNegativeInteger	
+	<wasDestroyedOnDate>	<hasConfidence>	"0.9559"^^xsd:decimal	0.9559
+	<diedIn>	rdfs:range	<wordnet_city_108524735>	
+	<permanentRelationToObject>	rdfs:range	owl:Thing	
+	<hasMusicalRole>	<hasConfidence>	"0.9295"^^xsd:decimal	0.9295
+	<isLeaderOf>	rdfs:range	<yagoLegalActorGeo>	
+	<endedOnDate>	rdfs:range	xsd:date	
+	<wasBornIn>	rdfs:domain	<wordnet_person_100007846>	
+	rdfs:subPropertyOf	rdfs:range	rdf:Property	
+	<occursIn>	rdfs:domain	rdf:Statement	
+	<exports>	<hasConfidence>	"0.9333"^^xsd:decimal	0.9333
+	<hasImport>	<hasConfidence>	"0.9639"^^xsd:decimal	0.9639
+	<hasMotto>	rdfs:domain	<yagoLegalActorGeo>	
+	<hasMusicalRole>	rdfs:range	rdfs:Class	
+	<endedOnDate>	rdfs:domain	<wordnet_event_100029378>	
+	<hasNeighbor>	rdfs:domain	<yagoGeoEntity>	
+	<imports>	rdfs:domain	<wordnet_location_100027167>	
+	<_timeToLocation>	rdfs:domain	rdf:Property	
+	<isInterestedIn>	rdfs:domain	<wordnet_person_100007846>	
+	rdfs:label	rdfs:range	xsd:string	
+	<isCitizenOf>	<hasConfidence>	"0.9815"^^xsd:decimal	0.9815
+	rdfs:subClassOf	rdfs:range	rdfs:Class	
+	<wasCreatedOnDate>	rdfs:subPropertyOf	<startsExistingOnDate>	
+	<endedOnDate>	rdfs:subPropertyOf	<endsExistingOnDate>	
+	<hasCitationTitle>	rdfs:subPropertyOf	<hasContext>	
+	<hasAcademicAdvisor>	<hasConfidence>	"0.9708"^^xsd:decimal	0.9708
+	<hasTLD>	<hasConfidence>	"0.9725"^^xsd:decimal	0.9725
+	<hasDuration>	<hasConfidence>	"0.9559"^^xsd:decimal	0.9559
+	<hasWeight>	rdfs:domain	<wordnet_physical_entity_100001930>	
+	<isPoliticianOf>	<hasConfidence>	"0.9733"^^xsd:decimal	0.9733
+	<hasWonPrize>	rdfs:domain	<yagoLegalActorGeo>	
+	<hasCurrency>	rdfs:range	owl:Thing	
+	<hasHeight>	<hasConfidence>	"0.9202"^^xsd:decimal	0.9202
+	<hasLatitude>	<hasConfidence>	"0.9771"^^xsd:decimal	0.9771
+	<isAffiliatedTo>	rdfs:domain	<yagoLegalActor>	
+	<relationLocatedByObject>	rdfs:range	owl:Thing	
+	<hasTLD>	rdfs:range	<yagoTLD>	
+	<isKnownFor>	rdfs:range	owl:Thing	
+	<hasWikipediaArticleLength>	rdfs:range	xsd:decimal	
+	<hasTLD>	rdfs:domain	<wordnet_location_100027167>	
+	<wasDestroyedOnDate>	rdfs:subPropertyOf	<endsExistingOnDate>	
+	<hasArea>	rdfs:range	<m^2>	
+	<hasAcademicAdvisor>	rdfs:domain	<wordnet_person_100007846>	
+	<directed>	rdfs:domain	<wordnet_person_100007846>	
+	<hasThreeLetterLanguageCode>	rdfs:domain	<wordnet_language_106282651>	
+	<hasExternalWikipediaLinkTo>	rdfs:domain	rdf:Resource	
+	<byTransport>	rdfs:domain	rdf:Statement	
+	<hasEconomicGrowth>	rdfs:domain	<wordnet_location_100027167>	
+	<hasTitleText>	rdfs:domain	rdf:Resource	
+	<objectEndRelation>	rdfs:range	owl:Thing	
+	<hasContextPrecedingAnchor>	rdfs:domain	rdf:Statement	
+	rdfs:comment	rdfs:domain	rdfs:Resource	
+	<hasCapital>	rdfs:range	<wordnet_location_100027167>	
+	<hasSuccessor>	<hasConfidence>	"0.9774"^^xsd:decimal	0.9774
+	<diedOnDate>	rdfs:range	xsd:date	
+	<hasWeight>	<hasConfidence>	"0.9582"^^xsd:decimal	0.9582
+	<hasPopulationDensity>	rdfs:range	</km^2>	
+	<byTransport>	rdfs:range	<wordnet_airline_102690081>	
+	<hasGender>	rdfs:range	<wordnet_sex_105006898>	
+	<hasMotto>	rdfs:range	xsd:string	
+	<isConnectedTo>	rdfs:range	<yagoGeoEntity>	
+	<hasGeonamesId>	rdfs:range	<geonamesId>	
+	<hasLatitude>	rdfs:range	<degrees>	
+	<hasMusicalRole>	rdfs:domain	<wordnet_person_100007846>	
+	<isMarriedTo>	rdfs:domain	<wordnet_person_100007846>	
+	<occursSince>	rdfs:range	xsd:date	
+	<hasChild>	<hasConfidence>	"0.9470"^^xsd:decimal	0.9470
+	<isMarriedTo>	<hasConfidence>	"0.9729"^^xsd:decimal	0.9729
+	<hasAirportCode>	rdfs:range	xsd:string	
+	<playsFor>	rdfs:domain	<wordnet_person_100007846>	
+	<linksTo>	rdfs:domain	owl:Thing	
+	<hasConfidence>	rdfs:range	<yagoFraction>	
+	<wasCreatedOnDate>	rdfs:range	xsd:date	
+	<participatedIn>	rdfs:domain	<yagoLegalActorGeo>	
+	<hasRevenue>	rdfs:range	<yagoMonetaryValue>	
+	<hasGeoCoordinates>	rdfs:domain	<yagoGeoEntity>	
+	<hasContextPrecedingAnchor>	rdfs:range	xsd:string	
+	<wasBornOnDate>	<hasConfidence>	"0.9699"^^xsd:decimal	0.9699
+	<isLocatedIn>	rdfs:domain	<yagoPermanentlyLocatedEntity>	
+	<exports>	rdfs:domain	<wordnet_location_100027167>	
+	<hasUnemployment>	rdfs:range	<%>	
+	<hasExport>	rdfs:domain	<wordnet_location_100027167>	
+	<hasTitleText>	rdfs:range	xsd:string	
+	<worksAt>	rdfs:domain	<wordnet_person_100007846>	
+	<hasGloss>	rdfs:range	xsd:string	
+	<hasInflation>	rdfs:domain	<wordnet_location_100027167>	
+	<hasArea>	rdfs:domain	<wordnet_location_100027167>	
+	<isLocatedIn>	rdfs:range	<yagoGeoEntity>	
+	<isLeaderOf>	rdfs:domain	<wordnet_person_100007846>	
+	<endsExistingOnDate>	rdfs:range	xsd:date	
+	<isCitizenOf>	rdfs:range	<wordnet_country_108544813>	
+	<hasNumberOfWikipediaLinks>	rdfs:range	xsd:decimal	
+	<participatedIn>	rdfs:range	owl:Thing	
+	<actedIn>	<hasConfidence>	"0.9771"^^xsd:decimal	0.9771
+	<wasBornOnDate>	rdfs:range	xsd:date	
+	<wasBornIn>	<hasConfidence>	"0.9694"^^xsd:decimal	0.9694
+	<hasHeight>	rdfs:range	<m>	
+	<hasBudget>	rdfs:range	<yagoMonetaryValue>	
+	<startedOnDate>	<hasConfidence>	"0.9775"^^xsd:decimal	0.9775
+	<subjectEndRelation>	rdfs:domain	owl:Thing	
+	skos:prefLabel	<hasConfidence>	"0.9791"^^xsd:decimal	0.9791
+	<diedIn>	<hasConfidence>	"0.9813"^^xsd:decimal	0.9813
+	<isInterestedIn>	<hasConfidence>	"0.9315"^^xsd:decimal	0.9315
+	<hasPoverty>	rdfs:range	<%>	
+	<hasWikipediaAnchorText>	rdfs:range	xsd:string	
+	<hasNumberOfWikipediaLinks>	rdfs:domain	rdf:Resource	
+	<hasISBN>	rdfs:range	<yagoISBN>	
+	<hasHeight>	rdfs:domain	<wordnet_physical_entity_100001930>	
+	<hasInflation>	<hasConfidence>	"0.9660"^^xsd:decimal	0.9660
+	<influences>	rdfs:range	<wordnet_person_100007846>	
+	<hasAirportCode>	rdfs:domain	<wordnet_airport_102692232>	
+	skos:prefLabel	rdfs:domain	owl:Thing	
+	<holdsPoliticalPosition>	rdfs:range	<wordnet_person_100007846>	
+	<hasExpenses>	rdfs:range	<yagoMonetaryValue>	
+	<hasWonPrize>	<hasConfidence>	"0.9733"^^xsd:decimal	0.9733
+	<permanentRelationToSubject>	rdfs:range	owl:Thing	
+	<wasBornIn>	rdfs:range	<wordnet_city_108524735>	
+	<hasGDP>	<hasConfidence>	"0.9291"^^xsd:decimal	0.9291
+	<isPreferredMeaningOf>	rdfs:range	owl:Thing	
+	<extractionSource>	rdfs:range	<yagoURL>	
+	<hasWonPrize>	rdfs:range	<wordnet_award_106696483>	
+	<hasPoverty>	<hasConfidence>	"0.9604"^^xsd:decimal	0.9604
+	<hasGeonamesEntityId>	rdfs:domain	owl:Thing	
+	<diedOnDate>	rdfs:subPropertyOf	<endsExistingOnDate>	
+	<hasWikipediaCategory>	rdfs:subPropertyOf	<hasContext>	
+	<subjectStartRelation>	rdfs:domain	owl:Thing	
+	<diedIn>	rdfs:domain	<wordnet_person_100007846>	
+	<playsFor>	<hasConfidence>	"0.9765"^^xsd:decimal	0.9765
+	<hasCitationTitle>	rdfs:range	xsd:string	
+	<actedIn>	rdfs:range	<wordnet_movie_106613686>	
+	<hasAnchorText>	rdfs:range	xsd:string	
+	<hasRevenue>	rdfs:domain	<yagoLegalActorGeo>	
+	<hasPopulationDensity>	<hasConfidence>	"0.9733"^^xsd:decimal	0.9733
+	rdf:type	rdfs:domain	rdfs:Resource	
+	<hasLatitude>	rdfs:domain	<yagoGeoEntity>	
+	<hasImdb>	rdfs:domain	<wordnet_movie_106613686>	
+	<imports>	<hasConfidence>	"0.9538"^^xsd:decimal	0.9538
+	<hasNumberOfPeople>	rdfs:domain	<yagoLegalActorGeo>	
+	<actedIn>	rdfs:domain	<wordnet_actor_109765278>	
+	<happenedOnDate>	rdfs:subPropertyOf	<endsExistingOnDate>	
+	<wasCreatedOnDate>	<hasConfidence>	"0.9793"^^xsd:decimal	0.9793
+	<endedOnDate>	<hasConfidence>	"0.9678"^^xsd:decimal	0.9678
+	<isAffiliatedTo>	rdfs:range	<yagoLegalActor>	
+	<relationLocatedByObject>	rdfs:domain	owl:Thing	
+	<worksAt>	<hasConfidence>	"0.9736"^^xsd:decimal	0.9736
+	<hasGloss>	rdfs:domain	owl:Thing	
+	rdfs:comment	rdfs:range	xsd:string	
+	<objectEndRelation>	rdfs:domain	owl:Thing	
+	<hasWeight>	rdfs:range	<g>	
+	<hasContextSucceedingAnchor>	rdfs:range	xsd:string	
+	<hasUnemployment>	<hasConfidence>	"0.9599"^^xsd:decimal	0.9599
+	<livesIn>	rdfs:range	<wordnet_location_100027167>	
+	<isPoliticianOf>	rdfs:domain	<wordnet_person_100007846>	
+	<happenedIn>	rdfs:subPropertyOf	<placedIn>	
+	<hasAcademicAdvisor>	rdfs:range	<wordnet_person_100007846>	
+	<hasSynsetId>	rdfs:domain	rdfs:Class	
+	<hasExternalWikipediaLinkTo>	rdfs:range	rdf:Resource	
+	<imports>	rdfs:range	rdfs:Class	
+	rdfs:subClassOf	rdfs:domain	rdfs:Class	
+	<_hasTypeCheckPattern>	rdfs:domain	rdfs:class	
+	<hasWikipediaAbstract>	rdfs:domain	rdf:Resource	
+	<occursUntil>	<hasConfidence>	"0.9685"^^xsd:decimal	0.9685
+	<hasNeighbor>	rdfs:range	<yagoGeoEntity>	
+	<_timeToLocation>	rdfs:range	rdf:Property	
+	<hasPredecessor>	rdfs:domain	rdf:Statement	
+	<isCalled>	<hasConfidence>	"0.9662"^^xsd:decimal	0.9662
+	<hasCurrency>	<hasConfidence>	"0.9694"^^xsd:decimal	0.9694
+	<occursUntil>	rdfs:range	xsd:date	
+	<holdsPoliticalPosition>	<hasConfidence>	"0.9461"^^xsd:decimal	0.9461
+	<hasExport>	rdfs:range	<yagoMonetaryValue>	
+	<occursSince>	<hasConfidence>	"0.9760"^^xsd:decimal	0.9760
+	<hasPages>	<hasConfidence>	"0.9568"^^xsd:decimal	0.9568
+	<dealsWith>	<hasConfidence>	"0.9535"^^xsd:decimal	0.9535
+	<hasThreeLetterLanguageCode>	rdfs:range	xsd:string	
+	<hasWikipediaUrl>	rdfs:domain	owl:Thing	
+	<hasBudget>	<hasConfidence>	"0.9542"^^xsd:decimal	0.9542
+	<happenedOnDate>	<hasConfidence>	"0.9734"^^xsd:decimal	0.9734
+	<livesIn>	<hasConfidence>	"0.9793"^^xsd:decimal	0.9793
+	<wroteMusicFor>	rdfs:domain	<wordnet_person_100007846>	
+	<hasGeonamesId>	rdfs:domain	<wordnet_location_100027167>	
+	<hasGivenName>	rdfs:range	xsd:string	
+	<happenedIn>	<hasConfidence>	"0.9593"^^xsd:decimal	0.9593
+	<occursIn>	rdfs:range	<yagoGeoEntity>	
+	<hasLanguageCode>	rdfs:domain	<wordnet_language_106282651>	
+	<hasExpenses>	rdfs:domain	<yagoLegalActorGeo>	
+	<isPreferredMeaningOf>	rdfs:domain	xsd:string	
+	rdfs:subPropertyOf	rdfs:domain	rdf:Property	
+	skos:prefLabel	rdfs:range	xsd:string	
+	<hasGeonamesEntityId>	rdfs:range	<yagoIdentifier>	
+	<permanentRelationToObject>	rdfs:domain	owl:Thing	
+	<directed>	rdfs:range	<wordnet_movie_106613686>	
+	<isLeaderOf>	<hasConfidence>	"0.9725"^^xsd:decimal	0.9725
+	<hasWikipediaUrl>	rdfs:range	<yagoURL>	
+	<graduatedFrom>	<hasConfidence>	"0.9740"^^xsd:decimal	0.9740
+	<hasImdb>	<hasConfidence>	"0.9495"^^xsd:decimal	0.9495
+	<isKnownFor>	<hasConfidence>	"0.9538"^^xsd:decimal	0.9538
+	<diedOnDate>	<hasConfidence>	"0.9791"^^xsd:decimal	0.9791
+	<hasLongitude>	<hasConfidence>	"0.9643"^^xsd:decimal	0.9643
+	<hasGender>	rdfs:domain	<wordnet_person_100007846>	
+	<hasChild>	rdfs:range	<wordnet_person_100007846>	
+	<directed>	<hasConfidence>	"0.9759"^^xsd:decimal	0.9759
+	<wasCreatedOnDate>	rdfs:domain	owl:Thing	
+	<_hasTypeCheckPattern>	rdfs:range	xsd:string	
+	<hasBudget>	rdfs:domain	<yagoLegalActorGeo>	
+	<created>	<hasConfidence>	"0.9548"^^xsd:decimal	0.9548
+	<extractionTechnique>	rdfs:range	xsd:string	
+	rdfs:label	<hasConfidence>	"0.9428"^^xsd:decimal	0.9428
+	<hasSuccessor>	rdfs:range	<wordnet_person_100007846>	
+	rdfs:domain	rdfs:range	rdfs:Class	
+	<hasHDI>	<hasConfidence>	"0.9622"^^xsd:decimal	0.9622
+	<hasFamilyName>	rdfs:range	xsd:string	
+	<hasExpenses>	<hasConfidence>	"0.9582"^^xsd:decimal	0.9582
+	<hasOfficialLanguage>	rdfs:range	<wordnet_language_106282651>	
+	<dealsWith>	rdfs:domain	<wordnet_location_100027167>	
+	<hasWikipediaCategory>	rdfs:domain	rdf:Resource	
+	<happenedOnDate>	rdfs:domain	<wordnet_event_100029378>	
+	<objectStartRelation>	rdfs:range	owl:Thing	
+	rdf:type	rdfs:range	rdfs:Class	
+	rdfs:domain	rdfs:domain	rdf:Property	
+	<influences>	<hasConfidence>	"0.9625"^^xsd:decimal	0.9625
+	<startedOnDate>	rdfs:subPropertyOf	<startsExistingOnDate>	
+	<happenedOnDate>	rdfs:range	xsd:date	
+	<endsExistingOnDate>	rdfs:domain	owl:Thing	
+	<hasWebsite>	rdfs:domain	<yagoLegalActorGeo>	
+	<hasLength>	rdfs:range	<m>	
+	<hasEconomicGrowth>	rdfs:range	<%>	
+	<hasMotto>	<hasConfidence>	"0.9610"^^xsd:decimal	0.9610
+	<hasContext>	rdfs:range	xsd:string	
+	<isPoliticianOf>	rdfs:range	<wikicategory_States_of_the_United_States>	
+	<happenedOnDate>	rdfs:subPropertyOf	<endedOnDate>	
+	<participatedIn>	<hasConfidence>	"0.9656"^^xsd:decimal	0.9656
+	<hasPopulationDensity>	rdfs:domain	<wordnet_location_100027167>	
+	<startedOnDate>	rdfs:domain	<wordnet_event_100029378>	
+	<happenedOnDate>	rdfs:subPropertyOf	<startedOnDate >	
+	<occursUntil>	rdfs:domain	rdf:Statement	
+	<hasSuccessor>	rdfs:domain	rdf:Statement	
+	<subjectStartRelation>	rdfs:range	owl:Thing	
+	<hasSynsetId>	rdfs:range	<yagoIdentifier>	
+	<startedOnDate>	rdfs:range	xsd:date	
+	<happenedOnDate>	rdfs:subPropertyOf	<startsExistingOnDate>	
+	<edited>	rdfs:range	<wordnet_movie_106613686>	
+	<graduatedFrom>	rdfs:range	<wordnet_university_108286569>	
+	<influences>	rdfs:domain	<wordnet_person_100007846>	
+	<hasGDP>	rdfs:range	<yagoMonetaryValue>	
+	<holdsPoliticalPosition>	rdfs:domain	<wordnet_person_100007846>	
+	<created>	rdfs:range	owl:Thing	
+	<hasCallingCode>	<hasConfidence>	"0.7163"^^xsd:decimal	0.7163
+	<permanentRelationToSubject>	rdfs:domain	owl:Thing	
+	<hasImport>	rdfs:domain	<wordnet_location_100027167>	
+	<hasDuration>	rdfs:domain	owl:Thing	
+	<isLocatedIn>	rdfs:subPropertyOf	<placedIn>	
+	<diedOnDate>	rdfs:domain	<wordnet_person_100007846>	
+	<hasWikipediaAnchorText>	rdfs:subPropertyOf	<hasContext>	
+	<hasGini>	<hasConfidence>	"0.9652"^^xsd:decimal	0.9652
+	<hasDuration>	rdfs:range	<s>	
+	<subjectEndRelation>	rdfs:range	owl:Thing	
+	<hasWikipediaCategory>	rdfs:range	xsd:string	
+	<hasUTCOffset>	<hasConfidence>	"0.9527"^^xsd:decimal	0.9527
+	<edited>	rdfs:domain	<wordnet_editor_110044879>	
+	<hasOfficialLanguage>	<hasConfidence>	"0.9593"^^xsd:decimal	0.9593
+	<extractionTechnique>	rdfs:domain	rdf:Statement	
+	<hasGeonamesClassId>	rdfs:domain	owl:Thing	
+	<hasGeoCoordinates>	rdfs:range	<yagoGeoCoordinatePair>	
+	<owns>	rdfs:domain	<yagoLegalActorGeo>	
+	<livesIn>	rdfs:domain	<wordnet_person_100007846>	
+	<hasISBN>	<hasConfidence>	"0.9433"^^xsd:decimal	0.9433
+	<hasUnemployment>	rdfs:domain	<wordnet_location_100027167>	
+	<hasLongitude>	rdfs:domain	<yagoGeoEntity>	
+	<inLanguage>	<hasConfidence>	"0.9725"^^xsd:decimal	0.9725
+	<hasInflation>	rdfs:range	<%>	
+	<hasExport>	<hasConfidence>	"0.9634"^^xsd:decimal	0.9634
+	<produced>	<hasConfidence>	"0.9643"^^xsd:decimal	0.9643
+	<hasLength>	rdfs:domain	<yagoGeoEntity>	
+	<wasDestroyedOnDate>	rdfs:domain	owl:Thing	
+	<isInterestedIn>	rdfs:range	owl:Thing	
+	<hasCitationTitle>	rdfs:domain	rdf:Resource	
+	<hasContextSucceedingAnchor>	rdfs:domain	rdf:Statement	
+	<linksTo>	rdfs:range	owl:Thing	
+	<hasGivenName>	rdfs:subPropertyOf	rdfs:label	
+	rdfs:subClassOf	<hasConfidence>	"0.9532"^^xsd:decimal	0.9532
+	<exports>	rdfs:range	rdfs:Class	
+	<happenedIn>	rdfs:domain	<wordnet_event_100029378>	
+	<hasPages>	rdfs:domain	owl:Thing	
+	<placedIn>	rdfs:range	<yagoGeoEntity>	
+	<hasPredecessor>	rdfs:range	<wordnet_person_100007846>	
+	<placedIn>	rdfs:domain	owl:Thing	
+	<owns>	rdfs:range	owl:Thing	
+	<playsFor>	rdfs:range	<wordnet_organization_108008335>	
+	<hasOfficialLanguage>	rdfs:domain	<wordnet_location_100027167>	
+	<hasAnchorText>	rdfs:domain	rdf:Statement	
+	<hasPopulation>	<hasConfidence>	"0.9599"^^xsd:decimal	0.9599
+	<hasWikipediaAbstract>	rdfs:range	xsd:string	
+	<startsExistingOnDate>	rdfs:domain	owl:Thing	
+	rdfs:label	rdfs:domain	owl:Thing	
+	<hasPages>	rdfs:range	xsd:nonNegativeInteger	
+	<hasFamilyName>	rdfs:subPropertyOf	rdfs:label	
+	<hasPoverty>	rdfs:domain	<wordnet_location_100027167>	
+	<isPreferredMeaningOf>	<hasConfidence>	"0.9740"^^xsd:decimal	0.9740
+	<extractionSource>	rdfs:domain	rdf:Statement	
+	<isKnownFor>	rdfs:domain	<yagoLegalActor>	
+	<hasNumberOfPeople>	<hasConfidence>	"0.9588"^^xsd:decimal	0.9588
+	<hasCapital>	rdfs:domain	<wordnet_location_100027167>	
+	<wasBornOnDate>	rdfs:domain	<wordnet_person_100007846>	
+	<hasCapital>	<hasConfidence>	"0.9582"^^xsd:decimal	0.9582
+	<hasArea>	<hasConfidence>	"0.9622"^^xsd:decimal	0.9622
+	<isMarriedTo>	rdfs:range	<wordnet_person_100007846>	
+	rdf:type	<hasConfidence>	"0.9665"^^xsd:decimal	0.9665
+	<worksAt>	rdfs:range	<wordnet_organization_108008335>	
+	<isLocatedIn>	<hasConfidence>	"0.9593"^^xsd:decimal	0.9593
+	<hasGivenName>	<hasConfidence>	"0.9544"^^xsd:decimal	0.9544
+	<isConnectedTo>	rdfs:domain	<yagoGeoEntity>	
+	<graduatedFrom>	rdfs:domain	<wordnet_person_100007846>	
+	<hasICD10>	<hasConfidence>	"0.9643"^^xsd:decimal	0.9643
+	<hasTitleText>	rdfs:subPropertyOf	<hasContext>	

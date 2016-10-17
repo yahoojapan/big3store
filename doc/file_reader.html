@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module file_reader</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module file_reader</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>A process for reading a tsv triple dump file and generating
+  data streams of the file.
+<p>Copyright © 2013-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+
+<p><b>Version:</b> 0.3</p>
+<p><b>Introduced in:</b> August, 2013</p>
+<p><b>Authors:</b> Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
+<p><b>See also:</b> <a href="triple_distributor.html">triple_distributor</a>.</p>
+
+<h2><a name="description">Description</a></h2><p>A process for reading a tsv triple dump file and generating
+  data streams of the file. One process is invoked for one file. This
+  module is implemented as an erlang <A href="http://www.erlang.org/doc/man/gen_server.html">gen_server</A>  
+process.</p>
+ 
+  <table bgcolor="lemonchiffon">
+  <tr><th>Section Index</th></tr>
+  <tr><td><a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></td></tr>
+  <tr><td><a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></td></tr>
+  <tr><td><a href="#property_list">property list</a></td></tr>
+  </table>
+ 
+  <h3><a name="handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>)</p>
+ 
+  <h4><a name="{start,_FileName,_Destination,_Message}">{start, FileName, Destination, Message}</a></h4>
+ 
+  <p>Prepare to generate a stream from specified
+  Filename::string(). Variable Destination is a tuple
+  {ProcessId::pid(), NodeId::node()} that indicates a <a href="triple_distributor.html"><code>triple_distributor</code></a> process in distributed environment. Variable
+  Message is an atom() that specifies whether the stream message is
+  investigate_stream or store_stream. It returns ok if the process
+  was successfully started. Otherwise, it returns {error,
+  Reason::term()}. If succeeded, it turns the wait property from true
+  to false so that this file_reader process can accept <a href="#{empty,_From}">{empty, From}</a> messages to send stream messages. A stream message
+  will have a form of {Message, From, Triple}, where Message is
+  either of investigate_stream or store_stream, From is a tuple
+  {ProcessId::pid(), NodeId::node()} that indicates the file_reader
+  process in distributed environment, and Triple is <a href="tp_query_node.html#type-qn_triple"><code>tp_query_node:qn_triple()</code></a> | end_of_stream. This request is
+  implemented by <a href="#hc_start-4"><code>hc_start/4</code></a>. (LINK: <a href="#{start,_FileName,_Destination,_Message}">{start,
+  FileName, Destination, Message}</a>)</p>
+ 
+  <h4><a name="{get_property,_Name}">{get_property, Name}</a></h4>
+ 
+  <p>Return the value of specified property name. Variable Name is an
+  atom(). (LINK: <a href="#{get_property,_Name}">{get_property, Name}</a>).</p>
+ 
+  <h3><a name="handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a>)</p>
+ 
+  <h4><a name="{empty,_From}">{empty, From}</a></h4>
+ 
+  <p>Send a stream message, if the process has been started by <a href="#{start,_FileName,_Destination,_Message}">{start, FileName, Destination, Message}</a> call and the wait
+  property is false. Variable From is a tuple {ProcessId::pid(),
+  NodeId::node()} that indicates a process in distributed
+  environment. A stream message will have a form of {Message, From,
+  Triple}, where Message is either of investigate_stream or
+  store_stream, From is a tuple {ProcessId::pid(), NodeId::node()}
+  that indicates the file_reader process in distributed environment,
+  and Triple is <a href="tp_query_node.html#type-qn_triple"><code>tp_query_node:qn_triple()</code></a> |
+  end_of_stream. This request is implemented by <a href="#hc_empty-1"><code>hc_empty/1</code></a>. (LINK: <a href="#{empty,_From}">{empty, From}</a>)</p>
+ 
+  <h3><a name="property_list">property list</a></h3>
+ 
+  <p>(LINK: <a href="#property_list">property list</a>)</p>
+ 
+  <p>The gen_server process uses following properties holded by <a href="#type-fr_state"><code>fr_state()</code></a>. These properties can be accessed using <a href="#{get_property,_Name}">{get_property, Name}</a> synchronous messages.</p>
+ 
+  <table border="3">
+  <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+ 
+  <tr> <td>created</td> <td>boolean()</td> <td>true denotes that
+  process dictionary was created and used. false denotes that
+  completely new process.</td> </tr>
+ 
+  <tr> <td>pid</td> <td>pid()</td> <td>local id of the file_reader
+  process.</td> </tr>
+ 
+  <tr> <td>file_name</td> <td>string()</td> <td>path string to be
+  read.</td> </tr>
+ 
+  <tr> <td>dest_proc</td> <td>pid()</td> <td>process id of stream
+  destination.</td> </tr>
+ 
+  <tr> <td>dest_node</td> <td>node()</td> <td>node id of stream
+  destination.</td> </tr>
+ 
+  <tr> <td>msg_type</td> <td>atom()</td> <td>type of stream
+  message.</td> </tr>
+ 
+  <tr> <td>io_device</td> <td>io_device()</td> <td>I/O device pointer
+  of opened file.</td> </tr>
+ 
+  <tr> <td>triple_count</td> <td>integer()</td> <td>number of sent
+  triples.</td> </tr>
+ 
+  <tr> <td>request_start_time</td> <td>calendar:datetime()</td>
+  <td>Date and time when the file_reader process was initialized by
+  <a href="#{start,_FileName,_Destination,_Message}">{start, FileName, Destination, Message}</a>.</td> </tr>
+ 
+  <tr> <td>process_sec_total</td> <td>integer()</td> <td>total
+  seconds after process creation.</td> </tr>
+ 
+  <tr> <td>process_sec_latest</td> <td>integer()</td> <td>total
+  seconds after request_start_time.</td> </tr>
+ 
+  <tr> <td>number_of_triple_total</td> <td>integer()</td> <td>total
+  number of processed triples after process creation.</td> </tr>
+ 
+  <tr> <td>number_of_triple_latest</td> <td>integer()</td> <td>total
+  number of processed triples after request_start_time.</td> </tr>
+ 
+  <tr> <td>wait</td> <td>boolean()</td> <td>indicate whether the
+  process is in wait state or not.</td> </tr>
+ 
+  <tr> <td>store_report_frequency</td> <td>integer()</td>
+  <td>Report frequency of storing process.</td> </tr>
+ 
+  </table>
+ 
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-fr_state">fr_state()</a></h3>
+<p><tt>fr_state() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+<p>A Reference pointer of the map
+  object that manages properties for operating the gen_server
+  process.
+ </p>
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#child_spec-1">child_spec/1</a></td><td>Return child spec for this process.</td></tr>
+<tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Process code change action.</td></tr>
+<tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle synchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
+<tr><td valign="top"><a href="#hc_empty-1">hc_empty/1*</a></td><td>Send a stream message.</td></tr>
+<tr><td valign="top"><a href="#hc_empty_test_-0">hc_empty_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_start-4">hc_start/4*</a></td><td>Prepare to generate a stream from specified
+  Filename::string().</td></tr>
+<tr><td valign="top"><a href="#hc_start_test_-0">hc_start_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hce_confirm-5">hce_confirm/5*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hce_line_to_tok-1">hce_line_to_tok/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hce_line_to_tok_test_-0">hce_line_to_tok_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hce_process_line-3">hce_process_line/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hce_record_progress-1">hce_record_progress/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hce_send_message-2">hce_send_message/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcs_open-1">hcs_open/1*</a></td><td>Open data file.</td></tr>
+<tr><td valign="top"><a href="#hcs_wait-1">hcs_wait/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcsspl_fix_token-3">hcsspl_fix_token/3*</a></td><td>Fix token string.</td></tr>
+<tr><td valign="top"><a href="#hcsspl_process_token-4">hcsspl_process_token/4*</a></td><td>Process a token of line.</td></tr>
+<tr><td valign="top"><a href="#hcsspl_sel_token-11">hcsspl_sel_token/11*</a></td><td>Select appropriate portion of token string.</td></tr>
+<tr><td valign="top"><a href="#het_iterate_cast-3">het_iterate_cast/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hltt_tab-2">hltt_tab/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#im_cond-3">im_cond/3*</a></td><td>Report an information issue to the error_logger with specified
+  format and argument if current debug level is greater than
+  ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#im_cond-4">im_cond/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a file_reader process.</td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="child_spec-1">child_spec/1</a></h3>
+<div class="spec">
+<p><tt>child_spec(Id::atom()) -&gt; <a href="supervisor.html#type-child_spec">supervisor:child_spec()</a></tt><br></p>
+</div><p>Return child spec for this process. It can be used in
+  supervisor:init/0 callback implementation.
+ </p>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><tt>code_change(OldVsn::term(), State::<a href="#type-fr_state">fr_state()</a>, Extra::term()) -&gt; {ok, <a href="#type-fr_state">fr_state()</a>}</tt><br></p>
+</div><p>Process code change action.
+ </p>
+
+<h3 class="function"><a name="error_msg-3">error_msg/3 *</a></h3>
+<div class="spec">
+<p><tt>error_msg(FunName::atom(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
+</div><p>Report an error issue to the error_logger.
+ </p>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><tt>handle_call(Request::term(), From::{pid(), term()}, State::<a href="#type-fr_state">fr_state()</a>) -&gt; {reply, term(), <a href="#type-fr_state">fr_state()</a>}</tt><br></p>
+</div><p>Handle synchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><tt>handle_cast(Request::term(), State::<a href="#type-fr_state">fr_state()</a>) -&gt; {noreply, <a href="#type-fr_state">fr_state()</a>}</tt><br></p>
+</div><p>Handle asynchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><tt>handle_info(Info::term(), State::<a href="#type-fr_state">fr_state()</a>) -&gt; {noreply, <a href="#type-fr_state">fr_state()</a>}</tt><br></p>
+</div><p>Handle exceptional query requests.
+ </p>
+
+<h3 class="function"><a name="hc_empty-1">hc_empty/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_empty(From::{ProcId::pid(), NodeId::node()}) -&gt; ok</tt><br></p>
+</div><p>Send a stream message.
+ </p>
+
+<h3 class="function"><a name="hc_empty_test_-0">hc_empty_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_empty_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_restore_pd-2">hc_restore_pd/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd(X1::[{atom(), term()}] | undefined, State::<a href="#type-fr_state">fr_state()</a>) -&gt; ok</tt><br></p>
+</div><p>Restore process dictionaries from state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd_1-1">hc_restore_pd_1/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd_1(T) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_save_pd-0">hc_save_pd/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_save_pd() -&gt; <a href="#type-fr_state">fr_state()</a></tt><br></p>
+</div><p>Save process all dictionary contents into state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_start-4">hc_start/4 *</a></h3>
+<div class="spec">
+<p><tt>hc_start(FileName::string(), Destination::{ProcId::pid(), NodeId::node()}, Message::atom(), From::{ProcId::pid(), NodeId::node()}) -&gt; ok | {error, Reason::term()}</tt><br></p>
+</div><p>Prepare to generate a stream from specified
+  Filename::string().
+ </p>
+
+<h3 class="function"><a name="hc_start_test_-0">hc_start_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_start_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hce_confirm-5">hce_confirm/5 *</a></h3>
+<div class="spec">
+<p><tt>hce_confirm(Proc, Node, P, N, W) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hce_line_to_tok-1">hce_line_to_tok/1 *</a></h3>
+<div class="spec">
+<p><tt>hce_line_to_tok(Line) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hce_line_to_tok_test_-0">hce_line_to_tok_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hce_line_to_tok_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hce_process_line-3">hce_process_line/3 *</a></h3>
+<div class="spec">
+<p><tt>hce_process_line(Line, C, SRF) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hce_record_progress-1">hce_record_progress/1 *</a></h3>
+<div class="spec">
+<p><tt>hce_record_progress(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hce_send_message-2">hce_send_message/2 *</a></h3>
+<div class="spec">
+<p><tt>hce_send_message(X1, Data) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcs_open-1">hcs_open/1 *</a></h3>
+<div class="spec">
+<p><tt>hcs_open(X1) -&gt; any()</tt></p>
+</div><p>Open data file.</p>
+
+<h3 class="function"><a name="hcs_wait-1">hcs_wait/1 *</a></h3>
+<div class="spec">
+<p><tt>hcs_wait(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcsspl_fix_token-3">hcsspl_fix_token/3 *</a></h3>
+<div class="spec">
+<p><tt>hcsspl_fix_token(Tok, TokN, LinN) -&gt; any()</tt></p>
+</div><p>Fix token string.</p>
+
+<h3 class="function"><a name="hcsspl_process_token-4">hcsspl_process_token/4 *</a></h3>
+<div class="spec">
+<p><tt>hcsspl_process_token(Rst, TokLst, TokN, LinN) -&gt; any()</tt></p>
+</div><p>Process a token of line.</p>
+
+<h3 class="function"><a name="hcsspl_sel_token-11">hcsspl_sel_token/11 *</a></h3>
+<div class="spec">
+<p><tt>hcsspl_sel_token(T, LN, C1, C2, C3, C4, C5, S1, TokN, LinN, CLS) -&gt; any()</tt></p>
+</div><p>Select appropriate portion of token string.</p>
+
+<h3 class="function"><a name="het_iterate_cast-3">het_iterate_cast/3 *</a></h3>
+<div class="spec">
+<p><tt>het_iterate_cast(N, Pid, Message) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hltt_tab-2">hltt_tab/2 *</a></h3>
+<div class="spec">
+<p><tt>hltt_tab(X1, TokLst) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="im_cond-3">im_cond/3 *</a></h3>
+<div class="spec">
+<p><tt>im_cond(Format::atom(), Argument::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger with specified
+  format and argument if current debug level is greater than
+  ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="im_cond-4">im_cond/4 *</a></h3>
+<div class="spec">
+<p><tt>im_cond(Format, Argument, DL, TDL) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
+<div class="spec">
+<p><tt>info_msg(FunName::atom(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(X1::[pid()]) -&gt; {ok, <a href="#type-fr_state">fr_state()</a>}</tt><br></p>
+</div><p>Initialize a file_reader process.
+ </p>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason::term(), State::<a href="#type-fr_state">fr_state()</a>) -&gt; none()</tt><br></p>
+</div><p>Process termination.
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Aug 25 2016, 11:26:41.</i></p>
+</body>
+</html>

@@ -1,0 +1,7 @@
+edoc
+Mnesia*
+bak
+TAGS
+*.beam
+*.so
+*~

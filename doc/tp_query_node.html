@@ -1,0 +1,420 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module tp_query_node</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module tp_query_node</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Triple pattern query node is implemented as gen-process.
+<p>Copyright © 2014-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+
+<p><b>Version:</b> 0.3</p>
+<p><b>Introduced in:</b> May, 2014</p>
+<p><b>Authors:</b> Iztok Savnik (<a href="mailto:iztok.savnik@famnit.upr.si"><tt>iztok.savnik@famnit.upr.si</tt></a>), Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
+
+<h2><a name="description">Description</a></h2><p>Triple pattern query node is implemented as gen-process. It realizes  
+access method to local triple-store based on triple patterns. Access method  
+supports index based access to triple-table.</p>
+ 
+  <p>TP query node is implemented as state machine. Input and output messages  
+trigger co-routines that comprise protocol. The states of TP query node are:  
+active, db_access, eos, and inactive. Message start inits state to active.  
+Eval message moves state to read_db. Subsequent empty messages retain state  
+read_db. After end_of_stream is obtained from  
+accessing triple-store state moves to eos. Eval can be received multiple times  
+if in state active or eos. Finally, stop message puts  
+TP query node to state inactive.</p>
+ 
+  <table bgcolor="lemonchiffon">
+  <tr><th>Section Index</th></tr>
+  <tr><td><a href="#triple-pattern_access_method">triple-pattern access method</a></td></tr>
+  <tr><td><a href="#property_list">property list</a></td></tr>
+  <tr><td><a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></td></tr>
+  <tr><td><a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></td></tr>
+  </table>
+ 
+  <h3><a name="triple-pattern_access_method">triple-pattern access method</a></h3>
+ 
+  <p>(LINK: <a href="#triple-pattern_access_method">triple-pattern access method</a>)</p>
+ 
+  <p>Triple-pattern access method is a query node implemented as independent gen_process.
+  Process communicates with local database system via module <a href="db_interface.html"><code>db_interface</code></a> that  
+converts triple-pattern into internal data access method. Triples from database  
+are retrieved in the form of block including N triples where N is application  
+variable block_size.</p>
+ 
+  <p>Triple-pattern access method protocol is simple. Each time empty message is received
+  block of triples (possibly filtered against the selection predicate) is first collected
+  from local database and then sent to parent query node. In the case triple-pattern query
+  node has the role of inner query node of it is expected that it will receive
+  multiple messages <a href="#{eval,_VarsValues}">{eval, VarsValues}</a>.</p>
+ 
+  <h3><a name="property_list">property list</a></h3>
+ 
+  <p>(LINK: <a href="#property_list">property list</a>)</p>
+ 
+  <p>The gen_server process uses following properties holded by <a href="#type-tpqn_state"><code>tpqn_state()</code></a>.</p>
+ 
+  <table border="3">
+  <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+ 
+  <tr> <td>created</td> <td>boolean()</td> <td>true denotes that
+  process dictionary was created and used. false denotes that
+  completely new process.</td> </tr>
+ 
+  <tr> <td>node_id</td> <td>string()</td> <td>query node identifier</td> </tr>
+ 
+  <tr> <td>query_id</td> <td>string()</td> <td>query tree identifier</td> </tr>
+ 
+  <tr> <td>session_id</td> <td>string()</td> <td>session identifier</td> </tr>
+ 
+  <tr> <td>self</td> <td>state_node:ns_pid()</td> <td>pid of self</td> </tr>
+ 
+  <tr> <td>state</td> <td>atom()</td> <td>inactive | active | db_access |
+  eos</td> </tr>
+ 
+  <tr> <td>orig_tp</td> <td>query_node:qn_triple_pattern()</td> <td>original
+  triple pattern set by hc_start()</td> </tr>
+ 
+  <tr> <td>tp</td> <td>query_node:qn_triple_pattern()</td> <td>triple pattern of
+  query node</td> </tr>
+ 
+  <tr> <td>select_pred</td> <td>query_node:qn_select_predicate()</td> <td>selection
+  predicate in the form of abstract syntax tree of type <code><a href="query_node.html#type-qn_select_predicate">query_node:qn_select_predicate()</a></code>
+  </td> </tr>
+ 
+  <tr> <td>project_list</td> <td>query_node:qn_project_list()</td> <td>list of
+  variables to be projected</td> </tr>
+ 
+  <tr> <td>parent</td> <td>node_state:ns_pid()</td> <td>process id of query node
+  process</td> </tr>
+ 
+  <tr> <td>vars</td> <td>maps:map()</td> <td>mapping from <a href="query_node.html#type-qn_var"><code>query_node:qn_var()</code></a> to integer()</td> </tr>
+ 
+  <tr> <td>wait</td> <td>boolean()</td> <td>indicate whether the
+  process is in wait state or not.</td> </tr>
+ 
+  <tr> <td>inner_outer</td> <td>inner | outer</td> <td> Position to
+  its parent query node.</td> </tr>
+ 
+  <tr> <td>pause</td> <td>boolean()</td> <td>query stops evaluating
+  if true and evaluates normally if false</td> </tr>
+ 
+  <tr> <td>start_date_time</td> <td>calendar:datetime()</td>
+  <td>started date and time of the process.</td> </tr>
+ 
+  <tr> <td>b3s_state_pid</td> <td><code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code></td>
+  <td>process id of b3s_state.</td> </tr>
+ 
+  <tr> <td>queue_from_parent</td> <td>queue:queue()</td> <td> Queue
+  storing empty messages from parent if tp_query_node in state undefined,
+  eos, or, active.</td> </tr>
+ 
+  <tr> <td>benchmark_task_pid</td> <td><code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code></td> <td>process id of executing benchmark
+  task.</td> </tr>
+ 
+  <tr> <td>table_name</td> <td>string()</td> <td>name of triple table
+  used by <a href="db_interface.html"><code>db_interface</code></a>.</td> </tr>
+ 
+  <tr> <td>result_record_max</td> <td>integer()</td> <td>Max number
+  of records to be reported.</td> </tr>
+ 
+  </table>
+ 
+  <h3><a name="handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>)</p>
+ 
+  <h4><a name="{start,_QueryNodeId,_QueryId,_SessionId,_Self,_TriplePattern,_SelectPred,_ProjectList,_ParentPid,_VarsPositions}">{start, QueryNodeId, QueryId, SessionId, Self, TriplePattern, SelectPred, ProjectList, ParentPid, VarsPositions}</a></h4>
+ 
+  <p>Initialize all parameters and save them to the state structure.</p>
+ 
+  <p>QueryNodeId is <a href="query_node.html#type-qn_id"><code>query_node:qn_id()</code></a>, QueryId is string(), SessionId is string(),
+  Self is <a href="node_state.html#type-ns_pid"><code>node_state:ns_pid()</code></a>, Triplepattern is <a href="query_node.html#type-qn_triple_pattern"><code>query_node:qn_triple_pattern()</code></a>,
+  SelectPred is <code><a href="query_node.html#type-qn_select_predicate">query_node:qn_select_predicate()</a></code>, ProjectList is
+  <code><a href="query_node.html#type-qn_project_list">query_node:qn_project_list()</a></code>, ParentPid is node_state:ns_pid(), and
+  VarsPositions is <a href="#type-tpqn_var_position"><code>tpqn_var_position()</code></a>.</p>
+ 
+  <p>This request is implemented by <a href="#hc_start-6"><code>hc_start/6</code></a>. (LINK: <a href="#{start,_QueryNodeId,_QueryId,_SessionId,_Self,_TriplePattern,_SelectPred,_ProjectList,_ParentPid,_VarsPositions}">{start, QueryNodeId, QueryId, SessionId, Self, TriplePattern, SelectPred, ProjectList, ParentPid, VarsPositions}</a>).</p>
+ 
+  <h4><a name="{eval,_VarsValues}">{eval, VarsValues}</a></h4>
+ 
+  <p>Eval initiates evaluation of query node state machine. It opens cursor-based  
+access to triple-table. Indexes are used to access subset of keys from SPO.</p>
+ 
+  <p>Protocol is driven by empty messages received by TP query node from parent  
+query node. After receiving empty message TP query node sends next graph to  
+parent. End of stream message is sent to parent when there are no more  
+triples from triple-store.</p>
+ 
+  <p>VarsValues is <a href="query_tree.html#type-qn_var_val_map"><code>query_tree:qn_var_val_map()</code></a>. This request is implemented
+  by <a href="#hc_eval-1"><code>hc_eval/1</code></a>. (LINK: <a href="#{eval,_VarsValues}">{eval, VarsValues}</a>).</p>
+ 
+  <h4><a name="{get_property,_Name}">{get_property, Name}</a></h4>
+
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-tpqn_state">tpqn_state()</a></h3>
+<p><tt>tpqn_state() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+<p>Map structure
+  that manages properties for operating the gen_server process.
+ </p>
+
+<h3 class="typedecl"><a name="type-tpqn_var_position">tpqn_var_position()</a></h3>
+<p><tt>tpqn_var_position() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+<p>Mapping from
+  <a href="query_node.html#type-qn_var"><code>query_node:qn_var()</code></a> to <a href="query_node.html#type-qn_id"><code>query_node:qn_id()</code></a>.
+ </p>
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#child_spec-1">child_spec/1</a></td><td>Return child spec for this process.</td></tr>
+<tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Process code change action.</td></tr>
+<tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle synchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
+<tr><td valign="top"><a href="#hc_empty-1">hc_empty/1*</a></td><td>Empty message from parent received.</td></tr>
+<tr><td valign="top"><a href="#hc_eval-2">hc_eval/2*</a></td><td>Start query execution.</td></tr>
+<tr><td valign="top"><a href="#hc_eval_1-1">hc_eval_1/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_eval_test_-0">hc_eval_test_/0*</a></td><td>Test function of eval protocol guided by empty messages.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_start-10">hc_start/10*</a></td><td>Initialize the query node process.</td></tr>
+<tr><td valign="top"><a href="#hc_start_test_-0">hc_start_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hce_process-1">hce_process/1*</a></td><td>Iterate through the triples from queue from_db and process them.</td></tr>
+<tr><td valign="top"><a href="#hcep_process_triple-1">hcep_process_triple/1*</a></td><td>Process one triple and then continue to iterate through the triples  
+from queue from_db and process them.</td></tr>
+<tr><td valign="top"><a href="#hcet_load_db-0">hcet_load_db/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_load_db_bdbnif-0">hcet_load_db_bdbnif/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_load_db_epgsql_string_integer-0">hcet_load_db_epgsql_string_integer/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_load_db_mnesia_qlc-0">hcet_load_db_mnesia_qlc/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_q01-0">hcet_q01/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_q01_no_encode-0">hcet_q01_no_encode/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_q01_string_integer-0">hcet_q01_string_integer/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_q02-0">hcet_q02/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_q03-0">hcet_q03/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_send_empty-2">hcet_send_empty/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcet_site-1">hcet_site/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcst_q01-0">hcst_q01/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hst_site-1">hst_site/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a tp_query_node process.</td></tr>
+<tr><td valign="top"><a href="#spawn_process-2">spawn_process/2</a></td><td>Spawn tp_query_node process with given local identifier at given node.</td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="child_spec-1">child_spec/1</a></h3>
+<div class="spec">
+<p><tt>child_spec(Id::atom()) -&gt; <a href="supervisor.html#type-child_spec">supervisor:child_spec()</a></tt><br></p>
+</div><p>Return child spec for this process. It can be used in
+  supervisor:init/0 callback implementation.
+ </p>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><tt>code_change(OldVsn::term(), State::<a href="#type-tpqn_state">tpqn_state()</a>, Extra::term()) -&gt; {ok, <a href="#type-tpqn_state">tpqn_state()</a>}</tt><br></p>
+</div><p>Process code change action.
+ </p>
+
+<h3 class="function"><a name="error_msg-3">error_msg/3 *</a></h3>
+<div class="spec">
+<p><tt>error_msg(FunName::atom(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
+</div><p>Report an error issue to the error_logger.
+ </p>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><tt>handle_call(Request::term(), From::{pid(), term()}, State::<a href="#type-tpqn_state">tpqn_state()</a>) -&gt; {reply, term(), <a href="#type-tpqn_state">tpqn_state()</a>}</tt><br></p>
+</div><p>Handle synchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><tt>handle_cast(Request::term(), State::<a href="#type-tpqn_state">tpqn_state()</a>) -&gt; {noreply, <a href="#type-tpqn_state">tpqn_state()</a>}</tt><br></p>
+</div><p>Handle asynchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><tt>handle_info(Info::term(), State::<a href="#type-tpqn_state">tpqn_state()</a>) -&gt; {noreply, <a href="#type-tpqn_state">tpqn_state()</a>}</tt><br></p>
+</div><p>Handle exceptional query requests.
+ </p>
+
+<h3 class="function"><a name="hc_empty-1">hc_empty/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_empty(State::atom()) -&gt; ok</tt><br></p>
+</div><p>Empty message from parent received. Get next triple from
+  cursor for tp and send it in a message to parent.
+  Send end_of_stream if no more triples exist.
+ </p>
+
+<h3 class="function"><a name="hc_eval-2">hc_eval/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_eval(VarsValues::<a href="query_node.html#type-qn_var_val_map">query_node:qn_var_val_map()</a> | [], State::atom()) -&gt; ok</tt><br></p>
+</div><p>Start query execution. If argument VarsValues is given, the tp
+  query node assume to eval inner node for its parent
+  node. Otherwise, outer node.
+ </p>
+
+<h3 class="function"><a name="hc_eval_1-1">hc_eval_1/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_eval_1(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_eval_test_-0">hc_eval_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_eval_test_() -&gt; any()</tt></p>
+</div><p>Test function of eval protocol guided by empty messages.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd-2">hc_restore_pd/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd(X1::[{atom(), term()}] | undefined, State::<a href="#type-tpqn_state">tpqn_state()</a>) -&gt; ok</tt><br></p>
+</div><p>Restore process dictionaries from state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd_1-1">hc_restore_pd_1/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd_1(T) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_save_pd-0">hc_save_pd/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_save_pd() -&gt; <a href="#type-tpqn_state">tpqn_state()</a></tt><br></p>
+</div><p>Save process all dictionary contents into state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_start-10">hc_start/10 *</a></h3>
+<div class="spec">
+<p><tt>hc_start(QueryNodeId::<a href="query_node.html#type-qn_id">query_node:qn_id()</a>, QueryId::string(), SessionId::string(), Self::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>, TriplePattern::<a href="query_node.html#type-qn_triple_pattern">query_node:qn_triple_pattern()</a>, SelectPred::<a href="query_node.html#type-qn_select_predicate">query_node:qn_select_predicate()</a>, ProjectList::<a href="query_node.html#type-qn_project_list">query_node:qn_project_list()</a>, ParentPid::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>, VarsPositions::<a href="#type-tpqn_var_position">tpqn_var_position()</a>, Side::<a href="#type-qn_side">qn_side()</a>) -&gt; ok</tt><br></p>
+</div><p>Initialize the query node process.
+ </p>
+
+<h3 class="function"><a name="hc_start_test_-0">hc_start_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_start_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hce_process-1">hce_process/1 *</a></h3>
+<div class="spec">
+<p><tt>hce_process(X1) -&gt; any()</tt></p>
+</div><p><p>Iterate through the triples from queue from_db and process them. Each triple is  
+tested for selection predicate and then stored to queue to_parent.</p>
+ 
+  hce_process_iterate(FromDbEmpty::boolean()) -&gt; ok
+ </p>
+
+<h3 class="function"><a name="hcep_process_triple-1">hcep_process_triple/1 *</a></h3>
+<div class="spec">
+<p><tt>hcep_process_triple(Triple) -&gt; any()</tt></p>
+</div><p><p>Process one triple and then continue to iterate through the triples  
+from queue from_db and process them. Each triple is  
+tested against selection predicate and then stored to queue to_parent.</p>
+ 
+  hce_process_iterate(Triple::query_node:qn_triple()) -&gt; ok
+ </p>
+
+<h3 class="function"><a name="hcet_load_db-0">hcet_load_db/0</a></h3>
+<div class="spec">
+<p><tt>hcet_load_db() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_load_db_bdbnif-0">hcet_load_db_bdbnif/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_load_db_bdbnif() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_load_db_epgsql_string_integer-0">hcet_load_db_epgsql_string_integer/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_load_db_epgsql_string_integer() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_load_db_mnesia_qlc-0">hcet_load_db_mnesia_qlc/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_load_db_mnesia_qlc() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_q01-0">hcet_q01/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_q01() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_q01_no_encode-0">hcet_q01_no_encode/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_q01_no_encode() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_q01_string_integer-0">hcet_q01_string_integer/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_q01_string_integer() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_q02-0">hcet_q02/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_q02() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_q03-0">hcet_q03/0 *</a></h3>
+<div class="spec">
+<p><tt>hcet_q03() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_send_empty-2">hcet_send_empty/2 *</a></h3>
+<div class="spec">
+<p><tt>hcet_send_empty(TPQN, R) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcet_site-1">hcet_site/1 *</a></h3>
+<div class="spec">
+<p><tt>hcet_site(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcst_q01-0">hcst_q01/0 *</a></h3>
+<div class="spec">
+<p><tt>hcst_q01() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hst_site-1">hst_site/1 *</a></h3>
+<div class="spec">
+<p><tt>hst_site(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
+<div class="spec">
+<p><tt>info_msg(FunName::atom(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(X1::[]) -&gt; {ok, <a href="#type-tpqn_state">tpqn_state()</a>}</tt><br></p>
+</div><p>Initialize a tp_query_node process.
+ </p>
+
+<h3 class="function"><a name="spawn_process-2">spawn_process/2</a></h3>
+<div class="spec">
+<p><tt>spawn_process(Id::atom(), Node::node()) -&gt; <a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></tt><br></p>
+</div><p>Spawn tp_query_node process with given local identifier at given node.
+ </p>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason::term(), State::<a href="#type-tpqn_state">tpqn_state()</a>) -&gt; none()</tt><br></p>
+</div><p>Process termination.
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Aug 25 2016, 11:26:42.</i></p>
+</body>
+</html>

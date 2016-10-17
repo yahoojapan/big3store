@@ -1,0 +1,1000 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module string_id</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module string_id</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>A server for mapping URI strings and integer ids.
+<p>Copyright © 2013-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+
+<p><b>Version:</b> 0.3</p>
+<p><b>Introduced in:</b> August, 2013</p>
+<p><b>Authors:</b> Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
+<p><b>See also:</b> <a href="b3s.html">b3s</a>, <a href="node_state.html">node_state</a>, <a href="query_node.html">query_node</a>, <a href="triple_distributor.html">triple_distributor</a>.</p>
+
+<h2><a name="description">Description</a></h2><p>A server for mapping URI strings and integer ids. This module
+  is implemented as an erlang <A href="http://www.erlang.org/doc/man/gen_server.html">gen_server</A>  
+process.</p>
+ 
+  <p>Implementation method of the string-id mapping table can be changed  
+by constant variable DB_IMPLEMENTATION that is defined in  
+"record.hrl". If the constant has value 'epgsql', the table will be  
+built on a PostgreSQL server. This option is highly recommended for  
+storing large-scale triple dataset. In this option, this module  
+uses server-side functions defined in "../plpgsql/encode.plpgsql".</p>
+ 
+  <h3><a name="handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>)</p>
+ 
+  <h4><a name="{create_table,_TableName}">{create_table, TableName}</a></h4>
+ 
+  <p>Creats a string-id mapping table which name is
+  TableName::atom(). It returns {created, TabName::atom()}, if the
+  table was successfully created. Otherwise, it returns {not_created,
+  TabName::atom(), Reason::term()}. This request is implemented by
+  <a href="#hc_create_table-2"><code>hc_create_table/2</code></a>. (LINK: <a href="#{create_table,_TableName}">{create_table,
+  TableName}</a>)</p>
+ 
+  <h4><a name="{load_table,_TableName}">{load_table, TableName}</a></h4>
+ 
+  <p>Loads a string-id mapping table which name is TableName::atom(). It
+  returns {reloaded, TabName::atom()}, if the table was successfully
+  found and loaded. It tries to create a new table, if the table does
+  not exist. It returns {created, TabName::atom()}, if the table was
+  successfully created. Otherwise, it returns {not_created,
+  TabName::atom(), Reason::term()}. This request is implemented by
+  <a href="#hc_load_table-2"><code>hc_load_table/2</code></a>. (LINK: <a href="#{create_table,_TableName}">{create_table,
+  TableName}</a>)</p>
+ 
+  <h4><a name="make_index">make_index</a></h4>
+ 
+  <p>Makes an index for the string-id mapping table. The table must be
+  created by a <a href="#{create_table,_TableName}">{create_table, TableName}</a> request or
+  loaded by a <a href="#{load_table,_TableName}">{load_table, TableName}</a> request. It
+  returns {index_built, TabName::atom()}, if the index was
+  successfully built. Otherwise, it returns {index_not_built,
+  Reason::term()}. This request is implemented by <a href="#hc_make_index-1"><code>hc_make_index/1</code></a>. (LINK: <a href="#make_index">make_index</a>)</p>
+ 
+  <h4><a name="delete_table">delete_table</a></h4>
+ 
+  <p>Deletes the string-id mapping table. The table must be created by a
+  <a href="#{create_table,_TableName}">{create_table, TableName}</a> request or loaded by a
+  <a href="#{load_table,_TableName}">{load_table, TableName}</a> request. It returns {deleted,
+  TabName::atom()}, if the table was successfully deleted. Otherwise,
+  it returns {not_deleted, Reason::term()}. This request is
+  implemented by <a href="#hc_delete_table-1"><code>hc_delete_table/1</code></a>. (LINK: <a href="#delete_table">delete_table</a>)</p>
+ 
+  <h4><a name="{append,_StrDat}">{append, StrDat}</a></h4>
+ 
+  <p>Appends a string data StrDat::string() to the string-id table. The
+  table must be created by a <a href="#{create_table,_TableName}">{create_table, TableName}</a>
+  request or loaded by a <a href="#{load_table,_TableName}">{load_table, TableName}</a>
+  request. It returns {appended, {Id::integer(), StrDat::string()},
+  if the string was successfully appended to the table. This request
+  is implemented by <a href="#hc_append-2"><code>hc_append/2</code></a>. (LINK: <a href="#{append,_StrDat}">{append,
+  StrDat}</a>)</p>
+ 
+  <h4><a name="{delete,_Id}">{delete, Id}</a></h4>
+ 
+  <p>Deletes a data identified by Id::integer(). The table must be
+  created by a <a href="#{create_table,_TableName}">{create_table, TableName}</a> request or
+  loaded by a <a href="#{load_table,_TableName}">{load_table, TableName}</a> request. The data
+  must be registered to the table using a <a href="#{append,_StrDat}">{append,
+  StrDat}</a> or <a href="#{get_id,_StrDat}">{get_id, StrDat}</a> request. It returns
+  {deleted, {TabName::atom(), Id::integer()}}, if the data is
+  successfully deleted. Otherwise, it returns {not_deleted,
+  Reason::term()}. This request is implemented by <a href="#hc_delete-2"><code>hc_delete/2</code></a>. (LINK: <a href="#{delete,_Id}">{delete, Id}</a>)</p>
+ 
+  <h4><a name="{find,_Data}">{find, Data}</a></h4>
+ 
+  <p>Finds corresponding id or string from Data::integer() |
+  string(). The table must be created by a <a href="#{create_table,_TableName}">{create_table,
+  TableName}</a> request or loaded by a <a href="#{load_table,_TableName}">{load_table,
+  TableName}</a> request. The table must have index built by a
+  <a href="#make_index">make_index</a> request. It returns {found,
+  StrDat::string()}, if Data is integer() and the data is
+  successfully found. It returns {found, Id::integer()}, if Data is
+  string() and the data is successfully found. Otherwise, it returns
+  {not_found, Data::integer() | string()}. This request is
+  implemented by <a href="#hc_find-2"><code>hc_find/2</code></a>. (LINK: <a href="#{find,_Data}">{find, Data}</a>)</p>
+ 
+  <h4><a name="{get_id,_StrDat}">{get_id, StrDat}</a></h4>
+ 
+  <p>Finds or appends StrDat::string() data. Basically, it finds
+  corresponding id from the table. It automatically appends the data,
+  if it has not been registered to the table. The table must be
+  created by a <a href="#{create_table,_TableName}">{create_table, TableName}</a> request or
+  loaded by a <a href="#{load_table,_TableName}">{load_table, TableName}</a> request. The table
+  must have index built by a <a href="#make_index">make_index</a> request. It always
+  returns {id, Id::integer()}. This request is implemented by <a href="#hc_get_id-2"><code>hc_get_id/2</code></a>.  (LINK: <a href="#{get_id,_StrDat}">{get_id, StrDat}</a>)</p>
+ 
+  <h4><a name="get_size">get_size</a></h4>
+ 
+  <p>Returns the Size::integer() of the string-id mapping table. The
+  table must be created by a <a href="#{create_table,_TableName}">{create_table, TableName}</a>
+  request or loaded by a <a href="#{load_table,_TableName}">{load_table, TableName}</a>
+  request. This request is implemented by <a href="#hc_get_size-1"><code>hc_get_size/1</code></a>.
+  (LINK: <a href="#get_size">get_size</a>)</p>
+ 
+  <h3><a name="handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a>)</p>
+ 
+  <h4><a name="{stream,_Command,_Triple,_DestProc,_NotifyProc}">{stream, Command, Triple, DestProc, NotifyProc}</a></h4>
+ 
+  Processes a store stream element. It converts Triple::<a href="#type-si_str_triple"><code>si_str_triple()</code></a> to IdTriple::<a href="#type-si_id_triple"><code>si_id_triple()</code></a> using
+  <a href="#{get_id,_StrDat}">{get_id, StrDat}</a> function. Then, it casts a store
+  stream element {Cmd::term(), IdTriple::<a href="#type-si_id_triple"><code>si_id_triple()</code></a>,
+  NotifyProc::pid()} to DestProc::pid() <a href="data_server.html"><code>data_server</code></a>
+  process. This request is implemented by <a href="#hc_stream-5"><code>hc_stream/5</code></a>. (LINK:
+  <a href="#{stream,_Command,_Triple,_DestProc,_NotifyProc}">{stream, Command, Triple, DestProc, NotifyProc}</a>)
+ 
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-si_id_object">si_id_object()</a></h3>
+<p><tt>si_id_object() = integer()</tt></p>
+<p>Object of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_id_object_numerical">si_id_object_numerical()</a></h3>
+<p><tt>si_id_object_numerical() = term()</tt></p>
+<p>Numerical value of object
+  of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_id_object_type">si_id_object_type()</a></h3>
+<p><tt>si_id_object_type() = integer()</tt></p>
+<p>Object type of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_id_predicate">si_id_predicate()</a></h3>
+<p><tt>si_id_predicate() = integer()</tt></p>
+<p>Predicate of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_id_subject">si_id_subject()</a></h3>
+<p><tt>si_id_subject() = integer()</tt></p>
+<p>Subject of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_id_triple">si_id_triple()</a></h3>
+<p><tt>si_id_triple() = {<a href="#type-si_id_triple_id">si_id_triple_id()</a>, <a href="#type-si_id_subject">si_id_subject()</a>, <a href="#type-si_id_predicate">si_id_predicate()</a>, <a href="#type-si_id_object">si_id_object()</a>, <a href="#type-si_id_object_type">si_id_object_type()</a>, <a href="#type-si_id_object_numerical">si_id_object_numerical()</a>}</tt></p>
+<p>Integer id expression of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_id_triple_id">si_id_triple_id()</a></h3>
+<p><tt>si_id_triple_id() = integer()</tt></p>
+<p>Triple id of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_state">si_state()</a></h3>
+<p><tt>si_state() = #{}</tt></p>
+<p>This map stores Property::atom() and
+  Value::term() for a string-id mapping service process.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_str_object">si_str_object()</a></h3>
+<p><tt>si_str_object() = term()</tt></p>
+<p>Object of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_str_object_numerical">si_str_object_numerical()</a></h3>
+<p><tt>si_str_object_numerical() = term()</tt></p>
+<p>Numerical value of object
+  of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_str_object_type">si_str_object_type()</a></h3>
+<p><tt>si_str_object_type() = term()</tt></p>
+<p>Object type of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_str_predicate">si_str_predicate()</a></h3>
+<p><tt>si_str_predicate() = term()</tt></p>
+<p>Predicate of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_str_subject">si_str_subject()</a></h3>
+<p><tt>si_str_subject() = term()</tt></p>
+<p>Subject of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_str_triple">si_str_triple()</a></h3>
+<p><tt>si_str_triple() = {<a href="#type-si_str_triple_id">si_str_triple_id()</a>, <a href="#type-si_str_subject">si_str_subject()</a>, <a href="#type-si_str_predicate">si_str_predicate()</a>, <a href="#type-si_str_object">si_str_object()</a>, <a href="#type-si_str_object_type">si_str_object_type()</a>, <a href="#type-si_str_object_numerical">si_str_object_numerical()</a>}</tt></p>
+<p>String expression of a RDF data.
+ </p>
+
+<h3 class="typedecl"><a name="type-si_str_triple_id">si_str_triple_id()</a></h3>
+<p><tt>si_str_triple_id() = term()</tt></p>
+<p>Triple id of a RDF data.
+ </p>
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#child_spec-0">child_spec/0</a></td><td>Return child spec for this process.</td></tr>
+<tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Process code change action.</td></tr>
+<tr><td valign="top"><a href="#decode_triple-1">decode_triple/1</a></td><td>This function decodes a triple.</td></tr>
+<tr><td valign="top"><a href="#decode_triple_method-2">decode_triple_method/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#decode_triple_pattern-1">decode_triple_pattern/1</a></td><td>This function decodes a triple pattern.</td></tr>
+<tr><td valign="top"><a href="#decode_triple_pattern_method-2">decode_triple_pattern_method/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#dtpm_string_integer-2">dtpm_string_integer/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#dtpmsi_perform-3">dtpmsi_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#encode_test_-0">encode_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#encode_triple-1">encode_triple/1</a></td><td>This function encodes a triple.</td></tr>
+<tr><td valign="top"><a href="#encode_triple_method-2">encode_triple_method/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#encode_triple_pattern-1">encode_triple_pattern/1</a></td><td>This function encodes a triple pattern.</td></tr>
+<tr><td valign="top"><a href="#encode_triple_pattern_method-2">encode_triple_pattern_method/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#et_site-2">et_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#etpm_string_integer-2">etpm_string_integer/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#etpmsi_perform-3">etpmsi_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#etsi_conv_obj-4">etsi_conv_obj/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#etsi_parse_datetime-2">etsi_parse_datetime/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#etsi_prepare_mp-0">etsi_prepare_mp/0</a></td><td>This function prepares re:mp() matching patterns into process  
+dictionary key "__string_id_mp".</td></tr>
+<tr><td valign="top"><a href="#etsipm_perform-1">etsipm_perform/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#fi_check_pd-2">fi_check_pd/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#fi_return-2">fi_return/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#find-1">find/1</a></td><td>This function finds corresponding id or string from
+  Data::integer() | string().</td></tr>
+<tr><td valign="top"><a href="#find_test_-0">find_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ft_site-2">ft_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#get_id-1">get_id/1</a></td><td>This function finds or appends a mapping for a string from the
+  string-id table.</td></tr>
+<tr><td valign="top"><a href="#get_id_test_-0">get_id_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#gi_check_pd-3">gi_check_pd/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#gi_return-2">gi_return/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#git_site-2">git_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hae_perform-3">hae_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle synchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
+<tr><td valign="top"><a href="#hat_site-2">hat_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_append-2">hc_append/2*</a></td><td>Append a record to the string-id table.</td></tr>
+<tr><td valign="top"><a href="#hc_append_epgsql-2">hc_append_epgsql/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_append_mnesia-2">hc_append_mnesia/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_append_test_-0">hc_append_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_create_table-2">hc_create_table/2*</a></td><td>Create a string-id mapping table.</td></tr>
+<tr><td valign="top"><a href="#hc_create_table_epgsql-2">hc_create_table_epgsql/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_create_table_mnesia-2">hc_create_table_mnesia/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_create_table_test_-0">hc_create_table_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_delete-2">hc_delete/2*</a></td><td>Delete a record from the string-id table.</td></tr>
+<tr><td valign="top"><a href="#hc_delete_epgsql-2">hc_delete_epgsql/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_delete_mnesia-2">hc_delete_mnesia/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_delete_table-1">hc_delete_table/1*</a></td><td>Delete the string-id table.</td></tr>
+<tr><td valign="top"><a href="#hc_delete_table_epgsql-1">hc_delete_table_epgsql/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_delete_table_mnesia-1">hc_delete_table_mnesia/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_delete_table_test_-0">hc_delete_table_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_delete_test_-0">hc_delete_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_find-2">hc_find/2*</a></td><td>Find a mapping for a string from the string-id table.</td></tr>
+<tr><td valign="top"><a href="#hc_find_epgsql-2">hc_find_epgsql/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_find_id-2">hc_find_id/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_find_id_epgsql-2">hc_find_id_epgsql/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_find_mnesia-2">hc_find_mnesia/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_find_str-2">hc_find_str/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_find_str_epgsql-2">hc_find_str_epgsql/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_find_test_-0">hc_find_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_get_id-2">hc_get_id/2*</a></td><td>Find or append a mapping for a string from the string-id
+  table.</td></tr>
+<tr><td valign="top"><a href="#hc_get_id_epgsql-2">hc_get_id_epgsql/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_get_id_mnesia-2">hc_get_id_mnesia/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_get_id_test_-0">hc_get_id_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_get_size-1">hc_get_size/1*</a></td><td>Count the size of the string-id table.</td></tr>
+<tr><td valign="top"><a href="#hc_get_size_epgsql-1">hc_get_size_epgsql/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_get_size_mnesia-1">hc_get_size_mnesia/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_load_table-2">hc_load_table/2*</a></td><td>Load existing table as mapping table.</td></tr>
+<tr><td valign="top"><a href="#hc_load_table_epgsql-2">hc_load_table_epgsql/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_load_table_mnesia-2">hc_load_table_mnesia/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_load_table_test_-0">hc_load_table_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_make_index-1">hc_make_index/1*</a></td><td>Create an index for string-id mapping table.</td></tr>
+<tr><td valign="top"><a href="#hc_make_index_epgsql-1">hc_make_index_epgsql/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_make_index_mnesia-1">hc_make_index_mnesia/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_make_index_test_-0">hc_make_index_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_stream-5">hc_stream/5*</a></td><td>Replace strings with ids in input triple and send it to the
+  subsequent process.</td></tr>
+<tr><td valign="top"><a href="#hc_stream_test_-0">hc_stream_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hca_check_id-5">hca_check_id/5*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hca_transaction-2">hca_transaction/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcct-3">hcct/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcd_construct_reply-3">hcd_construct_reply/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcd_transaction-2">hcd_transaction/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcdt-2">hcdt/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcfi_construct_reply-3">hcfi_construct_reply/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcfs_construct_reply-3">hcfs_construct_reply/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcgi_construct_reply-3">hcgi_construct_reply/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcgi_perform-2">hcgi_perform/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcgip-3">hcgip/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hclt_check_size-3">hclt_check_size/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcmi-2">hcmi/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcs_convert-3">hcs_convert/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcte_confirm_sql-3">hcte_confirm_sql/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcte_exec_sqls-2">hcte_exec_sqls/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcte_perform-3">hcte_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hctt_site-2">hctt_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hde_perform-3">hde_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hdt_site-2">hdt_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hdte_perform-2">hdte_perform/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hdtt_site-2">hdtt_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hfie_perform-3">hfie_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hfse_perform-3">hfse_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hft_site-2">hft_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hgie_append-1">hgie_append/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hgie_find-3">hgie_find/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hgit_site-2">hgit_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hgse_perform-2">hgse_perform/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hltt_site-2">hltt_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hmie_perform-2">hmie_perform/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hmit_site-2">hmit_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hst_site-2">hst_site/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a string_id process.</td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="child_spec-0">child_spec/0</a></h3>
+<div class="spec">
+<p><tt>child_spec() -&gt; <a href="supervisor.html#type-child_spec">supervisor:child_spec()</a></tt><br></p>
+</div><p>Return child spec for this process. It can be used in
+  supervisor:init/0 callback implementation.
+ </p>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><tt>code_change(OldVsn::term(), State::<a href="#type-si_state">si_state()</a>, Extra::term()) -&gt; {ok, <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Process code change action.
+ </p>
+
+<h3 class="function"><a name="decode_triple-1">decode_triple/1</a></h3>
+<div class="spec">
+<p><tt>decode_triple(Triple::<a href="query_node.html#type-qn_triple">query_node:qn_triple()</a>) -&gt; <a href="query_node.html#type-qn_triple">query_node:qn_triple()</a> | fail</tt><br></p>
+</div><p>This function decodes a triple. The implementation of this
+  function can be replaced by changing STRING_ID_CODING_METHOD
+  constant definition.
+ </p>
+
+<h3 class="function"><a name="decode_triple_method-2">decode_triple_method/2 *</a></h3>
+<div class="spec">
+<p><tt>decode_triple_method(M, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="decode_triple_pattern-1">decode_triple_pattern/1</a></h3>
+<div class="spec">
+<p><tt>decode_triple_pattern(Triple::{integer() | string(), integer() | string(), integer() | string(), integer() | string()}) -&gt; <a href="query_node.html#type-qn_triple_pattern">query_node:qn_triple_pattern()</a> | fail</tt><br></p>
+</div><p>This function decodes a triple pattern. The implementation of
+  this function can be replaced by changing STRING_ID_CODING_METHOD
+  constant definition.
+ </p>
+
+<h3 class="function"><a name="decode_triple_pattern_method-2">decode_triple_pattern_method/2 *</a></h3>
+<div class="spec">
+<p><tt>decode_triple_pattern_method(M, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="dtpm_string_integer-2">dtpm_string_integer/2 *</a></h3>
+<div class="spec">
+<p><tt>dtpm_string_integer(Pos, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="dtpmsi_perform-3">dtpmsi_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>dtpmsi_perform(X1, Pos, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="encode_test_-0">encode_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>encode_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="encode_triple-1">encode_triple/1</a></h3>
+<div class="spec">
+<p><tt>encode_triple(Triple::<a href="query_node.html#type-qn_triple">query_node:qn_triple()</a>) -&gt; <a href="query_node.html#type-qn_triple">query_node:qn_triple()</a> | fail</tt><br></p>
+</div><p>This function encodes a triple. The implementation of this
+  function can be replaced by changing STRING_ID_CODING_METHOD
+  constant definition. The string_id implementation of this function
+  uses process dictionary key "__string_id_mp" that stores several
+  re:mp() matching patterns.
+ </p>
+
+<h3 class="function"><a name="encode_triple_method-2">encode_triple_method/2 *</a></h3>
+<div class="spec">
+<p><tt>encode_triple_method(M, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="encode_triple_pattern-1">encode_triple_pattern/1</a></h3>
+<div class="spec">
+<p><tt>encode_triple_pattern(Triple::<a href="query_node.html#type-qn_triple_pattern">query_node:qn_triple_pattern()</a>) -&gt; {integer() | string(), integer() | string(), integer() | string(), integer() | string()} | fail</tt><br></p>
+</div><p>This function encodes a triple pattern. The implementation of
+  this function can be replaced by changing STRING_ID_CODING_METHOD
+  constant definition. Variable elements are left not encoded. The
+  string_id implementation of this function uses process dictionary
+  key "__string_id_mp" that stores several re:mp() matching patterns.
+ </p>
+
+<h3 class="function"><a name="encode_triple_pattern_method-2">encode_triple_pattern_method/2 *</a></h3>
+<div class="spec">
+<p><tt>encode_triple_pattern_method(M, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="error_msg-3">error_msg/3 *</a></h3>
+<div class="spec">
+<p><tt>error_msg(FunName::string(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
+</div><p>Report an error issue to the error_logger.
+ </p>
+
+<h3 class="function"><a name="et_site-2">et_site/2 *</a></h3>
+<div class="spec">
+<p><tt>et_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="etpm_string_integer-2">etpm_string_integer/2 *</a></h3>
+<div class="spec">
+<p><tt>etpm_string_integer(Pos, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="etpmsi_perform-3">etpmsi_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>etpmsi_perform(X1, Pos, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="etsi_conv_obj-4">etsi_conv_obj/4 *</a></h3>
+<div class="spec">
+<p><tt>etsi_conv_obj(X1, X2, X3, Obj) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="etsi_parse_datetime-2">etsi_parse_datetime/2</a></h3>
+<div class="spec">
+<p><tt>etsi_parse_datetime(X1, Str) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="etsi_prepare_mp-0">etsi_prepare_mp/0</a></h3>
+<div class="spec">
+<p><tt>etsi_prepare_mp() -&gt; any()</tt></p>
+</div><p><p>This function prepares re:mp() matching patterns into process  
+dictionary key "__string_id_mp". It is a #{} object that takes  
+following atom() keys for accessing matching patterns.</p>
+ 
+  <table bgcolor="lemonchiffon">
+  <tr><th>key</th> <th>mapching pattern</th></tr>
+  <tr><td>integer</td>  <td>-?[0-9]+</td></tr>
+  <tr><td>real</td>
+      <td>-?[0-9]+\\\.[0-9]+([eE][\+\-]?[0-9]+)?</td></tr>
+  <tr><td>datetime</td>
+      <td>([0-9]+)[-/]+([0-9#]+)[-/]+([0-9#]+)</td></tr>
+  <tr><td></td>
+      <td>(\s+([0-9]+):([0-9]+)(:([0-9]+))?)?</td></tr>
+  </table>
+ </p>
+
+<h3 class="function"><a name="etsipm_perform-1">etsipm_perform/1 *</a></h3>
+<div class="spec">
+<p><tt>etsipm_perform(NonMap) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="fi_check_pd-2">fi_check_pd/2 *</a></h3>
+<div class="spec">
+<p><tt>fi_check_pd(Tab, Data) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="fi_return-2">fi_return/2 *</a></h3>
+<div class="spec">
+<p><tt>fi_return(E, Data) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="find-1">find/1</a></h3>
+<div class="spec">
+<p><tt>find(Data::integer() | string()) -&gt; string() | <a href="#type-interger">interger()</a></tt><br></p>
+</div><p>This function finds corresponding id or string from
+  Data::integer() | string(). It performs the same functionality with
+  <a href="#{find,_Data}">{find, Data}</a> synchronous message. It returns fail if
+  not found or error occurred. It uses a key of process dictionary
+  sid_table_name. This key must be erased before the first call of
+  this function from a process. While it can be erased everytime
+  before calling this function subsequently, leaving it as it is will
+  increase the performance.
+ </p>
+
+<h3 class="function"><a name="find_test_-0">find_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>find_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ft_site-2">ft_site/2 *</a></h3>
+<div class="spec">
+<p><tt>ft_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="get_id-1">get_id/1</a></h3>
+<div class="spec">
+<p><tt>get_id(StrDat::string()) -&gt; integer() | fail</tt><br></p>
+</div><p>This function finds or appends a mapping for a string from the
+  string-id table. It performs the same functionality with <a href="#{get_id,_StrDat}">{get_id, StrDat}</a> synchronous message. It returns fail if error
+  occurred. It uses 2 keys of process dictionary: sid_table_name and
+  sid_max_id. These keys must be erased before the first call of this
+  function from a process. While they can be erased everytime before
+  calling this function subsequently, leaving them as they are will
+  increase the performance.
+ </p>
+
+<h3 class="function"><a name="get_id_test_-0">get_id_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>get_id_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="gi_check_pd-3">gi_check_pd/3 *</a></h3>
+<div class="spec">
+<p><tt>gi_check_pd(Tab, Max, StrDat) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="gi_return-2">gi_return/2 *</a></h3>
+<div class="spec">
+<p><tt>gi_return(E, StrDat) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="git_site-2">git_site/2 *</a></h3>
+<div class="spec">
+<p><tt>git_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hae_perform-3">hae_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>hae_perform(C, StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><tt>handle_call(Request::term(), From::{pid(), term()}, State::<a href="#type-si_state">si_state()</a>) -&gt; {reply, term(), <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Handle synchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><tt>handle_cast(Request::term(), State::<a href="#type-si_state">si_state()</a>) -&gt; {noreply, <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Handle asynchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><tt>handle_info(Info::term(), State::<a href="#type-si_state">si_state()</a>) -&gt; {noreply, <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Handle exceptional query requests.
+ </p>
+
+<h3 class="function"><a name="hat_site-2">hat_site/2 *</a></h3>
+<div class="spec">
+<p><tt>hat_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_append-2">hc_append/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_append(StrDat::string(), State::<a href="#type-si_state">si_state()</a>) -&gt; {reply, term(), <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Append a record to the string-id table.
+ </p>
+
+<h3 class="function"><a name="hc_append_epgsql-2">hc_append_epgsql/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_append_epgsql(StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_append_mnesia-2">hc_append_mnesia/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_append_mnesia(StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_append_test_-0">hc_append_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_append_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_create_table-2">hc_create_table/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_create_table(TabName::atom(), State::<a href="#type-si_state">si_state()</a>) -&gt; {reply, term(), <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Create a string-id mapping table.
+ </p>
+
+<h3 class="function"><a name="hc_create_table_epgsql-2">hc_create_table_epgsql/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_create_table_epgsql(TabName, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_create_table_mnesia-2">hc_create_table_mnesia/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_create_table_mnesia(TabName, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_create_table_test_-0">hc_create_table_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_create_table_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_delete-2">hc_delete/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_delete(Id::integer(), State::<a href="#type-si_state">si_state()</a>) -&gt; {reply, term(), <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Delete a record from the string-id table.
+ </p>
+
+<h3 class="function"><a name="hc_delete_epgsql-2">hc_delete_epgsql/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_delete_epgsql(Id, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_delete_mnesia-2">hc_delete_mnesia/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_delete_mnesia(Id, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_delete_table-1">hc_delete_table/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_delete_table(State::<a href="#type-si_state">si_state()</a>) -&gt; {reply, term(), <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Delete the string-id table.
+ </p>
+
+<h3 class="function"><a name="hc_delete_table_epgsql-1">hc_delete_table_epgsql/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_delete_table_epgsql(State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_delete_table_mnesia-1">hc_delete_table_mnesia/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_delete_table_mnesia(State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_delete_table_test_-0">hc_delete_table_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_delete_table_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_delete_test_-0">hc_delete_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_delete_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_find-2">hc_find/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_find(Data::string() | integer(), State::<a href="#type-si_state">si_state()</a>) -&gt; {reply, term(), <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Find a mapping for a string from the string-id table.
+ </p>
+
+<h3 class="function"><a name="hc_find_epgsql-2">hc_find_epgsql/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_find_epgsql(Data, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_find_id-2">hc_find_id/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_find_id(StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_find_id_epgsql-2">hc_find_id_epgsql/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_find_id_epgsql(StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_find_mnesia-2">hc_find_mnesia/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_find_mnesia(Data, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_find_str-2">hc_find_str/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_find_str(Id, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_find_str_epgsql-2">hc_find_str_epgsql/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_find_str_epgsql(Id, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_find_test_-0">hc_find_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_find_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_get_id-2">hc_get_id/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_get_id(StrDat::string(), State::<a href="#type-si_state">si_state()</a>) -&gt; {reply, term(), <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Find or append a mapping for a string from the string-id
+  table.
+ </p>
+
+<h3 class="function"><a name="hc_get_id_epgsql-2">hc_get_id_epgsql/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_get_id_epgsql(StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_get_id_mnesia-2">hc_get_id_mnesia/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_get_id_mnesia(StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_get_id_test_-0">hc_get_id_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_get_id_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_get_size-1">hc_get_size/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_get_size(State::<a href="#type-si_state">si_state()</a>) -&gt; {reply, term(), <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Count the size of the string-id table.
+ </p>
+
+<h3 class="function"><a name="hc_get_size_epgsql-1">hc_get_size_epgsql/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_get_size_epgsql(State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_get_size_mnesia-1">hc_get_size_mnesia/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_get_size_mnesia(State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_load_table-2">hc_load_table/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_load_table(TabName::atom(), State::<a href="#type-si_state">si_state()</a>) -&gt; {reply, term(), <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Load existing table as mapping table.
+ </p>
+
+<h3 class="function"><a name="hc_load_table_epgsql-2">hc_load_table_epgsql/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_load_table_epgsql(TabName, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_load_table_mnesia-2">hc_load_table_mnesia/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_load_table_mnesia(TabName, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_load_table_test_-0">hc_load_table_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_load_table_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_make_index-1">hc_make_index/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_make_index(State::<a href="#type-si_state">si_state()</a>) -&gt; {reply, term(), <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Create an index for string-id mapping table.
+ </p>
+
+<h3 class="function"><a name="hc_make_index_epgsql-1">hc_make_index_epgsql/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_make_index_epgsql(State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_make_index_mnesia-1">hc_make_index_mnesia/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_make_index_mnesia(State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_make_index_test_-0">hc_make_index_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_make_index_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_restore_pd-2">hc_restore_pd/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd(X1::[{atom(), term()}] | undefined, State::<a href="#type-bm_state">bm_state()</a>) -&gt; ok</tt><br></p>
+</div><p>Restore process dictionaries from state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd_1-1">hc_restore_pd_1/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd_1(T) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_save_pd-0">hc_save_pd/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_save_pd() -&gt; <a href="#type-bm_state">bm_state()</a></tt><br></p>
+</div><p>Save process all dictionary contents into state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_stream-5">hc_stream/5 *</a></h3>
+<div class="spec">
+<p><tt>hc_stream(Cmd::term(), StrT::<a href="#type-si_str_triple">si_str_triple()</a>, DestProc::pid(), NotifyProc::pid(), State::<a href="#type-si_state">si_state()</a>) -&gt; {noreply, <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Replace strings with ids in input triple and send it to the
+  subsequent process.
+ </p>
+
+<h3 class="function"><a name="hc_stream_test_-0">hc_stream_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_stream_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hca_check_id-5">hca_check_id/5 *</a></h3>
+<div class="spec">
+<p><tt>hca_check_id(X1, TabName, Id, StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hca_transaction-2">hca_transaction/2 *</a></h3>
+<div class="spec">
+<p><tt>hca_transaction(StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcct-3">hcct/3 *</a></h3>
+<div class="spec">
+<p><tt>hcct(X1, TabName, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcd_construct_reply-3">hcd_construct_reply/3 *</a></h3>
+<div class="spec">
+<p><tt>hcd_construct_reply(X1, X2, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcd_transaction-2">hcd_transaction/2 *</a></h3>
+<div class="spec">
+<p><tt>hcd_transaction(DelTuple, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcdt-2">hcdt/2 *</a></h3>
+<div class="spec">
+<p><tt>hcdt(X1, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcfi_construct_reply-3">hcfi_construct_reply/3 *</a></h3>
+<div class="spec">
+<p><tt>hcfi_construct_reply(X1, StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcfs_construct_reply-3">hcfs_construct_reply/3 *</a></h3>
+<div class="spec">
+<p><tt>hcfs_construct_reply(X1, Id, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcgi_construct_reply-3">hcgi_construct_reply/3 *</a></h3>
+<div class="spec">
+<p><tt>hcgi_construct_reply(X1, StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcgi_perform-2">hcgi_perform/2 *</a></h3>
+<div class="spec">
+<p><tt>hcgi_perform(StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcgip-3">hcgip/3 *</a></h3>
+<div class="spec">
+<p><tt>hcgip(X1, StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hclt_check_size-3">hclt_check_size/3 *</a></h3>
+<div class="spec">
+<p><tt>hclt_check_size(Size, TabName, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcmi-2">hcmi/2 *</a></h3>
+<div class="spec">
+<p><tt>hcmi(X1, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcs_convert-3">hcs_convert/3 *</a></h3>
+<div class="spec">
+<p><tt>hcs_convert(Rest, State, Result) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcte_confirm_sql-3">hcte_confirm_sql/3 *</a></h3>
+<div class="spec">
+<p><tt>hcte_confirm_sql(Size, Rest, C) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcte_exec_sqls-2">hcte_exec_sqls/2 *</a></h3>
+<div class="spec">
+<p><tt>hcte_exec_sqls(Rest, C) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcte_perform-3">hcte_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>hcte_perform(C, TabName, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hctt_site-2">hctt_site/2 *</a></h3>
+<div class="spec">
+<p><tt>hctt_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hde_perform-3">hde_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>hde_perform(C, Id, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hdt_site-2">hdt_site/2 *</a></h3>
+<div class="spec">
+<p><tt>hdt_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hdte_perform-2">hdte_perform/2 *</a></h3>
+<div class="spec">
+<p><tt>hdte_perform(C, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hdtt_site-2">hdtt_site/2 *</a></h3>
+<div class="spec">
+<p><tt>hdtt_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hfie_perform-3">hfie_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>hfie_perform(C, StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hfse_perform-3">hfse_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>hfse_perform(C, Id, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hft_site-2">hft_site/2 *</a></h3>
+<div class="spec">
+<p><tt>hft_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hgie_append-1">hgie_append/1 *</a></h3>
+<div class="spec">
+<p><tt>hgie_append(R) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hgie_find-3">hgie_find/3 *</a></h3>
+<div class="spec">
+<p><tt>hgie_find(X1, StrDat, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hgit_site-2">hgit_site/2 *</a></h3>
+<div class="spec">
+<p><tt>hgit_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hgse_perform-2">hgse_perform/2 *</a></h3>
+<div class="spec">
+<p><tt>hgse_perform(C, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hltt_site-2">hltt_site/2 *</a></h3>
+<div class="spec">
+<p><tt>hltt_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hmie_perform-2">hmie_perform/2 *</a></h3>
+<div class="spec">
+<p><tt>hmie_perform(C, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hmit_site-2">hmit_site/2 *</a></h3>
+<div class="spec">
+<p><tt>hmit_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hst_site-2">hst_site/2 *</a></h3>
+<div class="spec">
+<p><tt>hst_site(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
+<div class="spec">
+<p><tt>info_msg(FunName::string(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(X1::[]) -&gt; {ok, <a href="#type-si_state">si_state()</a>}</tt><br></p>
+</div><p>Initialize a string_id process.
+ </p>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason::term(), State::<a href="#type-si_state">si_state()</a>) -&gt; none()</tt><br></p>
+</div><p>Process termination.
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Aug 25 2016, 11:26:42.</i></p>
+</body>
+</html>

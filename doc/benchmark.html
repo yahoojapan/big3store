@@ -1,0 +1,1827 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module benchmark</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module benchmark</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Perform benchmark tasks.
+<p>Copyright © 2014-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+
+<p><b>Version:</b> 0.3</p>
+<p><b>Introduced in:</b> September, 2014</p>
+<p><b>Authors:</b> Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
+<p><b>See also:</b> <a href="b3s.html">b3s</a>.</p>
+
+<h2><a name="description">Description</a></h2><p>Perform benchmark tasks. This is a gen_server process that  
+runs on distributed b3s systems. Typically, this process will be  
+invoked on a front server node of the distributed big3store  
+system.</p>
+ 
+  <table bgcolor="lemonchiffon">
+  <tr><th>Section Index</th></tr>
+  <tr><td><a href="#property_list">property list</a></td></tr>
+  <tr><td><a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></td></tr>
+  <tr><td><a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></td></tr>
+  </table>
+ 
+  <h3><a name="property_list">property list</a></h3>
+ 
+  <p>(LINK: <a href="#property_list">property list</a>)</p>
+ 
+  <table border="3">
+  <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+ 
+  <tr> <td>created</td> <td>boolean()</td> <td>true denotes that
+  process dictionary was created and used. false denotes that
+  completely new process.</td> </tr>
+ 
+  <tr> <td>pid</td> <td>pid()</td> <td>local id of this process.</td>
+  </tr>
+ 
+  <tr> <td>start_date_time</td> <td>calendar:datetime()</td>
+  <td>started date and time of the process.</td> </tr>
+ 
+  <tr> <td>update_date_time</td> <td>calendar:datetime()</td>
+  <td>updated date and time of process properties.</td> </tr>
+ 
+  <tr> <td>result_freq</td> <td>maps:map()</td> <td>mapping from
+  pid() to integer().</td> </tr>
+ 
+  <tr> <td>pid_start</td> <td>maps:map()</td> <td>mapping from term()
+  to erlang:timestamp().</td> </tr>
+ 
+  <tr> <td>pid_elapse</td> <td>maps:map()</td> <td>mapping from
+  term() to integer() (in microseconds).</td> </tr>
+ 
+  <tr> <td>pid_results</td> <td>maps:map()</td> <td>mapping from
+  pid() to [<a href="join_query_node.html#type-qn_graph"><code>join_query_node:qn_graph()</code></a>].</td> </tr>
+ 
+  <tr> <td>last_task</td> <td>atom()</td> <td>identifier of the last
+  benchmark task.</td> </tr>
+ 
+  <tr> <td>process_id</td> <td>atom()</td> <td>identifier of the
+  benchmark task of this process.</td> </tr>
+ 
+  <tr> <td>tmp_report</td> <td>queue:queue()</td> <td>temporal work
+  area for report generation.</td> </tr>
+ 
+  <tr> <td>width_report</td> <td>integer()</td> <td>number of max
+  characters per reporting line.</td> </tr>
+ 
+  <tr> <td>dump_result</td> <td>boolean()</td> <td>control result
+  dump in the report.</td> </tr>
+ 
+  <tr> <td>num_calls</td> <td>maps:map()</td> <td>mapping from term()
+  to integer().</td> </tr>
+ 
+  <tr> <td>result_record_max</td> <td>integer()</td> <td>Max number
+  of records to be reported.</td> </tr>
+ 
+  <tr> <td>query_tree_pid</td> <td>pid() | undefined</td> <td>process
+  id of <a href="query_tree.html"><code>query_tree</code></a> process.</td> </tr>
+ 
+  </table>
+ 
+  <h3><a name="handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>)</p>
+ 
+  <table border="3">
+ 
+  <tr> <th>Message</th> <th>Args</th> <th>Returns</th>
+  <th>Description</th> </tr>
+ 
+  <tr> <td><a href="#{get,_PropertyName}">{get, PropertyName}</a></td> <td>atom()</td>
+  <td>term() | undefined</td> <td>get value</td> </tr>
+ 
+  <tr> <td><a href="#{put,_PropertyName,_Value}">{put, PropertyName, Value}</a></td> <td>atom(),
+  term()</td> <td>ok | {error, term()}</td> <td>put value</td> </tr>
+ 
+  <tr> <td><a href="#{update_modules,_ModuleList}">{update_modules, ModuleList}</a></td>
+  <td>[atom()]</td> <td>ok | {error, term()}</td> <td>update
+  modules</td> </tr>
+ 
+  <tr> <td><a href="#report">report</a></td> <td></td> <td>string()</td>
+  <td>report last benchmark task</td> </tr>
+ 
+  </table>
+ 
+  <h4><a name="{get,_PropertyName}">{get, PropertyName}</a></h4>
+ 
+  <p>This message takes PropertyName::atom() as an argument and returns
+  the value Result::term() of the specified global property managed
+  by the b3s_state process. It returns undefined, if the property was
+  not defined yet. (LINK: <a href="#{get,_PropertyName}">{get, PropertyName}</a>)</p>
+ 
+  <h4><a name="{put,_PropertyName,_Value}">{put, PropertyName, Value}</a></h4>
+ 
+  <p>This message takes PropertyName::atom() and Value::term() as
+  arguments. If it successfully puts the value to the property, it
+  returns ok. Otherwise, it returns {error, Reason::term()}. (LINK:
+  <a href="#{put,_PropertyName,_Value}">{put, PropertyName, Value}</a>)</p>
+ 
+  <h4><a name="{update_modules,_ModuleList}">{update_modules, ModuleList}</a></h4>
+ 
+  <p>This message update and compile modules listed in
+  ModuleList::[atom()] on all big3store participating nodes. It uses
+  'clm_row_conf' property of <a href="node_state.html"><code>node_state</code></a> for retrieving the
+  nodes. If it successfully updates all modules on all nodes, it
+  returns ok. Otherwise, it returns {error, Reason::term()}. Usually,
+  it takes several seconds. It is recommended to extend timeout
+  parameters of gen_server:call/3 and unit tests. (LINK: <a href="#{update_modules,_ModuleList}">{update_modules, ModuleList}</a>)</p>
+ 
+  <h4><a name="report">report</a></h4>
+ 
+  <p>This message returns a string() result that reports the last
+  executed benchmark task. (LINK: <a href="#report">report</a>)</p>
+ 
+  <h3><a name="handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a>)</p>
+ 
+  <table border="3">
+ 
+  <tr> <th>Message</th> <th>Args</th> <th>Description</th> </tr>
+ 
+  <tr> <td><a href="#task_local2_0001">task_local2_0001</a></td> <td></td> <td>start a
+  benchmark task for unit test</td> </tr>
+ 
+  <tr> <td><a href="#task_local2_0002">task_local2_0002</a></td> <td></td> <td>start a
+  benchmark task for unit test</td> </tr>
+ 
+  <tr> <td><a href="#task_local2_0003">task_local2_0003</a></td> <td></td> <td>start a
+  benchmark task for unit test</td> </tr>
+ 
+  <tr> <td><a href="#task_local2_0004">task_local2_0004</a></td> <td></td> <td>start a
+  benchmark task for unit test</td> </tr>
+ 
+  <tr> <td><a href="#task_local2_0005">task_local2_0005</a></td> <td></td> <td>start a
+  benchmark task for unit test</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0001">task_yjr5x1_0001</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0002">task_yjr5x1_0002</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0003">task_yjr5x1_0003</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0003h">task_yjr5x1_0003h</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0004">task_yjr5x1_0004</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0004m">task_yjr5x1_0004m</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0005">task_yjr5x1_0005</a></td> <td></td> <td>start a
+  benchmark task [NW08] YAGO B1</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0005m">task_yjr5x1_0005m</a></td> <td></td> <td>start a
+  benchmark task [NW08] YAGO B1</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0006">task_yjr5x1_0006</a></td> <td></td> <td>start a
+  benchmark task [NW08] YAGO C2</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0007">task_yjr5x1_0007</a></td> <td></td> <td>start a
+  benchmark task [NW08] YAGO C1</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0008">task_yjr5x1_0008</a></td> <td></td> <td>start a
+  benchmark task [NW08] YAGO A1</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0008m">task_yjr5x1_0008m</a></td> <td></td> <td>start a
+  benchmark task [NW08] YAGO A1</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0009">task_yjr5x1_0009</a></td> <td></td> <td>start a
+  benchmark task [NW08] YAGO B3</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0010">task_yjr5x1_0010</a></td> <td></td> <td>start a
+  benchmark task [NW08] YAGO B2</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0010h">task_yjr5x1_0010h</a></td> <td></td> <td>start a
+  benchmark task [NW08] YAGO B2</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0010m">task_yjr5x1_0010m</a></td> <td></td> <td>start a
+  benchmark task [NW08] YAGO B2</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0011">task_yjr5x1_0011</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0011m">task_yjr5x1_0011m</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0012">task_yjr5x1_0012</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0013">task_yjr5x1_0013</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0013m">task_yjr5x1_0013m</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0014">task_yjr5x1_0014</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0014m">task_yjr5x1_0014m</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0015">task_yjr5x1_0015</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0015m">task_yjr5x1_0015m</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0016">task_yjr5x1_0016</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#task_yjr5x1_0017">task_yjr5x1_0017</a></td> <td></td> <td>start a
+  benchmark task</td> </tr>
+ 
+  <tr> <td><a href="#{data_outer,_Pid,_Graph}">{data_outer, Pid, Graph}</a></td> <td></td>
+  <td>iterate data stream</td> </tr>
+ 
+  <tr> <td><a href="#{restart_record,_Pid,_TaskId}">{restart_record, Pid, TaskId}</a></td> <td></td>
+  <td>(re)start recording elapsed time</td> </tr>
+ 
+  <tr> <td><a href="#{stop_record,_Pid,_TaskId}">{stop_record, Pid, TaskId}</a></td> <td></td>
+  <td>stop recording elapsed time</td> </tr>
+ 
+  </table>
+ 
+  <h4><a name="task_local2_0001">task_local2_0001</a></h4>
+ 
+  <p>This message starts a benchmark task for 2 servers environment of
+  unit tests. Important events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a>
+  process on the same node. (LINK: <a href="#task_local2_0001">task_local2_0001</a>)</p>
+ 
+  <h4><a name="task_local2_0002">task_local2_0002</a></h4>
+ 
+  <p>This message starts a benchmark task for 2 servers environment of
+  unit tests. Important events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a>
+  process on the same node. It uses <a href="query_tree.html"><code>query_tree</code></a>. (LINK:
+  <a href="#task_local2_0002">task_local2_0002</a>)</p>
+ 
+  <h4><a name="task_local2_0003">task_local2_0003</a></h4>
+ 
+  <p>This message starts a benchmark task for 2 servers environment of
+  unit tests. Important events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a>
+  process on the same node. It uses <a href="query_tree.html"><code>query_tree</code></a>. (LINK:
+  <a href="#task_local2_0003">task_local2_0003</a>)</p>
+ 
+  <h4><a name="task_local2_0004">task_local2_0004</a></h4>
+ 
+  <p>This message starts a benchmark task for 2 servers environment of
+  unit tests. Important events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a>
+  process on the same node. It uses <a href="query_tree.html"><code>query_tree</code></a>. (LINK:
+  <a href="#task_local2_0004">task_local2_0004</a>)</p>
+ 
+  <h4><a name="task_local2_0005">task_local2_0005</a></h4>
+ 
+  <p>This message starts a benchmark task for 2 servers environment of
+  unit tests. Important events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a>
+  process on the same node. It uses <a href="query_tree.html"><code>query_tree</code></a>. (LINK:
+  <a href="#task_local2_0005">task_local2_0005</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0001">task_yjr5x1_0001</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It only uses triple pattern query
+  nodes. Important events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a>
+  process on the same node. It is implemented in function <a href="#hc_task_yjr5x1_0001-0"><code>hc_task_yjr5x1_0001/0</code></a>. (LINK: <a href="#task_yjr5x1_0001">task_yjr5x1_0001</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0002">task_yjr5x1_0002</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a join query node. Important events
+  are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  is implemented in function <a href="#hc_task_yjr5x1_0002-0"><code>hc_task_yjr5x1_0002/0</code></a>. (LINK:
+  <a href="#task_yjr5x1_0002">task_yjr5x1_0002</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0003">task_yjr5x1_0003</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a join query node. Important events
+  are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  is implemented in function <a href="#hc_task_yjr5x1_0003-0"><code>hc_task_yjr5x1_0003/0</code></a>. (LINK:
+  <a href="#task_yjr5x1_0003">task_yjr5x1_0003</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0003h">task_yjr5x1_0003h</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a hash join query node. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It is implemented in function <a href="#hc_task_yjr5x1_0003-0"><code>hc_task_yjr5x1_0003/0</code></a>. (LINK: <a href="#task_yjr5x1_0003">task_yjr5x1_0003</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0004">task_yjr5x1_0004</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a join query node. Important events
+  are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function <a href="#hc_task_yjr5x1_0004-0"><code>hc_task_yjr5x1_0004/0</code></a>. (LINK: <a href="#task_yjr5x1_0004">task_yjr5x1_0004</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0004m">task_yjr5x1_0004m</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a memory join query node. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function
+  <a href="#hc_task_yjr5x1_0004-0"><code>hc_task_yjr5x1_0004/0</code></a>. (LINK: <a href="#task_yjr5x1_0004">task_yjr5x1_0004</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0005">task_yjr5x1_0005</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses join query nodes. Important events are
+  recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of [NW08]
+  YAGO B1. It is implemented in function <a href="#hc_task_yjr5x1_0005-0"><code>hc_task_yjr5x1_0005/0</code></a>. (LINK: <a href="#task_yjr5x1_0005">task_yjr5x1_0005</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0005m">task_yjr5x1_0005m</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses memory join query nodes. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of
+  [NW08] YAGO B1. It is implemented in function <a href="#hc_task_yjr5x1_0005-0"><code>hc_task_yjr5x1_0005/0</code></a>. (LINK: <a href="#task_yjr5x1_0005">task_yjr5x1_0005</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0006">task_yjr5x1_0006</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a join query node. Important events
+  are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of [NW08]
+  YAGO C2. It is implemented in function <a href="#hc_task_yjr5x1_0006-0"><code>hc_task_yjr5x1_0006/0</code></a>. (LINK: <a href="#task_yjr5x1_0006">task_yjr5x1_0006</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0007">task_yjr5x1_0007</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a join query node. Important events
+  are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of [NW08]
+  YAGO C1. It is implemented in function <a href="#hc_task_yjr5x1_0007-0"><code>hc_task_yjr5x1_0007/0</code></a>. (LINK: <a href="#task_yjr5x1_0007">task_yjr5x1_0007</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0008">task_yjr5x1_0008</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses join query nodes. Important events are
+  recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of [NW08]
+  YAGO A1. It is implemented in function <a href="#hc_task_yjr5x1_0008-0"><code>hc_task_yjr5x1_0008/0</code></a>. (LINK: <a href="#task_yjr5x1_0008">task_yjr5x1_0008</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0008m">task_yjr5x1_0008m</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses memory join query nodes. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of
+  [NW08] YAGO A1. It is implemented in function <a href="#hc_task_yjr5x1_0008-0"><code>hc_task_yjr5x1_0008/0</code></a>. (LINK: <a href="#task_yjr5x1_0008">task_yjr5x1_0008</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0009">task_yjr5x1_0009</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a join query node. Important events
+  are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of [NW08]
+  YAGO B3. It is implemented in function <a href="#hc_task_yjr5x1_0009-0"><code>hc_task_yjr5x1_0009/0</code></a>. (LINK: <a href="#task_yjr5x1_0009">task_yjr5x1_0009</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0010">task_yjr5x1_0010</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses join query nodes. Important events are
+  recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of [NW08]
+  YAGO B2. It is implemented in function <a href="#hc_task_yjr5x1_0010-0"><code>hc_task_yjr5x1_0010/0</code></a>. (LINK: <a href="#task_yjr5x1_0010">task_yjr5x1_0010</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0010h">task_yjr5x1_0010h</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses hash join query nodes. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of
+  [NW08] YAGO B2. It is implemented in function <a href="#hc_task_yjr5x1_0010h-0"><code>hc_task_yjr5x1_0010h/0</code></a>. (LINK: <a href="#task_yjr5x1_0010h">task_yjr5x1_0010h</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0010m">task_yjr5x1_0010m</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses memory join query nodes. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of
+  [NW08] YAGO B2. It is implemented in function <a href="#hc_task_yjr5x1_0010m-0"><code>hc_task_yjr5x1_0010m/0</code></a>. (LINK: <a href="#task_yjr5x1_0010m">task_yjr5x1_0010m</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0011">task_yjr5x1_0011</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses join query nodes. Important events are
+  recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function <a href="#hc_task_yjr5x1_0011-0"><code>hc_task_yjr5x1_0011/0</code></a>. (LINK: <a href="#task_yjr5x1_0011">task_yjr5x1_0011</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0011m">task_yjr5x1_0011m</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses memory join query nodes. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function
+  <a href="#hc_task_yjr5x1_0011-0"><code>hc_task_yjr5x1_0011/0</code></a>. (LINK: <a href="#task_yjr5x1_0011">task_yjr5x1_0011</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0012">task_yjr5x1_0012</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a join query node. Important events
+  are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function <a href="#hc_task_yjr5x1_0012-0"><code>hc_task_yjr5x1_0012/0</code></a>. (LINK: <a href="#task_yjr5x1_0012">task_yjr5x1_0012</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0013">task_yjr5x1_0013</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses join query nodes. Important events
+  are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function <a href="#hc_task_yjr5x1_0013-0"><code>hc_task_yjr5x1_0013/0</code></a>. (LINK: <a href="#task_yjr5x1_0013">task_yjr5x1_0013</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0013m">task_yjr5x1_0013m</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a memory join query node. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function
+  <a href="#hc_task_yjr5x1_0013-0"><code>hc_task_yjr5x1_0013/0</code></a>. (LINK: <a href="#task_yjr5x1_0013">task_yjr5x1_0013</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0014">task_yjr5x1_0014</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses join query nodes. Important events are
+  recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function <a href="#hc_task_yjr5x1_0014-0"><code>hc_task_yjr5x1_0014/0</code></a>. (LINK: <a href="#task_yjr5x1_0014">task_yjr5x1_0014</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0014m">task_yjr5x1_0014m</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a memory join query node. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function
+  <a href="#hc_task_yjr5x1_0014-0"><code>hc_task_yjr5x1_0014/0</code></a>. (LINK: <a href="#task_yjr5x1_0014">task_yjr5x1_0014</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0015">task_yjr5x1_0015</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses join query nodes. Important events are
+  recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It
+  uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function <a href="#hc_task_yjr5x1_0015-0"><code>hc_task_yjr5x1_0015/0</code></a>. (LINK: <a href="#task_yjr5x1_0015">task_yjr5x1_0015</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0015m">task_yjr5x1_0015m</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses a memory join query node. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function
+  <a href="#hc_task_yjr5x1_0015-0"><code>hc_task_yjr5x1_0015/0</code></a>. (LINK: <a href="#task_yjr5x1_0015">task_yjr5x1_0015</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0016">task_yjr5x1_0016</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It is a part of task_yjr5x1_0010. It uses a
+  join query node. Important events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function <a href="#hc_task_yjr5x1_0016-0"><code>hc_task_yjr5x1_0016/0</code></a>. (LINK: <a href="#task_yjr5x1_0016">task_yjr5x1_0016</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0017">task_yjr5x1_0017</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It is a part of task_yjr5x1_0010. It uses a
+  join query node. Important events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same node. It uses <a href="query_tree.html"><code>query_tree</code></a>. It is implemented in function <a href="#hc_task_yjr5x1_0017-0"><code>hc_task_yjr5x1_0017/0</code></a>. (LINK: <a href="#task_yjr5x1_0017">task_yjr5x1_0017</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0018">task_yjr5x1_0018</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses hash join query nodes. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of
+  [NW08] YAGO B2 and task_yjr5x1_0010. It is implemented in function
+  <a href="#hc_task_yjr5x1_0018-0"><code>hc_task_yjr5x1_0018/0</code></a>. (LINK: <a href="#task_yjr5x1_0018">task_yjr5x1_0018</a>)</p>
+ 
+  <h4><a name="task_yjr5x1_0019">task_yjr5x1_0019</a></h4>
+ 
+  <p>This message starts a benchmark task for Yahoo Japan Research 6
+  servers environment. It uses hash join query nodes. Important
+  events are recorded in the <a href="stop_watch.html"><code>stop_watch</code></a> process on the same
+  node. It uses <a href="query_tree.html"><code>query_tree</code></a>. This is the equivalent query of
+  [NW08] YAGO B2 and task_yjr5x1_0010. It is implemented in function
+  <a href="#hc_task_yjr5x1_0019-0"><code>hc_task_yjr5x1_0019/0</code></a>. (LINK: <a href="#task_yjr5x1_0019">task_yjr5x1_0019</a>)</p>
+ 
+  <h4><a name="{data_outer,_Pid,_Graph}">{data_outer, Pid, Graph}</a></h4>
+ 
+  <p>This message performs iteration of data stream. Parameter
+  Pid::<code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code> is a sender process id of this
+  asynchronous message. Parameter Graph::<code><a href="join_query_node.html#type-qn_graph">join_query_node:qn_graph()</a></code> is a content of the message. The
+  parameter Graph can have atom() value 'end_of_stream'. In that
+  case, this message recognizes the stream termination of the process
+  and reports to the <a href="stop_watch.html"><code>stop_watch</code></a> process. Otherwise, it sends
+  back an {empty, <code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code>} message to the sender
+  query node process. It is implemented in function <a href="#hc_data_outer-2"><code>hc_data_outer/2</code></a>. (LINK: <a href="#{data_outer,_Pid,_Graph}">{data_outer, Pid, Graph}</a>)</p>
+ 
+  <h4><a name="{restart_record,_Pid,_TaskId}">{restart_record, Pid, TaskId}</a></h4>
+ 
+  <p>This message starts or restarts recording elapsed time for
+  specified task TaskId::atom() of process Pid::<code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code>. It uses maps of pid_start and pid_elapse
+  process dictionary properties with key {Pid, TaskId}. It is
+  implemented in function <a href="#hc_restart_record-2"><code>hc_restart_record/2</code></a>. (LINK:
+  <a href="#{restart_record,_Pid,_TaskId}">{restart_record, Pid, TaskId}</a>)</p>
+ 
+  <h4><a name="{stop_record,_Pid,_TaskId}">{stop_record, Pid, TaskId}</a></h4>
+ 
+  This message stops recording elapsed time for specified task
+  TaskId::atom() of process Pid::<code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code>. It uses
+  maps of pid_start and pid_elapse process dictionary properties with
+  key {Pid, TaskId}. It is implemented in function <a href="#hc_stop_record-2"><code>hc_stop_record/2</code></a>. (LINK: <a href="#{stop_record,_Pid,_TaskId}">{stop_record, Pid, TaskId}</a>)
+ 
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-bm_state">bm_state()</a></h3>
+<p><tt>bm_state() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bm_test_-0">bm_test_/0*</a></td><td>Unit tests.</td></tr>
+<tr><td valign="top"><a href="#bsl2-0">bsl2/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#bsl2_prev-0">bsl2_prev/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#bsl2_sid-0">bsl2_sid/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#bt_site-1">bt_site/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#child_spec-1">child_spec/1</a></td><td>Return child spec for this process.</td></tr>
+<tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Process code change action.</td></tr>
+<tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle synchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
+<tr><td valign="top"><a href="#hc_data_outer-2">hc_data_outer/2*</a></td><td>This function performs iteration of data stream.</td></tr>
+<tr><td valign="top"><a href="#hc_report-0">hc_report/0*</a></td><td>This function returns string() formatted report of the last
+  executed benchmark task.</td></tr>
+<tr><td valign="top"><a href="#hc_report_generate-2">hc_report_generate/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_report_legacy-0">hc_report_legacy/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_report_query_tree-1">hc_report_query_tree/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_report_switch-1">hc_report_switch/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_restart_record-2">hc_restart_record/2*</a></td><td>This message starts or restarts recording elapsed time for
+  specified task of specified process.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_stop_record-2">hc_stop_record/2*</a></td><td>This message stops recording elapsed time for specified task
+  of specified process.</td></tr>
+<tr><td valign="top"><a href="#hc_task_local2_0001-0">hc_task_local2_0001/0*</a></td><td>This function performs a benchmark task for unit test
+  environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_local2_0002-0">hc_task_local2_0002/0*</a></td><td>This function performs a benchmark task for unit test
+  environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_local2_0003-0">hc_task_local2_0003/0*</a></td><td>This function performs a benchmark task for unit test
+  environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_local2_0004-0">hc_task_local2_0004/0*</a></td><td>This function performs a benchmark task for unit test
+  environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_local2_0005-0">hc_task_local2_0005/0*</a></td><td>This function performs a benchmark task for unit test
+  environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0001-0">hc_task_yjr5x1_0001/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan
+  Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0001-1">hc_task_yjr5x1_0001/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0002-0">hc_task_yjr5x1_0002/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan
+  Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0002-1">hc_task_yjr5x1_0002/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0003-0">hc_task_yjr5x1_0003/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0003-1">hc_task_yjr5x1_0003/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0003h-0">hc_task_yjr5x1_0003h/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0004-0">hc_task_yjr5x1_0004/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0004-1">hc_task_yjr5x1_0004/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0004m-0">hc_task_yjr5x1_0004m/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0005-0">hc_task_yjr5x1_0005/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0005-1">hc_task_yjr5x1_0005/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0005m-0">hc_task_yjr5x1_0005m/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0006-0">hc_task_yjr5x1_0006/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0006-1">hc_task_yjr5x1_0006/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0007-0">hc_task_yjr5x1_0007/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan
+  Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0007-1">hc_task_yjr5x1_0007/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0008-0">hc_task_yjr5x1_0008/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0008-1">hc_task_yjr5x1_0008/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0008m-0">hc_task_yjr5x1_0008m/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0009-0">hc_task_yjr5x1_0009/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0009-1">hc_task_yjr5x1_0009/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0010-0">hc_task_yjr5x1_0010/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0010-1">hc_task_yjr5x1_0010/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0010h-0">hc_task_yjr5x1_0010h/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0010h-1">hc_task_yjr5x1_0010h/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0010m-0">hc_task_yjr5x1_0010m/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0010m-1">hc_task_yjr5x1_0010m/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0011-0">hc_task_yjr5x1_0011/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0011-1">hc_task_yjr5x1_0011/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0011m-0">hc_task_yjr5x1_0011m/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0012-0">hc_task_yjr5x1_0012/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0012-1">hc_task_yjr5x1_0012/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0013-0">hc_task_yjr5x1_0013/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0013-1">hc_task_yjr5x1_0013/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0013m-0">hc_task_yjr5x1_0013m/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0014-0">hc_task_yjr5x1_0014/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0014-1">hc_task_yjr5x1_0014/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0014m-0">hc_task_yjr5x1_0014m/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0015-0">hc_task_yjr5x1_0015/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0015-1">hc_task_yjr5x1_0015/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0015m-0">hc_task_yjr5x1_0015m/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0016-0">hc_task_yjr5x1_0016/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0016-1">hc_task_yjr5x1_0016/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0017-0">hc_task_yjr5x1_0017/0*</a></td><td>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</td></tr>
+<tr><td valign="top"><a href="#hc_task_yjr5x1_0017-1">hc_task_yjr5x1_0017/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_update_modules-1">hc_update_modules/1*</a></td><td>This function updates and compile modules on nodes.</td></tr>
+<tr><td valign="top"><a href="#hcr_perform-3">hcr_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_app_property-1">hr_app_property/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_b3s_property-1">hr_b3s_property/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_b3s_property_list-1">hr_b3s_property_list/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_cons_result-1">hr_cons_result/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_map-3">hr_map/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_map-4">hr_map/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_property-1">hr_property/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_property-2">hr_property/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_property_list-2">hr_property_list/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_pv_line-2">hr_pv_line/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_pv_map-4">hr_pv_map/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_result-4">hr_result/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_section_header-1">hr_section_header/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_separator-1">hr_separator/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hr_v_line-1">hr_v_line/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrr_graph-1">hrr_graph/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrr_root_node-2">hrr_root_node/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrr_tuple-1">hrr_tuple/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hsr_perform-3">hsr_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hty_construct_pid-3">hty_construct_pid/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hty_construct_qtid-2">hty_construct_qtid/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hty_prep-1">hty_prep/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hty_restart_jqn-10">hty_restart_jqn/10*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hty_restart_tpqn-8">hty_restart_tpqn/8*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hty_start_jqn-10">hty_start_jqn/10*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hty_start_tpqn-8">hty_start_tpqn/8*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hty_stop_qn-2">hty_stop_qn/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hum_confirm-2">hum_confirm/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hum_proc_module-3">hum_proc_module/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hum_proc_node-3">hum_proc_node/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#humc_return-1">humc_return/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a benchmark process.</td></tr>
+<tr><td valign="top"><a href="#start-1">start/1</a></td><td>This function starts a process of this module on specified
+  node.</td></tr>
+<tr><td valign="top"><a href="#start-2">start/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#start_cc-3">start_cc/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#start_sc-3">start_sc/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#stop-1">stop/1</a></td><td>This function stops the process of this module on specified
+  node.</td></tr>
+<tr><td valign="top"><a href="#stop-2">stop/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#stop_tc-3">stop_tc/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="bm_test_-0">bm_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>bm_test_() -&gt; any()</tt></p>
+</div><p>Unit tests.
+ </p>
+
+<h3 class="function"><a name="bsl2-0">bsl2/0 *</a></h3>
+<div class="spec">
+<p><tt>bsl2() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="bsl2_prev-0">bsl2_prev/0 *</a></h3>
+<div class="spec">
+<p><tt>bsl2_prev() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="bsl2_sid-0">bsl2_sid/0 *</a></h3>
+<div class="spec">
+<p><tt>bsl2_sid() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="bt_site-1">bt_site/1 *</a></h3>
+<div class="spec">
+<p><tt>bt_site(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="child_spec-1">child_spec/1</a></h3>
+<div class="spec">
+<p><tt>child_spec(ProcId::atom()) -&gt; <a href="supervisor.html#type-child_spec">supervisor:child_spec()</a></tt><br></p>
+</div><p>Return child spec for this process. It can be used in
+  supervisor:init/0 callback implementation.
+ </p>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><tt>code_change(OldVsn::term(), State::<a href="#type-bm_state">bm_state()</a>, Extra::term()) -&gt; {ok, <a href="#type-bm_state">bm_state()</a>}</tt><br></p>
+</div><p>Process code change action.
+ </p>
+
+<h3 class="function"><a name="error_msg-3">error_msg/3 *</a></h3>
+<div class="spec">
+<p><tt>error_msg(FunName::atom(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
+</div><p>Report an error issue to the error_logger.
+ </p>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><tt>handle_call(Request::term(), From::{pid(), term()}, State::<a href="#type-bm_state">bm_state()</a>) -&gt; {reply, term(), <a href="#type-bm_state">bm_state()</a>}</tt><br></p>
+</div><p>Handle synchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><tt>handle_cast(Request::term(), State::<a href="#type-bm_state">bm_state()</a>) -&gt; {noreply, <a href="#type-bm_state">bm_state()</a>}</tt><br></p>
+</div><p>Handle asynchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><tt>handle_info(Info::term(), State::<a href="#type-bm_state">bm_state()</a>) -&gt; {noreply, <a href="#type-bm_state">bm_state()</a>}</tt><br></p>
+</div><p>Handle exceptional query requests.
+ </p>
+
+<h3 class="function"><a name="hc_data_outer-2">hc_data_outer/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_data_outer(Pid::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>, Graph::<a href="join_query_node.html#type-qn_graph">join_query_node:qn_graph()</a> | end_of_stream) -&gt; ok</tt><br></p>
+</div><p>This function performs iteration of data stream.
+ </p>
+
+<h3 class="function"><a name="hc_report-0">hc_report/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_report() -&gt; string()</tt><br></p>
+</div><p>This function returns string() formatted report of the last
+  executed benchmark task.
+ </p>
+
+<h3 class="function"><a name="hc_report_generate-2">hc_report_generate/2</a></h3>
+<div class="spec">
+<p><tt>hc_report_generate(X1, R) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_report_legacy-0">hc_report_legacy/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_report_legacy() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_report_query_tree-1">hc_report_query_tree/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_report_query_tree(QTP) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_report_switch-1">hc_report_switch/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_report_switch(QTP) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_restart_record-2">hc_restart_record/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_restart_record(Pid::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>, TaskId::atom()) -&gt; ok</tt><br></p>
+</div><p>This message starts or restarts recording elapsed time for
+  specified task of specified process.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd-2">hc_restore_pd/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd(X1::[{atom(), term()}] | undefined, State::<a href="#type-bm_state">bm_state()</a>) -&gt; ok</tt><br></p>
+</div><p>Restore process dictionaries from state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd_1-1">hc_restore_pd_1/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd_1(T) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_save_pd-0">hc_save_pd/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_save_pd() -&gt; <a href="#type-bm_state">bm_state()</a></tt><br></p>
+</div><p>Save process all dictionary contents into state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_stop_record-2">hc_stop_record/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_stop_record(Pid::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>, TaskId::atom()) -&gt; ok | stop_called_before_start</tt><br></p>
+</div><p>This message stops recording elapsed time for specified task
+  of specified process.
+ </p>
+
+<h3 class="function"><a name="hc_task_local2_0001-0">hc_task_local2_0001/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_local2_0001() -&gt; any()</tt></p>
+</div><p>This function performs a benchmark task for unit test
+  environment.
+ </p>
+
+<h3 class="function"><a name="hc_task_local2_0002-0">hc_task_local2_0002/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_local2_0002() -&gt; any()</tt></p>
+</div><p>This function performs a benchmark task for unit test
+  environment.
+ </p>
+
+<h3 class="function"><a name="hc_task_local2_0003-0">hc_task_local2_0003/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_local2_0003() -&gt; any()</tt></p>
+</div><p>This function performs a benchmark task for unit test
+  environment.
+ </p>
+
+<h3 class="function"><a name="hc_task_local2_0004-0">hc_task_local2_0004/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_local2_0004() -&gt; any()</tt></p>
+</div><p>This function performs a benchmark task for unit test
+  environment.
+ </p>
+
+<h3 class="function"><a name="hc_task_local2_0005-0">hc_task_local2_0005/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_local2_0005() -&gt; any()</tt></p>
+</div><p>This function performs a benchmark task for unit test
+  environment.
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0001-0">hc_task_yjr5x1_0001/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0001() -&gt; any()</tt></p>
+</div><p>This function performs a benchmark task for the Yahoo Japan
+  Research's big six server environment.
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0001-1">hc_task_yjr5x1_0001/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0001(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0002-0">hc_task_yjr5x1_0002/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0002() -&gt; any()</tt></p>
+</div><p>This function performs a benchmark task for the Yahoo Japan
+  Research's big six server environment.
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0002-1">hc_task_yjr5x1_0002/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0002(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0003-0">hc_task_yjr5x1_0003/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0003() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</p>
+ 
+  <table border="3">
+  <tr><th>Pattern</th><th>Num</th></tr>
+ 
+  <tr><td>yago:Japan ?p ?o</td><td align="right">918</td></tr>
+ 
+  <tr><td>yago:Slovenia ?p ?o</td><td align="right">688</td></tr>
+ 
+  </table>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0003-1">hc_task_yjr5x1_0003/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0003(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0003h-0">hc_task_yjr5x1_0003h/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0003h() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</p>
+ 
+  <table border="3">
+  <tr><th>Pattern</th><th>Num</th></tr>
+ 
+  <tr><td>yago:Japan ?p ?o</td><td align="right">918</td></tr>
+ 
+  <tr><td>yago:Slovenia ?p ?o</td><td align="right">688</td></tr>
+ 
+  </table>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0004-0">hc_task_yjr5x1_0004/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0004() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</p>
+ 
+  <pre>
+  sparql
+  prefix yago: &lt;http://yago-knowledge.org/resource/&gt;
+  select * from &lt;http://yago-knowledge.org/resource&gt; where {
+    ?sbj yago:startedOnDate ?obj1 .
+    ?sbj yago:endedOnDate ?obj2 .
+  } ;
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0004-1">hc_task_yjr5x1_0004/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0004(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0004m-0">hc_task_yjr5x1_0004m/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0004m() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment.</p>
+ 
+  <pre>
+  sparql
+  prefix yago: &lt;http://yago-knowledge.org/resource/&gt;
+  select * from &lt;http://yago-knowledge.org/resource&gt; where {
+    ?sbj yago:startedOnDate ?obj1 .
+    ?sbj yago:endedOnDate ?obj2 .
+  } ;
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0005-0">hc_task_yjr5x1_0005/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0005() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is the equivalent query  
+of [NW08] YAGO B1.</p>
+ 
+  <table border="3">
+  <tr><th>Pattern</th><th>Num</th></tr>
+ 
+  <tr><td>?s yago:isLocatedIn yago:England</td><td align="right">4,183</td></tr>
+ 
+  <tr><td>?s yago:livesIn ?o</td><td align="right">33,610</td></tr>
+ 
+  <tr><td>?c yago:isLocatedIn yago:England . ?s yago:livesIn
+  ?c</td><td align="right">228</td></tr>
+ 
+  <tr><td>?s yago:actedIn ?o</td><td align="right">127,502</td></tr>
+ 
+  <tr><td>?c yago:isLocatedIn yago:England . ?s yago:livesIn
+  ?c . ?s yago:actedIn ?o</td><td align="right">1</td></tr>
+ 
+  </table>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0005-1">hc_task_yjr5x1_0005/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0005(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0005m-0">hc_task_yjr5x1_0005m/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0005m() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is the equivalent query  
+of [NW08] YAGO B1.</p>
+ 
+  <table border="3">
+  <tr><th>Pattern</th><th>Num</th></tr>
+ 
+  <tr><td>?s yago:isLocatedIn yago:England</td><td align="right">4,183</td></tr>
+ 
+  <tr><td>?s yago:livesIn ?o</td><td align="right">33,610</td></tr>
+ 
+  <tr><td>?c yago:isLocatedIn yago:England . ?s yago:livesIn
+  ?c</td><td align="right">228</td></tr>
+ 
+  <tr><td>?s yago:actedIn ?o</td><td align="right">127,502</td></tr>
+ 
+  <tr><td>?c yago:isLocatedIn yago:England . ?s yago:livesIn
+  ?c . ?s yago:actedIn ?o</td><td align="right">1</td></tr>
+ 
+  </table>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0006-0">hc_task_yjr5x1_0006/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0006() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is the equivalent query  
+of [NW08] YAGO C2.</p>
+ 
+  <pre>
+  sparql
+  prefix yago: &lt;http://yago-knowledge.org/resource/&gt;
+  select * from &lt;http://yago-knowledge.org/resource&gt; where {
+    ?c1 rdfs:label "London" .
+    ?c1 rdf:type yago:wordnet_site_108651247 .
+    ?p  ?prd1 ?c1 .
+    ?p  ?prd2 ?c2 .
+    ?c2 rdfs:label "Paris" .
+    ?c2 rdf:type yago:wordnet_site_108651247 .
+  } ;
+ 
+  a) ?c1 rdfs:label "London" .
+  b) ?c1 rdf:type yago:wordnet_site_108651247 .
+  c) ?p  ?prd1 ?c1 .
+  d) ?p  ?prd2 ?c2 .
+  e) ?c2 rdfs:label "Paris" .
+  f) ?c2 rdf:type yago:wordnet_site_108651247 .
+  g) filter(?prd1 != rdfs:label) .
+  h) filter(?prd2 != rdfs:label) .
+  i) filter(?prd1 != yago:linksTo) .
+  j) filter(?prd2 != yago:linksTo) .
+ 
+  a:5 ab:2 abc:73,235 abcd:4,573,471 abcde:5,837 abcdef:5,826
+  e:8 f:190,641 ef:2 def:37,674 cdef:2,444,134 acdef:5,900
+  abcdefghij:10
+ 
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0006-1">hc_task_yjr5x1_0006/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0006(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0007-0">hc_task_yjr5x1_0007/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0007() -&gt; any()</tt></p>
+</div><p>This function performs a benchmark task for the Yahoo Japan
+  Research's big six server environment. This is the equivalent query
+  of [NW08] YAGO C1.
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0007-1">hc_task_yjr5x1_0007/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0007(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0008-0">hc_task_yjr5x1_0008/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0008() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is the equivalent query  
+of [NW08] YAGO A1:</p>
+ 
+  <pre>
+  ?p     &lt;hasGivenName&gt;       ?gn
+  ?p     &lt;hasFamilyName&gt;      ?fn
+  ?p     rdf:type           &lt;wordnet_scientist_110560637&gt;
+  ?p     &lt;wasBornIn&gt;          ?city
+  ?p     &lt;hasAcademicAdvisor&gt; ?a
+  ?a     &lt;wasBornIn&gt;          ?city2
+  ?city  &lt;isLocatedIn&gt;        &lt;Switzerland&gt;
+  ?city2 &lt;isLocatedIn&gt;        &lt;Germany&gt;
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0008-1">hc_task_yjr5x1_0008/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0008(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0008m-0">hc_task_yjr5x1_0008m/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0008m() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is the equivalent query  
+of [NW08] YAGO A1:</p>
+ 
+  <pre>
+  ?p     &lt;hasGivenName&gt;       ?gn
+  ?p     &lt;hasFamilyName&gt;      ?fn
+  ?p     rdf:type           &lt;wordnet_scientist_110560637&gt;
+  ?p     &lt;wasBornIn&gt;          ?city
+  ?p     &lt;hasAcademicAdvisor&gt; ?a
+  ?a     &lt;wasBornIn&gt;          ?city2
+  ?city  &lt;isLocatedIn&gt;        &lt;Switzerland&gt;
+  ?city2 &lt;isLocatedIn&gt;        &lt;Germany&gt;
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0009-0">hc_task_yjr5x1_0009/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0009() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is the equivalent query  
+of [NW08] YAGO B3:</p>
+ 
+  <pre>
+  ?p1    &lt;hasFamilyName&gt;      ?fn
+  ?p2    &lt;hasFamilyName&gt;      ?fn
+  ?p1    rdf:type           &lt;wordnet_scientist_110560637&gt;
+  ?p1    &lt;hasWonPrize&gt;        ?award
+  ?p1    &lt;wasBornIn&gt;          ?city
+  ?p2    rdf:type           &lt;wordnet_scientist_110560637&gt;
+  ?p2    &lt;hasWonPrize&gt;        ?award
+  ?p2    &lt;wasBornIn&gt;          ?city
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0009-1">hc_task_yjr5x1_0009/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0009(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0010-0">hc_task_yjr5x1_0010/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0010() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is the equivalent query  
+of [NW08] YAGO B2:</p>
+ 
+  <pre>
+  ?p1    rdfs:label                 ?n1
+  ?p2    rdfs:label                 ?n2
+  ?p1    &lt;wasBornIn&gt;          ?city
+  ?p1    &lt;isMarriedTo&gt;        ?p2
+  ?p2    &lt;wasBornIn&gt;          ?city
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0010-1">hc_task_yjr5x1_0010/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0010(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0010h-0">hc_task_yjr5x1_0010h/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0010h() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is the equivalent query  
+of [NW08] YAGO B2 and task_yjr5x1_0010:</p>
+ 
+  <pre>
+  ?p1    rdfs:label                 ?n1
+  ?p2    rdfs:label                 ?n2
+  ?p1    &lt;wasBornIn&gt;          ?city
+  ?p1    &lt;isMarriedTo&gt;        ?p2
+  ?p2    &lt;wasBornIn&gt;          ?city
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0010h-1">hc_task_yjr5x1_0010h/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0010h(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0010m-0">hc_task_yjr5x1_0010m/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0010m() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is the equivalent query  
+of [NW08] YAGO B2 and task_yjr5x1_0010:</p>
+ 
+  <pre>
+  ?p1    rdfs:label                 ?n1
+  ?p2    rdfs:label                 ?n2
+  ?p1    &lt;wasBornIn&gt;          ?city
+  ?p1    &lt;isMarriedTo&gt;        ?p2
+  ?p2    &lt;wasBornIn&gt;          ?city
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0010m-1">hc_task_yjr5x1_0010m/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0010m(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0011-0">hc_task_yjr5x1_0011/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0011() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. It tries to test a circular  
+query.</p>
+ 
+  <table bgcolor="#E8FFFB">
+  <tr> <th>subject</th> <th>predicate</th> <th>object</th> </tr>
+ 
+  <tr> <td>?p1</td> <td>[]</td> <td>?p4</td> </tr>
+ 
+  <tr> <td>?p4</td> <td>[]</td> <td>?p3</td> </tr>
+ 
+  <tr> <td>?p4</td> <td>&lt;actedIn&gt;</td> <td>?movie2</td> </tr>
+ 
+  <tr> <td>?p3</td> <td>&lt;actedIn&gt;</td> <td>?movie1</td> </tr>
+ 
+  <tr> <td>?p2</td> <td>&lt;directed&gt;</td> <td>?movie2</td> </tr>
+ 
+  <tr> <td>?p2</td> <td>&lt;influences&gt;</td> <td>?p1</td> </tr>
+ 
+  <tr> <td>?p1</td> <td>&lt;directed&gt;</td> <td>?movie1</td> </tr>
+ 
+  <tr> <td>&lt;Tim_Burton&gt;</td> <td>&lt;directed&gt;</td>
+  <td>?movie1</td> </tr>
+ 
+  <tr> <td>&lt;Johnny_Depp&gt;</td> <td>&lt;actedIn&gt;</td>
+  <td>?movie1</td> </tr>
+ 
+  </table>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0011-1">hc_task_yjr5x1_0011/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0011(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0011m-0">hc_task_yjr5x1_0011m/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0011m() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. It tries to test a circular  
+query.</p>
+ 
+  <table bgcolor="#E8FFFB">
+  <tr> <th>subject</th> <th>predicate</th> <th>object</th> </tr>
+ 
+  <tr> <td>?p1</td> <td>[]</td> <td>?p4</td> </tr>
+ 
+  <tr> <td>?p4</td> <td>[]</td> <td>?p3</td> </tr>
+ 
+  <tr> <td>?p4</td> <td>&lt;actedIn&gt;</td> <td>?movie2</td> </tr>
+ 
+  <tr> <td>?p3</td> <td>&lt;actedIn&gt;</td> <td>?movie1</td> </tr>
+ 
+  <tr> <td>?p2</td> <td>&lt;directed&gt;</td> <td>?movie2</td> </tr>
+ 
+  <tr> <td>?p2</td> <td>&lt;influences&gt;</td> <td>?p1</td> </tr>
+ 
+  <tr> <td>?p1</td> <td>&lt;directed&gt;</td> <td>?movie1</td> </tr>
+ 
+  <tr> <td>&lt;Tim_Burton&gt;</td> <td>&lt;directed&gt;</td>
+  <td>?movie1</td> </tr>
+ 
+  <tr> <td>&lt;Johnny_Depp&gt;</td> <td>&lt;actedIn&gt;</td>
+  <td>?movie1</td> </tr>
+ 
+  </table>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0012-0">hc_task_yjr5x1_0012/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0012() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is another light query  
+that produces no so big traffic.</p>
+ 
+  <table bgcolor="#E8FFFB">
+  <tr> <th>subject</th> <th>predicate</th> <th>object</th> </tr>
+ 
+  <tr> <td>&lt;Eiiti_Wada&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Akinori_Yonezawa&gt;</td> <td>rdf:type</td>
+  <td>?c</td> </tr>
+ 
+  <tr> <td>&lt;Tadao_Kasami&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Ken_Sakamura&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Nobuo_Mii&gt;</td> <td>rdf:type</td> <td>?c</td> </tr>
+ 
+  <tr> <td>&lt;Makoto_Nagao&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Eiichi_Goto&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Kozo_Sugiyama&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Tatsuo_Kobayashi&gt;</td> <td>rdf:type</td>
+  <td>?c</td> </tr>
+ 
+  <tr> <td>&lt;Masaru_Kitsuregawa&gt;</td> <td>rdf:type</td>
+  <td>?c</td> </tr>
+ 
+  <tr> <td>&lt;Tomoyuki_Nishita&gt;</td> <td>rdf:type</td>
+  <td>?c</td> </tr>
+ 
+  <tr> <td>&lt;Makoto_Murata&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Hisao_Yamada&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Masaru_Tomita&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Takeo_Kanade&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Yukihiro_Matsumoto&gt;</td> <td>rdf:type</td>
+  <td>?c</td> </tr>
+ 
+  <tr> <td>&lt;Jun_Murai&gt;</td> <td>rdf:type</td> <td>?c</td> </tr>
+ 
+  <tr> <td>&lt;Nobuo_Yoneda&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Mitsunori_Miki&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  <tr> <td>&lt;Hiroshi_Ishii&gt;</td> <td>rdf:type</td> <td>?c</td>
+  </tr>
+ 
+  </table>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0012-1">hc_task_yjr5x1_0012/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0012(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0013-0">hc_task_yjr5x1_0013/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0013() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is another light query  
+that produces no so big traffic.</p>
+ 
+  <table bgcolor="#E8FFFB">
+  <tr> <th>subject</th> <th>predicate</th> <th>object</th>
+  <th>num</th> </tr>
+ 
+  <tr> <td>?p</td> <td>rdf:type</td>
+  <td>&lt;wikicategory_Japanese_computer_scientists&gt;</td> <td align="right">21</td> </tr>
+ 
+  <tr> <td>?p</td> <td>&lt;created&gt;</td> <td>?o</td> <td align="right">277,069</td> </tr>
+ 
+  <tr> <td>?o</td> <td>rdf:type</td>
+  <td>&lt;wordnet_programming_language_106898352&gt;</td> <td align="right">574</td> </tr>
+ 
+  </table>
+ 
+  <pre>
+  sparql
+  prefix yago: &lt;http://yago-knowledge.org/resource/&gt;
+  select * from &lt;http://yago-knowledge.org/resource&gt; where {
+    ?p rdf:type yago:wikicategory_Japanese_computer_scientists .
+    ?p yago:created ?o .
+    ?o rdf:type yago:wordnet_programming_language_106898352 .
+  } ;
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0013-1">hc_task_yjr5x1_0013/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0013(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0013m-0">hc_task_yjr5x1_0013m/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0013m() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is another light query  
+that produces no so big traffic.</p>
+ 
+  <table bgcolor="#E8FFFB">
+  <tr> <th>subject</th> <th>predicate</th> <th>object</th>
+  <th>num</th> </tr>
+ 
+  <tr> <td>?p</td> <td>rdf:type</td>
+  <td>&lt;wikicategory_Japanese_computer_scientists&gt;</td> <td align="right">21</td> </tr>
+ 
+  <tr> <td>?p</td> <td>&lt;created&gt;</td> <td>?o</td> <td align="right">277,069</td> </tr>
+ 
+  <tr> <td>?o</td> <td>rdf:type</td>
+  <td>&lt;wordnet_programming_language_106898352&gt;</td> <td align="right">574</td> </tr>
+ 
+  </table>
+ 
+  <pre>
+  sparql
+  prefix yago: &lt;http://yago-knowledge.org/resource/&gt;
+  select * from &lt;http://yago-knowledge.org/resource&gt; where {
+    ?p rdf:type yago:wikicategory_Japanese_computer_scientists .
+    ?p yago:created ?o .
+    ?o rdf:type yago:wordnet_programming_language_106898352 .
+  } ;
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0014-0">hc_task_yjr5x1_0014/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0014() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is another light query  
+that produces no so big traffic.</p>
+ 
+  <table bgcolor="#E8FFFB">
+  <tr> <th>subject</th> <th>predicate</th> <th>object</th>
+  <th>num</th> </tr>
+ 
+  <tr> <td>&lt;Ericsson&gt;</td> <td>&lt;created&gt;</td>
+  <td>?pl</td> <td align="right">5</td> </tr>
+ 
+  <tr> <td>?pl</td> <td>rdf:type</td>
+  <td>&lt;wordnet_language_106282651&gt;</td> <td align="right">10160</td> </tr>
+ 
+  <tr> <td>?pl</td> <td>&lt;wasCreatedOnDate&gt;</td> <td>?dt</td>
+  <td align="right"></td> </tr>
+ 
+  </table>
+ 
+  <pre>
+  sparql
+  prefix yago: &lt;http://yago-knowledge.org/resource/&gt;
+  select * from &lt;http://yago-knowledge.org/resource&gt; where {
+    yago:Ericsson yago:created ?pl .
+    ?pl rdf:type yago:wordnet_language_106282651 .
+    ?pl yago:wasCreatedOnDate ?dt .
+  } ;
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0014-1">hc_task_yjr5x1_0014/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0014(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0014m-0">hc_task_yjr5x1_0014m/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0014m() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is another light query  
+that produces no so big traffic.</p>
+ 
+  <table bgcolor="#E8FFFB">
+  <tr> <th>subject</th> <th>predicate</th> <th>object</th>
+  <th>num</th> </tr>
+ 
+  <tr> <td>&lt;Ericsson&gt;</td> <td>&lt;created&gt;</td>
+  <td>?pl</td> <td align="right">5</td> </tr>
+ 
+  <tr> <td>?pl</td> <td>rdf:type</td>
+  <td>&lt;wordnet_language_106282651&gt;</td> <td align="right">10160</td> </tr>
+ 
+  <tr> <td>?pl</td> <td>&lt;wasCreatedOnDate&gt;</td> <td>?dt</td>
+  <td align="right"></td> </tr>
+ 
+  </table>
+ 
+  <pre>
+  sparql
+  prefix yago: &lt;http://yago-knowledge.org/resource/&gt;
+  select * from &lt;http://yago-knowledge.org/resource&gt; where {
+    yago:Ericsson yago:created ?pl .
+    ?pl rdf:type yago:wordnet_language_106282651 .
+    ?pl yago:wasCreatedOnDate ?dt .
+  } ;
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0015-0">hc_task_yjr5x1_0015/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0015() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is another light query  
+that produces no so big traffic.</p>
+ 
+  <table bgcolor="#E8FFFB">
+  <tr> <th>subject</th> <th>predicate</th> <th>object</th>
+  <th>num</th> </tr>
+ 
+  <tr> <td>?dev</td> <td>&lt;created&gt;</td> <td>?pl</td> <td align="right">277,069</td> </tr>
+ 
+  <tr> <td>?pl</td> <td>rdf:type</td>
+  <td>&lt;wordnet_software_106566077&gt;</td> <td align="right">8,548</td> </tr>
+ 
+  <tr> <td>&lt;Erlang_(programming_language)&gt;</td>
+  <td>&lt;linksTo&gt;</td> <td>?pl</td> <td align="right">41</td>
+  </tr>
+ 
+  </table>
+ 
+  <pre>
+  sparql
+  prefix yago: &lt;http://yago-knowledge.org/resource/&gt;
+  select * from &lt;http://yago-knowledge.org/resource&gt; where {
+    ?dev yago:created ?pl .
+    ?pl rdf:type yago:wordnet_software_106566077 .
+    &lt;http://yago-knowledge.org/resource/Erlang_(programming_language)&gt; yago:linksTo ?pl .
+  } ;
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0015-1">hc_task_yjr5x1_0015/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0015(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0015m-0">hc_task_yjr5x1_0015m/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0015m() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. This is another light query  
+that produces no so big traffic.</p>
+ 
+  <table bgcolor="#E8FFFB">
+  <tr> <th>subject</th> <th>predicate</th> <th>object</th>
+  <th>num</th> </tr>
+ 
+  <tr> <td>?dev</td> <td>&lt;created&gt;</td> <td>?pl</td> <td align="right">277,069</td> </tr>
+ 
+  <tr> <td>?pl</td> <td>rdf:type</td>
+  <td>&lt;wordnet_software_106566077&gt;</td> <td align="right">8,548</td> </tr>
+ 
+  <tr> <td>&lt;Erlang_(programming_language)&gt;</td>
+  <td>&lt;linksTo&gt;</td> <td>?pl</td> <td align="right">41</td>
+  </tr>
+ 
+  </table>
+ 
+  <pre>
+  sparql
+  prefix yago: &lt;http://yago-knowledge.org/resource/&gt;
+  select * from &lt;http://yago-knowledge.org/resource&gt; where {
+    ?dev yago:created ?pl .
+    ?pl rdf:type yago:wordnet_software_106566077 .
+    &lt;http://yago-knowledge.org/resource/Erlang_(programming_language)&gt; yago:linksTo ?pl .
+  } ;
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0016-0">hc_task_yjr5x1_0016/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0016() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. It is a part of  
+task_yjr5x1_0010.</p>
+ 
+  <pre>
+  ?p1    &lt;isMarriedTo&gt;        ?p2
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0016-1">hc_task_yjr5x1_0016/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0016(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0017-0">hc_task_yjr5x1_0017/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0017() -&gt; any()</tt></p>
+</div><p><p>This function performs a benchmark task for the Yahoo Japan  
+Research's big six server environment. It is a part of  
+task_yjr5x1_0010.</p>
+ 
+  <pre>
+  ?p1    &lt;wasBornIn&gt;          ?city
+  </pre>
+ </p>
+
+<h3 class="function"><a name="hc_task_yjr5x1_0017-1">hc_task_yjr5x1_0017/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_task_yjr5x1_0017(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_update_modules-1">hc_update_modules/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_update_modules(ModuleList::[atom()]) -&gt; ok | {error, term()}</tt><br></p>
+</div><p>This function updates and compile modules on nodes.
+ </p>
+
+<h3 class="function"><a name="hcr_perform-3">hcr_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>hcr_perform(RestM, QTP, List) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_app_property-1">hr_app_property/1</a></h3>
+<div class="spec">
+<p><tt>hr_app_property(PropertyName) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_b3s_property-1">hr_b3s_property/1</a></h3>
+<div class="spec">
+<p><tt>hr_b3s_property(PropertyName) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_b3s_property_list-1">hr_b3s_property_list/1</a></h3>
+<div class="spec">
+<p><tt>hr_b3s_property_list(PropertyName) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_cons_result-1">hr_cons_result/1 *</a></h3>
+<div class="spec">
+<p><tt>hr_cons_result(QTP) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_map-3">hr_map/3 *</a></h3>
+<div class="spec">
+<p><tt>hr_map(PropertyName, Ratio, Comment) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_map-4">hr_map/4 *</a></h3>
+<div class="spec">
+<p><tt>hr_map(PropertyName, Map, R, C) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_property-1">hr_property/1</a></h3>
+<div class="spec">
+<p><tt>hr_property(PropertyName) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_property-2">hr_property/2</a></h3>
+<div class="spec">
+<p><tt>hr_property(PropertyName, PropertyValue) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_property_list-2">hr_property_list/2</a></h3>
+<div class="spec">
+<p><tt>hr_property_list(PropertyName, Rest) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_pv_line-2">hr_pv_line/2 *</a></h3>
+<div class="spec">
+<p><tt>hr_pv_line(PropertyName, PropertyValue) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_pv_map-4">hr_pv_map/4 *</a></h3>
+<div class="spec">
+<p><tt>hr_pv_map(X1, Val, Ratio, Comment) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_result-4">hr_result/4 *</a></h3>
+<div class="spec">
+<p><tt>hr_result(Results, X2, RF, RRM) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_section_header-1">hr_section_header/1 *</a></h3>
+<div class="spec">
+<p><tt>hr_section_header(Title) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_separator-1">hr_separator/1 *</a></h3>
+<div class="spec">
+<p><tt>hr_separator(SeedChar) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hr_v_line-1">hr_v_line/1 *</a></h3>
+<div class="spec">
+<p><tt>hr_v_line(PropertyValue) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrr_graph-1">hrr_graph/1 *</a></h3>
+<div class="spec">
+<p><tt>hrr_graph(G) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrr_root_node-2">hrr_root_node/2 *</a></h3>
+<div class="spec">
+<p><tt>hrr_root_node(K, V) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrr_tuple-1">hrr_tuple/1 *</a></h3>
+<div class="spec">
+<p><tt>hrr_tuple(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hsr_perform-3">hsr_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>hsr_perform(Pid, TaskId, X3) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hty_construct_pid-3">hty_construct_pid/3 *</a></h3>
+<div class="spec">
+<p><tt>hty_construct_pid(SessionId, QueryId, NodeId) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hty_construct_qtid-2">hty_construct_qtid/2 *</a></h3>
+<div class="spec">
+<p><tt>hty_construct_qtid(SessionId, QueryId) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hty_prep-1">hty_prep/1 *</a></h3>
+<div class="spec">
+<p><tt>hty_prep(TN) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hty_restart_jqn-10">hty_restart_jqn/10 *</a></h3>
+<div class="spec">
+<p><tt>hty_restart_jqn(Nid, Qid, Sid, GrPat, VarPos, JoiVar, Node, ParPid, OutPid, InnPid) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hty_restart_tpqn-8">hty_restart_tpqn/8 *</a></h3>
+<div class="spec">
+<p><tt>hty_restart_tpqn(Nid, Qid, Sid, TrPat, VarPos, Node, ParPid, Side) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hty_start_jqn-10">hty_start_jqn/10 *</a></h3>
+<div class="spec">
+<p><tt>hty_start_jqn(Nid, Qid, Sid, GrPat, VarPos, JoiVar, Node, ParPid, OutPid, InnPid) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hty_start_tpqn-8">hty_start_tpqn/8 *</a></h3>
+<div class="spec">
+<p><tt>hty_start_tpqn(Nid, Qid, Sid, TrPat, VarPos, Node, ParPid, Side) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hty_stop_qn-2">hty_stop_qn/2</a></h3>
+<div class="spec">
+<p><tt>hty_stop_qn(Id, Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hum_confirm-2">hum_confirm/2 *</a></h3>
+<div class="spec">
+<p><tt>hum_confirm(ListA, ListB) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hum_proc_module-3">hum_proc_module/3 *</a></h3>
+<div class="spec">
+<p><tt>hum_proc_module(Rest, Node, ModuleList) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hum_proc_node-3">hum_proc_node/3 *</a></h3>
+<div class="spec">
+<p><tt>hum_proc_node(Rest, ModuleList, NodeList) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="humc_return-1">humc_return/1 *</a></h3>
+<div class="spec">
+<p><tt>humc_return(L) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
+<div class="spec">
+<p><tt>info_msg(FunName::atom(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(X1::[]) -&gt; {ok, <a href="#type-bm_state">bm_state()</a>}</tt><br></p>
+</div><p>Initialize a benchmark process.
+ </p>
+
+<h3 class="function"><a name="start-1">start/1</a></h3>
+<div class="spec">
+<p><tt>start(Node::node()) -&gt; {ok, Pid::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>} | {error, Reason::term()}</tt><br></p>
+</div><p>This function starts a process of this module on specified
+  node. It returns global process id Pid. The target node must run
+  <a href="b3s.html"><code>b3s</code></a> application.
+ </p>
+
+<h3 class="function"><a name="start-2">start/2</a></h3>
+<div class="spec">
+<p><tt>start(Node, ProcId) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="start_cc-3">start_cc/3 *</a></h3>
+<div class="spec">
+<p><tt>start_cc(X1, Node, ProcId) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="start_sc-3">start_sc/3 *</a></h3>
+<div class="spec">
+<p><tt>start_sc(E, Node, ProcId) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="stop-1">stop/1</a></h3>
+<div class="spec">
+<p><tt>stop(Node::node()) -&gt; ok | {error, Reason::term()}</tt><br></p>
+</div><p>This function stops the process of this module on specified
+  node.
+ </p>
+
+<h3 class="function"><a name="stop-2">stop/2</a></h3>
+<div class="spec">
+<p><tt>stop(Node, ProcId) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="stop_tc-3">stop_tc/3 *</a></h3>
+<div class="spec">
+<p><tt>stop_tc(E, Node, ProcId) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason::term(), State::<a href="#type-bm_state">bm_state()</a>) -&gt; none()</tt><br></p>
+</div><p>Process termination.
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Aug 25 2016, 11:26:41.</i></p>
+</body>
+</html>

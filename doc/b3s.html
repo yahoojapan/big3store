@@ -1,0 +1,389 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module b3s</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module b3s</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Start a big3store server.
+<p>Copyright © 2013-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+
+<p><b>Version:</b> 0.3</p>
+<p><b>Introduced in:</b> August, 2013</p>
+<p><b>Authors:</b> Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
+<p><b>See also:</b> <a href="db_interface.html">db_interface</a>, <a href="file_reader.html">file_reader</a>, <a href="join_query_node.html">join_query_node</a>, <a href="tp_query_node.html">tp_query_node</a>, <a href="triple_distributor.html">triple_distributor</a>.</p>
+
+<h2><a name="description">Description</a></h2><p>Start a big3store server. This module is implemented as an
+  erlang <A href="http://www.erlang.org/doc/man/application.html">application</A>. It
+  invokes a root <A href="http://www.erlang.org/doc/man/supervisor.html">supervisor</A>
+  process by calling <a href="#invoke-0"><code>invoke/0</code></a>. It also provides basic command  
+line client interfaces.</p>
+ 
+  <h3><a name="environment_variables">environment variables</a></h3>
+ 
+  <p>This application recognises following environment variables.
+  (LINK: <a href="#environment_variables">environment variables</a>)</p>
+ 
+  <table border="3">
+  <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+ 
+  <tr> <td>b3s_mode</td> <td>data_server | front_server</td>
+  <td>Behavior of this application.</td> </tr>
+ 
+  <tr> <td>test_mode</td> <td>local1 | local2 | yjr6 | ...</td>
+  <td>Site type of unit tests.</td> </tr>
+ 
+  <tr> <td>benchmark_task</td> <td>atom()</td> <td>Name of benchmark
+  task to be executed.</td> </tr>
+ 
+  <tr> <td>front_server_nodes</td> <td>[node()]</td> <td>List of
+  front server node names.</td> </tr>
+ 
+  <tr> <td>data_server_nodes</td> <td>[{node(), integer()}]</td>
+  <td>List of node name and column of data servers.</td> </tr>
+ 
+  <tr> <td>b3s_state_nodes</td> <td>[node()]</td> <td>List of node
+  names that run <a href="b3s_state.html"><code>b3s_state</code></a> processes.</td> </tr>
+ 
+  <tr> <td>triple_distributor_nodes</td> <td>[node()]</td> <td>List
+  of node names that run <a href="triple_distributor.html"><code>triple_distributor</code></a> processes.</td>
+  </tr>
+ 
+  <tr> <td>column_id</td> <td><a href="triple_distributor.html#type-td_column_id"><code>triple_distributor:td_column_id()</code></a></td> <td>Column id of data
+  server. (DEPRECATED)</td> </tr>
+ 
+  <tr> <td>num_of_empty_msgs</td> <td>integer()</td> <td>The number of
+  empty messages that can be sent at once.</td> </tr>
+ 
+  <tr> <td>name_of_triple_tables</td> <td>[{node(), atom()}]</td>
+  <td>Names of triple tables for data server columns.</td> </tr>
+ 
+  <tr> <td>name_of_pred_clm_table</td> <td>atom()</td> <td>Name of
+  pred_clm table.</td> </tr>
+ 
+  <tr> <td>name_of_pred_freq_table</td> <td>atom()</td> <td>Name of
+  pred_freq table.</td> </tr>
+ 
+  <tr> <td>store_report_frequency</td> <td>integer()</td>
+  <td>Report frequency of storing process.</td> </tr>
+ 
+  <tr> <td>triple_id_skel</td> <td>string()</td> <td>Skeleton string
+  for generating triple id.</td> </tr>
+ 
+  <tr> <td>data_files</td> <td>[string()]</td> <td>List of path
+  strings to be loaded.</td> </tr>
+ 
+  <tr> <td>result_record_max</td> <td>integer()</td> <td>Max number
+  of records to be reported.</td> </tr>
+ 
+  <tr> <td><a href="#debug_level">debug_level</a></td> <td>integer()</td> <td>Debug
+  Level.</td> </tr>
+ 
+  </table>
+ 
+  <h4><a name="debug_level">debug_level</a></h4>
+ 
+  It must have integer() value that indicate the granularity of log
+  messages to be recorded on <A href="http://www.erlang.org/doc/man/error_logger.html">error_logger</A>. The
+  greater value produce more precise messages. The 0 value restricts
+  the most of log messages. The default debug messages will be
+  produced with the value greater than 50. (LINK: <a href="#debug_level">debug_level</a>)
+ 
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bootstrap-0">bootstrap/0</a></td><td>This function performs the bootstrapping task of destributed
+  big3store system.</td></tr>
+<tr><td valign="top"><a href="#bootstrap_command-0">bootstrap_command/0</a></td><td>This function performs the bootstrapping task of destributed
+  big3store system.</td></tr>
+<tr><td valign="top"><a href="#bootstrap_test_-0">bootstrap_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#if_perform-1">if_perform/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td><A href="http://www.erlang.org/doc/man/supervisor.html">Supervisor</A>
+  callback.</td></tr>
+<tr><td valign="top"><a href="#init-3">init/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#init_check_env-1">init_check_env/1*</a></td><td>Check environment variables.</td></tr>
+<tr><td valign="top"><a href="#init_check_env-2">init_check_env/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#init_check_env_test_-0">init_check_env_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#init_test_-0">init_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#investigate_files-0">investigate_files/0</a></td><td>This function investigate TSV dumped triple data files.</td></tr>
+<tr><td valign="top"><a href="#invoke-0">invoke/0</a></td><td>Invoke command.</td></tr>
+<tr><td valign="top"><a href="#invoke_data_servers-1">invoke_data_servers/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#invoke_loop-0">invoke_loop/0*</a></td><td>Main loop for waiting <code>terminate</code> signal.</td></tr>
+<tr><td valign="top"><a href="#invoke_update_env-1">invoke_update_env/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#invoke_update_env_test_-0">invoke_update_env_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#is_registered_process-1">is_registered_process/1</a></td><td>Check given registered name is an active process or not.</td></tr>
+<tr><td valign="top"><a href="#lf_perform-1">lf_perform/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#load_files-0">load_files/0</a></td><td>This function load TSV dumped triple data files.</td></tr>
+<tr><td valign="top"><a href="#load_files-1">load_files/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#opt_command_line-2">opt_command_line/2</a></td><td>Get a command line option as string.</td></tr>
+<tr><td valign="top"><a href="#report_benchmark-0">report_benchmark/0</a></td><td>This function reports the latest benchmark result.</td></tr>
+<tr><td valign="top"><a href="#report_stop_watch-0">report_stop_watch/0</a></td><td>Report stop watch.</td></tr>
+<tr><td valign="top"><a href="#report_stop_watch-1">report_stop_watch/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#sbt_predicate_based-0">sbt_predicate_based/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#sbt_random-0">sbt_random/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#start-0">start/0</a></td><td>Start as an <A href="http://www.erlang.org/doc/man/application.html">application</A>.</td></tr>
+<tr><td valign="top"><a href="#start-2">start/2</a></td><td>Start the <A href="http://www.erlang.org/doc/man/application.html">application</A>.</td></tr>
+<tr><td valign="top"><a href="#start_benchmark_task-0">start_benchmark_task/0</a></td><td>This function starts a benchmark task.</td></tr>
+<tr><td valign="top"><a href="#start_stop_watch-0">start_stop_watch/0</a></td><td>Start stop watch.</td></tr>
+<tr><td valign="top"><a href="#start_stop_watch-1">start_stop_watch/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#stop-0">stop/0</a></td><td>Stop the <A href="http://www.erlang.org/doc/man/application.html">application</A>.</td></tr>
+<tr><td valign="top"><a href="#stop-1">stop/1</a></td><td>Start the <A href="http://www.erlang.org/doc/man/application.html">application</A>.</td></tr>
+<tr><td valign="top"><a href="#tc_perform-1">tc_perform/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#terminate-0">terminate/0</a></td><td>Terminate application server.</td></tr>
+<tr><td valign="top"><a href="#terminate_children-0">terminate_children/0*</a></td><td>Terminates child processes.</td></tr>
+<tr><td valign="top"><a href="#update_modules-0">update_modules/0</a></td><td>This function recompiles source files on alive nodes.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="bootstrap-0">bootstrap/0</a></h3>
+<div class="spec">
+<p><tt>bootstrap() -&gt; ok | {error, Reason::term()}</tt><br></p>
+</div><p>This function performs the bootstrapping task of destributed
+  big3store system. All configuration parameters must be set in
+  application environment variables.
+ </p>
+
+<h3 class="function"><a name="bootstrap_command-0">bootstrap_command/0</a></h3>
+<div class="spec">
+<p><tt>bootstrap_command() -&gt; none()</tt><br></p>
+</div><p>This function performs the bootstrapping task of destributed
+  big3store system. It is a command line interface function.
+ </p>
+
+<h3 class="function"><a name="bootstrap_test_-0">bootstrap_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>bootstrap_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="error_msg-3">error_msg/3 *</a></h3>
+<div class="spec">
+<p><tt>error_msg(FunName::atom(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
+</div><p>Report an error issue to the error_logger.
+ </p>
+
+<h3 class="function"><a name="if_perform-1">if_perform/1 *</a></h3>
+<div class="spec">
+<p><tt>if_perform(File) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
+<div class="spec">
+<p><tt>info_msg(FunName::atom(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(Args) -&gt; any()</tt></p>
+</div><p><A href="http://www.erlang.org/doc/man/supervisor.html">Supervisor</A>
+  callback.
+ </p>
+
+<h3 class="function"><a name="init-3">init/3 *</a></h3>
+<div class="spec">
+<p><tt>init(Args, X2, X3) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="init_check_env-1">init_check_env/1 *</a></h3>
+<div class="spec">
+<p><tt>init_check_env(EnvVarList) -&gt; any()</tt></p>
+</div><p>Check environment variables.
+ </p>
+
+<h3 class="function"><a name="init_check_env-2">init_check_env/2 *</a></h3>
+<div class="spec">
+<p><tt>init_check_env(X1, EnvVarList) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="init_check_env_test_-0">init_check_env_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>init_check_env_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="init_test_-0">init_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>init_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="investigate_files-0">investigate_files/0</a></h3>
+<div class="spec">
+<p><tt>investigate_files() -&gt; none()</tt><br></p>
+</div><p>This function investigate TSV dumped triple data files. It is
+  called from erl command.
+ </p>
+
+<h3 class="function"><a name="invoke-0">invoke/0</a></h3>
+<div class="spec">
+<p><tt>invoke() -&gt; none()</tt><br></p>
+</div><p>Invoke command. This function should be called from erl
+  command.
+ </p>
+
+<h3 class="function"><a name="invoke_data_servers-1">invoke_data_servers/1 *</a></h3>
+<div class="spec">
+<p><tt>invoke_data_servers(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="invoke_loop-0">invoke_loop/0 *</a></h3>
+<div class="spec">
+<p><tt>invoke_loop() -&gt; none()</tt><br></p>
+</div><p>Main loop for waiting <code>terminate</code> signal.
+ </p>
+
+<h3 class="function"><a name="invoke_update_env-1">invoke_update_env/1 *</a></h3>
+<div class="spec">
+<p><tt>invoke_update_env(Rest) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="invoke_update_env_test_-0">invoke_update_env_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>invoke_update_env_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="is_registered_process-1">is_registered_process/1</a></h3>
+<div class="spec">
+<p><tt>is_registered_process(Name::atom()) -&gt; true | false</tt><br></p>
+</div><p>Check given registered name is an active process or not.
+ </p>
+
+<h3 class="function"><a name="lf_perform-1">lf_perform/1 *</a></h3>
+<div class="spec">
+<p><tt>lf_perform(File) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="load_files-0">load_files/0</a></h3>
+<div class="spec">
+<p><tt>load_files() -&gt; none()</tt><br></p>
+</div><p>This function load TSV dumped triple data files. It is called
+  from erl command.
+ </p>
+
+<h3 class="function"><a name="load_files-1">load_files/1 *</a></h3>
+<div class="spec">
+<p><tt>load_files(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="opt_command_line-2">opt_command_line/2</a></h3>
+<div class="spec">
+<p><tt>opt_command_line(OptName::atom(), DefaultValue::string()) -&gt; string()</tt><br></p>
+</div><p>Get a command line option as string.
+ </p>
+
+<h3 class="function"><a name="report_benchmark-0">report_benchmark/0</a></h3>
+<div class="spec">
+<p><tt>report_benchmark() -&gt; none()</tt><br></p>
+</div><p>This function reports the latest benchmark result. It is
+  called from erl command.
+ </p>
+
+<h3 class="function"><a name="report_stop_watch-0">report_stop_watch/0</a></h3>
+<div class="spec">
+<p><tt>report_stop_watch() -&gt; none()</tt><br></p>
+</div><p>Report stop watch.
+ </p>
+
+<h3 class="function"><a name="report_stop_watch-1">report_stop_watch/1 *</a></h3>
+<div class="spec">
+<p><tt>report_stop_watch(Label) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="sbt_predicate_based-0">sbt_predicate_based/0 *</a></h3>
+<div class="spec">
+<p><tt>sbt_predicate_based() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="sbt_random-0">sbt_random/0 *</a></h3>
+<div class="spec">
+<p><tt>sbt_random() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="start-0">start/0</a></h3>
+<div class="spec">
+<p><tt>start() -&gt; any()</tt></p>
+</div><p>Start as an <A href="http://www.erlang.org/doc/man/application.html">application</A>.
+ </p>
+
+<h3 class="function"><a name="start-2">start/2</a></h3>
+<div class="spec">
+<p><tt>start(StartType, StartArgs) -&gt; any()</tt></p>
+</div><p>Start the <A href="http://www.erlang.org/doc/man/application.html">application</A>. <A href="http://www.erlang.org/doc/man/application.html">application</A>
+  callback.
+ </p>
+
+<h3 class="function"><a name="start_benchmark_task-0">start_benchmark_task/0</a></h3>
+<div class="spec">
+<p><tt>start_benchmark_task() -&gt; none()</tt><br></p>
+</div><p>This function starts a benchmark task. It is called from erl
+  command. It recovers pred_clm from permanent storage saved by
+  <a href="db_interface.html#db_put_map-2"><code>db_interface:db_put_map/2</code></a> using <a href="db_interface.html#db_get_map-1"><code>db_interface:db_get_map/1</code></a>.
+ </p>
+
+<h3 class="function"><a name="start_stop_watch-0">start_stop_watch/0</a></h3>
+<div class="spec">
+<p><tt>start_stop_watch() -&gt; none()</tt><br></p>
+</div><p>Start stop watch.
+ </p>
+
+<h3 class="function"><a name="start_stop_watch-1">start_stop_watch/1 *</a></h3>
+<div class="spec">
+<p><tt>start_stop_watch(Label) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="stop-0">stop/0</a></h3>
+<div class="spec">
+<p><tt>stop() -&gt; any()</tt></p>
+</div><p>Stop the <A href="http://www.erlang.org/doc/man/application.html">application</A>.
+ </p>
+
+<h3 class="function"><a name="stop-1">stop/1</a></h3>
+<div class="spec">
+<p><tt>stop(State) -&gt; any()</tt></p>
+</div><p>Start the <A href="http://www.erlang.org/doc/man/application.html">application</A>.
+  <A href="http://www.erlang.org/doc/man/application.html">application</A>
+  callback.
+ </p>
+
+<h3 class="function"><a name="tc_perform-1">tc_perform/1 *</a></h3>
+<div class="spec">
+<p><tt>tc_perform(ChiList) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="terminate-0">terminate/0</a></h3>
+<div class="spec">
+<p><tt>terminate() -&gt; none()</tt><br></p>
+</div><p><p>Terminate application server. This function should be called  
+from erl command. It may take following command line options.</p>
+ 
+  <dl>
+    <dt><tt>-node_name &lt;name@host&gt;</tt></dt>
+    <dd>Node name specification of Erlang runtime system on which
+    test suite processes are running.</dd>
+  </dl>
+ </p>
+
+<h3 class="function"><a name="terminate_children-0">terminate_children/0 *</a></h3>
+<div class="spec">
+<p><tt>terminate_children() -&gt; any()</tt></p>
+</div><p>Terminates child processes.
+ </p>
+
+<h3 class="function"><a name="update_modules-0">update_modules/0</a></h3>
+<div class="spec">
+<p><tt>update_modules() -&gt; none()</tt><br></p>
+</div><p>This function recompiles source files on alive nodes. It is
+  called from erl command.
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Aug 25 2016, 11:26:41.</i></p>
+</body>
+</html>

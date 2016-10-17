@@ -1,0 +1,885 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module triple_distributor</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module triple_distributor</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>A gen_server process for distributing given triples and triple
+  patterns to columns of available data servers and managing schema
+  information.
+<p>Copyright © 2014-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+
+<p><b>Version:</b> 0.3</p>
+<p><b>Introduced in:</b> March, 2014</p>
+<p><b>Authors:</b> Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>), Iztok Savnik (<a href="mailto:iztok.savnik@famnit.upr.si"><tt>iztok.savnik@famnit.upr.si</tt></a>).</p>
+<p><b>See also:</b> <a href="b3s.html">b3s</a>, <a href="db_interface.html">db_interface</a>, <a href="file_reader.html">file_reader</a>, <a href="join_query_node.html">join_query_node</a>, <a href="tp_query_node.html">tp_query_node</a>.</p>
+
+<h2><a name="description">Description</a></h2><p>A gen_server process for distributing given triples and triple
+  patterns to columns of available data servers and managing schema
+  information. This module is implemented as an erlang <A href="http://www.erlang.org/doc/man/gen_server.html"> gen_server
+  </A> process. For performing the distribution, the triple  
+distributor process must have schema information. This module  
+provides means for investigating the schema from given data  
+set. The triple distributor process holds a mnesia table for  
+storing the schema.</p>
+ 
+  <table bgcolor="lemonchiffon">
+  <tr><th>Section Index</th></tr>
+  <tr><td><a href="#bootstrap_procedure">bootstrap procedure</a></td></tr>
+  <tr><td><a href="#property_list">property list</a></td></tr>
+  <tr><td><a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></td></tr>
+  <tr><td><a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></td></tr>
+  </table>
+ 
+  <h3><a name="bootstrap_procedure">bootstrap procedure</a></h3>
+ 
+  <p>(LINK: <a href="#bootstrap_procedure">bootstrap procedure</a>)</p>
+ 
+  <p>The triple_distibutor process must be invoked by following
+  bootstrap procedure (maybe coded at <a href="b3s.html"><code>b3s</code></a>?).</p>
+ 
+  <ol>
+ 
+  <li>Invoke a front server b3s application on a server.</li>
+ 
+  <li>Invoke a triple_distibutor process.</li>
+ 
+  <li>Invoke client b3s applications on distributed servers.</li>
+ 
+  <li>Define column / row configuration using <a href="#{register_node,_Column,_NodeName}">{register_node, Column, NodeName}</a> synchronous messages.</li>
+ 
+  <li>Send <a href="#{investigate_stream,_Triple,_NotifyProc}">{investigate_stream, Triple, NotifyProc}</a>
+  asynchronous messages to the triple_distibutor process for
+  determing the distribution strategy.</li>
+ 
+  <li>Send <a href="#{store_stream,_Triple,_NotifyProc}">{store_stream, Triple, NotifyProc}</a>
+  asynchronous messages to the triple_distibutor process for storing
+  triples to column tables.</li>
+ 
+  </ol>
+ 
+  <h3><a name="property_list">property list</a></h3>
+ 
+  <p>(LINK: <a href="#property_list">property list</a>)</p>
+ 
+  <p>The gen_server process uses following properties holded by <a href="#type-td_state"><code>td_state()</code></a>. These properties can be accessed using <a href="#{get_property,_Name}">{get_property, Name}</a> synchronous messages.</p>
+ 
+  <table border="3">
+  <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+ 
+  <tr> <td>created</td> <td>boolean()</td> <td>true denotes that
+  process dictionary was created and used. false denotes that
+  completely new process.</td> </tr>
+ 
+  <tr> <td>pid</td> <td>pid()</td> <td>id of the triple_distributor
+  process.</td> </tr>
+ 
+  <tr> <td>node</td> <td>node()</td> <td>node name that runs the
+  triple_distributor process.</td> </tr>
+ 
+  <tr> <td>clm_row_conf</td> <td>maps:map()</td> <td>mapping from
+  <code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code> to <code><a href="node_state.html#type-ns_rows">node_state:ns_rows()</a></code>.</td> </tr>
+ 
+  <tr> <td>clm_filename</td> <td>maps:map()</td> <td>mapping from
+  <code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code> to string().</td> </tr>
+ 
+  <tr> <td>clm_count</td> <td>maps:map()</td> <td>mapping from <code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code> to integer().</td> </tr>
+ 
+  <tr> <td>clm_iodev</td> <td>maps:map()</td> <td>mapping from <code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code> to io_device().</td> </tr>
+ 
+  <tr> <td>pred_clm</td> <td>maps:map()</td> <td>mapping from <a href="tp_query_node.html#type-qn_predicate"><code>tp_query_node:qn_predicate()</code></a> to <code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code>.</td> </tr>
+ 
+  <tr> <td>pred_freq</td> <td>maps:map()</td> <td>mapping from <a href="tp_query_node.html#type-qn_predicate"><code>tp_query_node:qn_predicate()</code></a> to Frequency::integer().</td> </tr>
+ 
+  <tr> <td>last_triple</td> <td><code><a href="tp_query_node.html#type-qn_triple">tp_query_node:qn_triple()</a></code></td> <td>last triple received.</td>
+  </tr>
+ 
+  <tr> <td>investigate_processes</td> <td>[<code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code>]</td> <td>list of invoked <a href="file_reader.html"><code>file_reader</code></a>
+  processes.</td> </tr>
+ 
+  <tr> <td>store_processes</td> <td>[<code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code>]</td> <td>list of invoked <a href="file_reader.html"><code>file_reader</code></a>
+  processes.</td> </tr>
+ 
+  <tr> <td>sender_processes</td> <td>[<code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code>]</td> <td>list of processes that sent start
+  messages.</td> </tr>
+ 
+  <tr> <td>distribution_algorithm</td> <td>atom()</td> <td>specifies
+  a triple distribution algorithm.</td> </tr>
+ 
+  <tr> <td>max_id</td> <td>integer()</td> <td>max id integer for
+  no-id triples.</td> </tr>
+ 
+  <tr> <td>ti_skel</td> <td>string()</td> <td>skeleton string for
+  generating triple id.</td> </tr>
+ 
+  <tr> <td>column_file_path</td> <td>string()</td> <td>skeleton
+  path string for column dump files.</td> </tr>
+ 
+  <tr> <td>start_date_time</td> <td>calendar:datetime()</td>
+  <td>started date and time of the process.</td> </tr>
+ 
+  <tr> <td>update_date_time</td> <td>calendar:datetime()</td>
+  <td>updated date and time of process properties.</td> </tr>
+ 
+  <tr> <td>write_mode</td> <td>on_the_fly | postgres_bulk_load</td>
+  <td>specify actual behavior for write requests.</td> </tr>
+ 
+  <tr> <td>encode_mode</td> <td>boolean()</td>
+  <td>perform encoding when it is set to true.</td> </tr>
+ 
+  <tr> <td>initialized_string_id_table</td> <td>boolean()</td>
+  <td>default: false. becomes true if initialization performed.</td>
+  </tr>
+ 
+  </table>
+ 
+  <h4><a name="implemented_triple_distribution_algorithm">implemented triple distribution algorithm</a></h4>
+ 
+  <h5><a name="random">random</a></h5>
+ 
+  <p>Assign a column number at random.</p>
+ 
+  <h5><a name="predicate_based">predicate_based</a></h5>
+ 
+  <p>Assign a column number according to the predicate of the triple. A  
+mapping table from predicate string to column number integer will  
+be constructed by the investigate_stream process.</p>
+ 
+  <h3><a name="handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>)</p>
+ 
+  <table border="3">
+ 
+  <tr> <th>Message</th> <th>Args</th> <th>Returns</th>
+  <th>Description</th> </tr>
+ 
+  <tr> <td><a href="#{register_node,_Column,_NodeName}">{register_node, Column, NodeName}</a></td>
+  <td><code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code>, node()</td> <td>{registered,
+  {<a href="node_state.html#type-ns_node_location"><code>node_state:ns_node_location()</code></a>, node()}} | {failed, Column,
+  NodeName}</td> <td>register a data server node</td> </tr>
+ 
+  <tr> <td><a href="#{get_property,_Name}">{get_property, Name}</a></td> <td>atom()</td>
+  <td>term()</td> <td>get property value</td> </tr>
+ 
+  <tr> <td><a href="#{put_property,_Name,_Value}">{put_property, Name, Value}</a></td> <td>atom(),
+  term()</td> <td>ok</td> <td>put property value</td> </tr>
+ 
+  <tr> <td><a href="#build_distribution_function">build_distribution_function</a></td> <td></td>
+  <td>ok | {error, term()}</td> <td>build distribution function</td>
+  </tr>
+ 
+  <tr> <td><a href="#{save_property,_Name}">{save_property, Name}</a></td> <td>atom()</td>
+  <td>ok | {error, term()}</td> <td>save property value</td> </tr>
+ 
+  <tr> <td><a href="#{load_property,_Name}">{load_property, Name}</a></td> <td>atom()</td>
+  <td>ok | {error, term()}</td> <td>load property value</td> </tr>
+ 
+  </table>
+ 
+  <h4><a name="{register_node,_Column,_NodeName}">{register_node, Column, NodeName}</a></h4>
+ 
+  <p>This message registers an Erlang node NodeName::node() as one of
+  alive nodes of column label Column::<code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code>. It returns {registered, {<a href="node_state.html#type-ns_node_location"><code>node_state:ns_node_location()</code></a>, node()}} if successfully
+  registered. Otherwise, it returns {failed, Column, NodeName}. This
+  request is implemented by <a href="#hc_rn-2"><code>hc_rn/2</code></a>. (LINK: <a href="#{register_node,_Column,_NodeName}">{register_node, Column, NodeName}</a>)</p>
+ 
+  <h4><a name="{get_property,_Name}">{get_property, Name}</a></h4>
+ 
+  <p>This message returns the value of specified property name. Variable
+  Name is an atom(). (LINK: <a href="#{get_property,_Name}">{get_property, Name}</a>).</p>
+ 
+  <h4><a name="{put_property,_Name,_Value}">{put_property, Name, Value}</a></h4>
+ 
+  <p>This message puts the value of specified property name to process
+  dictionary. Variable Name is an atom(). Variable Value is a
+  term(). (LINK: <a href="#{put_property,_Name,_Value}">{put_property, Name, Value}</a>).</p>
+ 
+  <h4><a name="{save_property,_Name}">{save_property, Name}</a></h4>
+ 
+  <p>This message saves the value of specified property name to
+  permanent storage. Variable Name is an atom(). (LINK: <a href="#{save_property,_Name}">{save_property, Name}</a>). This request is implemented by <a href="#hc_save_property-1"><code>hc_save_property/1</code></a>.</p>
+ 
+  <h4><a name="{load_property,_Name}">{load_property, Name}</a></h4>
+ 
+  <p>This message loads the value of specified property name from
+  permanent storage. Variable Name is an atom(). (LINK: <a href="#{load_property,_Name}">{load_property, Name}</a>). This request is implemented by <a href="#hc_load_property-1"><code>hc_load_property/1</code></a>.</p>
+ 
+  <h4><a name="build_distribution_function">build_distribution_function</a></h4>
+ 
+  <p>This message builds a distribution function. It returns ok if the
+  function was successfully built. Otherwise, it returns {error,
+  Reason:term()}. This request is implemented by <a href="#hc_build_df-0"><code>hc_build_df/0</code></a>. (LINK: <a href="#build_distribution_function">build_distribution_function</a>).</p>
+ 
+  <h3><a name="handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a>)</p>
+ 
+  <table border="3">
+ 
+  <tr> <th>Message</th> <th>Args</th>
+  <th>Description</th> </tr>
+ 
+  <tr> <td><a href="#{start,_From,_investigate_stream_|_store_stream,_FileName,_Proc,_Node}">{start, From, investigate_stream |
+  store_stream, FileName, Proc, Node}</a></td> <td><code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code>, atom(), string(), atom(), atom()</td>
+  <td>start a file reading process</td> </tr>
+ 
+  <tr> <td><a href="#{investigate_stream,_From,_Triple}">{investigate_stream, From, Triple}</a></td>
+  <td><code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code>, end_of_stream | <code><a href="tp_query_node.html#type-qn_triple">tp_query_node:qn_triple()</a></code></td> <td>investigate a triple</td> </tr>
+ 
+  <tr> <td><a href="#{store_stream,_From,_Triple}">{store_stream, From, Triple}</a></td> <td><code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code>, end_of_stream | <code><a href="tp_query_node.html#type-qn_triple">tp_query_node:qn_triple()</a></code></td> <td>store a triple</td> </tr>
+ 
+  </table>
+ 
+  <h4><a name="{start,_From,_investigate_stream_|_store_stream,_FileName,_Proc,_Node}">{start, From, investigate_stream | store_stream, FileName, Proc, Node}</a></h4>
+ 
+  <p>This message starts invetigate or store process by invoking a
+  <a href="file_reader.html"><code>file_reader</code></a> process. Parameter From is <code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code> that indicates the sender process in
+  distributed environment. Parameter FileName is a string() that
+  shows a path of file to be read. Parameter Proc and Node are
+  process id and node id of invoking <a href="file_reader.html"><code>file_reader</code></a>
+  process. This request is implemented by <a href="#hc_start-5"><code>hc_start/5</code></a>. (LINK:
+  <a href="#{start,_From,_investigate_stream_|_store_stream,_FileName,_Proc,_Node}">{start, From, investigate_stream | store_stream,
+  FileName, Proc, Node}</a>)</p>
+ 
+  <h4><a name="{investigate_stream,_From,_Triple}">{investigate_stream, From, Triple}</a></h4>
+ 
+  <p>This message investigates a triple record Triple::<a href="tp_query_node.html#type-qn_triple"><code>tp_query_node:qn_triple()</code></a> for determining the distribution
+  strategy. From is <code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code> that indicates the
+  sender process in distributed environment. While this message will
+  be used similar to <a href="#{store_stream,_From,_Triple}">{store_stream, From, Triple}</a>
+  message, the investigate_stream message does not store anything. If
+  Triple is end_of_stream, it calculates the structure for assigining
+  column numbers to triples and sends a {triple_distributor_finished,
+  {Pid::atom(), NodeId::node()}} asynchronous message to the
+  processes that sent <a href="#{start,_From,_investigate_stream_|_store_stream,_FileName,_Proc,_Node}">{start, From, investigate_stream |
+  store_stream, FileName, Proc, Node}</a> messages. This request is
+  implemented by <a href="#hc_investigate_stream-2"><code>hc_investigate_stream/2</code></a>. (LINK: <a href="#{investigate_stream,_From,_Triple}">{investigate_stream, From, Triple}</a>)</p>
+ 
+  <h4><a name="{store_stream,_From,_Triple}">{store_stream, From, Triple}</a></h4>
+ 
+  This message appends a triple record Triple::<a href="tp_query_node.html#type-qn_triple"><code>tp_query_node:qn_triple()</code></a> into tables of an appropreate
+  clomun. From is <code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code> that indicates the
+  sender process in distributed environment. If Triple is
+  end_of_stream, it sends a {triple_distributor_finished,
+  {Pid::atom(), NodeId::node()}} asynchronous message to the
+  processes that sent <a href="#{start,_From,_investigate_stream_|_store_stream,_FileName,_Proc,_Node}">{start, From, investigate_stream |
+  store_stream, FileName, Proc, Node}</a> messages. (NOTE) The actual
+  write rpc calls will be performed on the first row servers of each
+  column. This request is implemented by <a href="#hc_store_stream-2"><code>hc_store_stream/2</code></a>. (LINK: <a href="#{store_stream,_From,_Triple}">{store_stream, From,
+  Triple}</a>)
+ 
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-td_state">td_state()</a></h3>
+<p><tt>td_state() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+<p>A Reference pointer of the map
+  object that manages properties for operating the gen_server
+  process.
+ </p>
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#child_spec-0">child_spec/0</a></td><td>Return child spec for this process.</td></tr>
+<tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Process code change action.</td></tr>
+<tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#hac_pbp-4">hac_pbp/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hacpb_perform-2">hacpb_perform/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hacpb_prep_colmap-2">hacpb_prep_colmap/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle synchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
+<tr><td valign="top"><a href="#hbd_perform-3">hbd_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_build_df-0">hc_build_df/0*</a></td><td>This function builds a distribution function according to
+  'distribution_algorithm' process dictionary property.</td></tr>
+<tr><td valign="top"><a href="#hc_investigate_stream-2">hc_investigate_stream/2*</a></td><td>Investigate a triple for determining an appropriate column to
+  be stored.</td></tr>
+<tr><td valign="top"><a href="#hc_load_property-1">hc_load_property/1*</a></td><td>This function loads the value of specified property name from
+  permanent storage.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_rn-2">hc_rn/2*</a></td><td>Register an Erlang node to a column.</td></tr>
+<tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_save_property-1">hc_save_property/1*</a></td><td>This function saves the value of specified property name to
+  permanent storage.</td></tr>
+<tr><td valign="top"><a href="#hc_start-5">hc_start/5*</a></td><td>Start invetigate or store process by invoking a <a href="file_reader.html"><code>file_reader</code></a> process.</td></tr>
+<tr><td valign="top"><a href="#hc_store_stream-2">hc_store_stream/2*</a></td><td>Store a triple into an appropriate column.</td></tr>
+<tr><td valign="top"><a href="#hcd_perform-2">hcd_perform/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcis_accumulate_statistics-1">hcis_accumulate_statistics/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcis_assign_column-2">hcis_assign_column/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcis_notify_finish-0">hcis_notify_finish/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcr_register-3">hcr_register/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcrr_perform-3">hcrr_perform/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcs_initialize_string_id-3">hcs_initialize_string_id/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcs_open_db-2">hcs_open_db/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcs_remind_from-1">hcs_remind_from/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcs_remind_process-3">hcs_remind_process/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcs_start_process-1">hcs_start_process/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcs_start_stop_watch-1">hcs_start_stop_watch/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcss_close_db-1">hcss_close_db/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcss_finish-1">hcss_finish/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcss_remind_triple-2">hcss_remind_triple/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hlp_perform-2">hlp_perform/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hof_perform-4">hof_perform/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrt_encode-1">hrt_encode/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrt_encode-2">hrt_encode/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrt_examine-4">hrt_examine/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrt_pb_perform-2">hrt_pb_perform/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrt_rpc-3">hrt_rpc/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrt_switch-2">hrt_switch/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrt_write_a_triple-2">hrt_write_a_triple/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrtwat_convert_datetime-1">hrtwat_convert_datetime/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrtwat_open_file-2">hrtwat_open_file/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrtwat_pbl-6">hrtwat_pbl/6*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hrtwat_select_mode-3">hrtwat_select_mode/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a triple_distributor process.</td></tr>
+<tr><td valign="top"><a href="#rc_perform-2">rc_perform/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#rcp_rpc-4">rcp_rpc/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#register_column-2">register_column/2</a></td><td>Register an Erlang node to a column of triple_distributor
+  process that runs on a front server node.</td></tr>
+<tr><td valign="top"><a href="#register_columns-1">register_columns/1</a></td><td>Register Erlang nodes to columns of triple_distributor process
+  that runs on a fron server node.</td></tr>
+<tr><td valign="top"><a href="#tcdy_test_query-4">tcdy_test_query/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tcdy_test_query_server-6">tcdy_test_query_server/6*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#td_test_-0">td_test_/0*</a></td><td>Unit tests.</td></tr>
+<tr><td valign="top"><a href="#tdt_check_data_local-0">tdt_check_data_local/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_check_data_yjr2_small-0">tdt_check_data_yjr2_small/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_check_data_yjr6-0">tdt_check_data_yjr6/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_check_data_yjr6_middle-0">tdt_check_data_yjr6_middle/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_check_data_yjr6_small-0">tdt_check_data_yjr6_small/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_check_data_yjr6_yjr6yg2s-0">tdt_check_data_yjr6_yjr6yg2s/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_flush_local-0">tdt_flush_local/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_flush_local_db_bdbnif-0">tdt_flush_local_db_bdbnif/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_flush_local_mnesia_qlc-0">tdt_flush_local_mnesia_qlc/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_flush_yjr6-0">tdt_flush_yjr6/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_investigate-0">tdt_investigate/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_investigate_store_middle-0">tdt_investigate_store_middle/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_investigate_store_small-0">tdt_investigate_store_small/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_investigate_store_yjr6yg2s-0">tdt_investigate_store_yjr6yg2s/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_node_connection-0">tdt_node_connection/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_put_get_save_load-0">tdt_put_get_save_load/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_register_local-0">tdt_register_local/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_register_yjr2-0">tdt_register_yjr2/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_register_yjr6-0">tdt_register_yjr6/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_reset_string_id-0">tdt_reset_string_id/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_send_empty-1">tdt_send_empty/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_site-1">tdt_site/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_store-0">tdt_store/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_store_pbl-0">tdt_store_pbl/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_store_pbl-1">tdt_store_pbl/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_store_pbl_pd-0">tdt_store_pbl_pd/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tdt_store_pbl_rnd-0">tdt_store_pbl_rnd/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
+<tr><td valign="top"><a href="#tim_confirm-2">tim_confirm/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#tim_start-3">tim_start/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#trl_set_remote_env-3">trl_set_remote_env/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ttqs_empty-3">ttqs_empty/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ttqs_empty_assert-3">ttqs_empty_assert/3*</a></td><td></td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="child_spec-0">child_spec/0</a></h3>
+<div class="spec">
+<p><tt>child_spec() -&gt; <a href="supervisor.html#type-child_spec">supervisor:child_spec()</a></tt><br></p>
+</div><p>Return child spec for this process. It can be used in
+  supervisor:init/0 callback implementation.
+ </p>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><tt>code_change(OldVsn::term(), State::<a href="#type-td_state">td_state()</a>, Extra::term()) -&gt; {ok, <a href="#type-td_state">td_state()</a>}</tt><br></p>
+</div><p>Process code change action.
+ </p>
+
+<h3 class="function"><a name="error_msg-3">error_msg/3 *</a></h3>
+<div class="spec">
+<p><tt>error_msg(FunName::atom(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
+</div><p>Report an error issue to the error_logger.
+ </p>
+
+<h3 class="function"><a name="hac_pbp-4">hac_pbp/4 *</a></h3>
+<div class="spec">
+<p><tt>hac_pbp(LstPrd, Column, MaxCol, LstCol) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hacpb_perform-2">hacpb_perform/2 *</a></h3>
+<div class="spec">
+<p><tt>hacpb_perform(LstPrd, MapCol) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hacpb_prep_colmap-2">hacpb_prep_colmap/2 *</a></h3>
+<div class="spec">
+<p><tt>hacpb_prep_colmap(L, Map) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><tt>handle_call(Request::term(), From::{pid(), term()}, State::<a href="#type-td_state">td_state()</a>) -&gt; {reply, term(), <a href="#type-td_state">td_state()</a>}</tt><br></p>
+</div><p>Handle synchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><tt>handle_cast(Request::term(), State::<a href="#type-td_state">td_state()</a>) -&gt; {noreply, <a href="#type-td_state">td_state()</a>}</tt><br></p>
+</div><p>Handle asynchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><tt>handle_info(Info::term(), State::<a href="#type-td_state">td_state()</a>) -&gt; {noreply, <a href="#type-td_state">td_state()</a>}</tt><br></p>
+</div><p>Handle exceptional query requests.
+ </p>
+
+<h3 class="function"><a name="hbd_perform-3">hbd_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>hbd_perform(DA, X2, X3) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_build_df-0">hc_build_df/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_build_df() -&gt; ok | {error, term()}</tt><br></p>
+</div><p>This function builds a distribution function according to
+  'distribution_algorithm' process dictionary property. It returns ok
+  if the function was successfully built. Otherwise, it returns
+  {error, Reason:term()}.
+ </p>
+
+<h3 class="function"><a name="hc_investigate_stream-2">hc_investigate_stream/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_investigate_stream(From::{ProcId::pid(), NodeId::node()}, Triple::<a href="tp_query_node.html#type-qn_triple">tp_query_node:qn_triple()</a>) -&gt; ok</tt><br></p>
+</div><p>Investigate a triple for determining an appropriate column to
+  be stored.
+ </p>
+
+<h3 class="function"><a name="hc_load_property-1">hc_load_property/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_load_property(Name::atom()) -&gt; ok | {error, Reason::term()}</tt><br></p>
+</div><p>This function loads the value of specified property name from
+  permanent storage.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd-2">hc_restore_pd/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd(X1::[{atom(), term()}] | undefined, State::<a href="#type-td_state">td_state()</a>) -&gt; ok</tt><br></p>
+</div><p>Restore process dictionaries from state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd_1-1">hc_restore_pd_1/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd_1(T) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_rn-2">hc_rn/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_rn(Column::<a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a>, NodeName::node()) -&gt; {registered, {<a href="node_state.html#type-ns_node_location">node_state:ns_node_location()</a>, node()}} | {failed, <a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a>, node()}</tt><br></p>
+</div><p>Register an Erlang node to a column.
+ </p>
+
+<h3 class="function"><a name="hc_save_pd-0">hc_save_pd/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_save_pd() -&gt; <a href="#type-td_state">td_state()</a></tt><br></p>
+</div><p>Save process all dictionary contents into state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_save_property-1">hc_save_property/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_save_property(Name::atom()) -&gt; ok | {error, Reason::term()}</tt><br></p>
+</div><p>This function saves the value of specified property name to
+  permanent storage. The property value must be maps:map() data type.
+ </p>
+
+<h3 class="function"><a name="hc_start-5">hc_start/5 *</a></h3>
+<div class="spec">
+<p><tt>hc_start(From::{ProcId::pid(), NodeId::node()}, Role::investigate_stream | store_stream, FileName::string(), Proc::atom(), Node::atom()) -&gt; ok</tt><br></p>
+</div><p>Start invetigate or store process by invoking a <a href="file_reader.html"><code>file_reader</code></a> process. Parameter From is a tuple {ProcessId::pid(),
+  NodeId::node()} that indicates the sender process in distributed
+  environment. Parameter FileName is a string() that shows a path of
+  file to be read. Parameter Proc and Node are process id and node id
+  of invoking <a href="file_reader.html"><code>file_reader</code></a> process.
+ </p>
+
+<h3 class="function"><a name="hc_store_stream-2">hc_store_stream/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_store_stream(From::{ProcId::pid(), NodeId::node()}, Triple::<a href="tp_query_node.html#type-qn_triple">tp_query_node:qn_triple()</a>) -&gt; ok</tt><br></p>
+</div><p>Store a triple into an appropriate column.
+ </p>
+
+<h3 class="function"><a name="hcd_perform-2">hcd_perform/2 *</a></h3>
+<div class="spec">
+<p><tt>hcd_perform(R, DateTime) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcis_accumulate_statistics-1">hcis_accumulate_statistics/1 *</a></h3>
+<div class="spec">
+<p><tt>hcis_accumulate_statistics(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcis_assign_column-2">hcis_assign_column/2 *</a></h3>
+<div class="spec">
+<p><tt>hcis_assign_column(Algorithm, NumAliveProc) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcis_notify_finish-0">hcis_notify_finish/0 *</a></h3>
+<div class="spec">
+<p><tt>hcis_notify_finish() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcr_register-3">hcr_register/3 *</a></h3>
+<div class="spec">
+<p><tt>hcr_register(Column, NodeName, X3) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcrr_perform-3">hcrr_perform/3 *</a></h3>
+<div class="spec">
+<p><tt>hcrr_perform(Column, NodeName, RowMap) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcs_initialize_string_id-3">hcs_initialize_string_id/3 *</a></h3>
+<div class="spec">
+<p><tt>hcs_initialize_string_id(X1, M, T) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcs_open_db-2">hcs_open_db/2 *</a></h3>
+<div class="spec">
+<p><tt>hcs_open_db(WM, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcs_remind_from-1">hcs_remind_from/1 *</a></h3>
+<div class="spec">
+<p><tt>hcs_remind_from(From) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcs_remind_process-3">hcs_remind_process/3 *</a></h3>
+<div class="spec">
+<p><tt>hcs_remind_process(X1, Proc, Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcs_start_process-1">hcs_start_process/1 *</a></h3>
+<div class="spec">
+<p><tt>hcs_start_process(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcs_start_stop_watch-1">hcs_start_stop_watch/1 *</a></h3>
+<div class="spec">
+<p><tt>hcs_start_stop_watch(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcss_close_db-1">hcss_close_db/1 *</a></h3>
+<div class="spec">
+<p><tt>hcss_close_db(WM) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcss_finish-1">hcss_finish/1 *</a></h3>
+<div class="spec">
+<p><tt>hcss_finish(NumAliveProc) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcss_remind_triple-2">hcss_remind_triple/2 *</a></h3>
+<div class="spec">
+<p><tt>hcss_remind_triple(DistributionAlgorithm, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hlp_perform-2">hlp_perform/2 *</a></h3>
+<div class="spec">
+<p><tt>hlp_perform(Map, Name) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hof_perform-4">hof_perform/4 *</a></h3>
+<div class="spec">
+<p><tt>hof_perform(X1, FN, Modes, Columnn) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrt_encode-1">hrt_encode/1 *</a></h3>
+<div class="spec">
+<p><tt>hrt_encode(Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrt_encode-2">hrt_encode/2 *</a></h3>
+<div class="spec">
+<p><tt>hrt_encode(X1, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrt_examine-4">hrt_examine/4 *</a></h3>
+<div class="spec">
+<p><tt>hrt_examine(E, Node, Column, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrt_pb_perform-2">hrt_pb_perform/2 *</a></h3>
+<div class="spec">
+<p><tt>hrt_pb_perform(X1, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrt_rpc-3">hrt_rpc/3 *</a></h3>
+<div class="spec">
+<p><tt>hrt_rpc(X1, Column, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrt_switch-2">hrt_switch/2 *</a></h3>
+<div class="spec">
+<p><tt>hrt_switch(X1, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrt_write_a_triple-2">hrt_write_a_triple/2 *</a></h3>
+<div class="spec">
+<p><tt>hrt_write_a_triple(Column, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrtwat_convert_datetime-1">hrtwat_convert_datetime/1 *</a></h3>
+<div class="spec">
+<p><tt>hrtwat_convert_datetime(DateTime) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrtwat_open_file-2">hrtwat_open_file/2 *</a></h3>
+<div class="spec">
+<p><tt>hrtwat_open_file(FN, Columnn) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrtwat_pbl-6">hrtwat_pbl/6 *</a></h3>
+<div class="spec">
+<p><tt>hrtwat_pbl(MikCFN, MikCCT, Column, Triple, SIMode, EM) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hrtwat_select_mode-3">hrtwat_select_mode/3 *</a></h3>
+<div class="spec">
+<p><tt>hrtwat_select_mode(WriteMode, Column, Triple) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
+<div class="spec">
+<p><tt>info_msg(FunName::atom(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(X1::[]) -&gt; {ok, <a href="#type-td_state">td_state()</a>}</tt><br></p>
+</div><p>Initialize a triple_distributor process.
+ </p>
+
+<h3 class="function"><a name="rc_perform-2">rc_perform/2 *</a></h3>
+<div class="spec">
+<p><tt>rc_perform(List, Result) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="rcp_rpc-4">rcp_rpc/4 *</a></h3>
+<div class="spec">
+<p><tt>rcp_rpc(R, DataServerNode, List, Result) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="register_column-2">register_column/2</a></h3>
+<div class="spec">
+<p><tt>register_column(Column::<a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a>, FrontServerNode::node()) -&gt; {registered, {<a href="node_state.html#type-ns_node_location">node_state:ns_node_location()</a>, node()}} | {failed, <a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a>, node()}</tt><br></p>
+</div><p>Register an Erlang node to a column of triple_distributor
+  process that runs on a front server node. This function should be
+  called from the data server. It sends <a href="#{register_node,_Column,_NodeName}">{register_node,
+  Column, NodeName}</a> synchronous request (<a href="#hc_rn-2"><code>hc_rn/2</code></a>)
+  internally.
+ </p>
+
+<h3 class="function"><a name="register_columns-1">register_columns/1</a></h3>
+<div class="spec">
+<p><tt>register_columns(List::[{DataServerNode::node(), Column::<a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a>}]) -&gt; [{registered, {<a href="node_state.html#type-ns_node_location">node_state:ns_node_location()</a>, node()}} | {failed, <a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a>, node()} | {badrpc, Reason::term(), node()}]</tt><br></p>
+</div><p>Register Erlang nodes to columns of triple_distributor process
+  that runs on a fron server node. It takes a list of
+  {DataServerNode::node(), Column::<code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code>}
+  tuples. This function should be called from the front server. It
+  sends <a href="#{register_node,_Column,_NodeName}">{register_node, Column, NodeName}</a> synchronous
+  request (<a href="#hc_rn-2"><code>hc_rn/2</code></a>) from remote nodes.
+ </p>
+
+<h3 class="function"><a name="tcdy_test_query-4">tcdy_test_query/4 *</a></h3>
+<div class="spec">
+<p><tt>tcdy_test_query(TP, QI, VP, RL) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tcdy_test_query_server-6">tcdy_test_query_server/6 *</a></h3>
+<div class="spec">
+<p><tt>tcdy_test_query_server(Node, TriplePat, QNId, ColRow, VarPos, ResultList) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="td_test_-0">td_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>td_test_() -&gt; any()</tt></p>
+</div><p>Unit tests.
+ </p>
+
+<h3 class="function"><a name="tdt_check_data_local-0">tdt_check_data_local/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_check_data_local() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_check_data_yjr2_small-0">tdt_check_data_yjr2_small/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_check_data_yjr2_small() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_check_data_yjr6-0">tdt_check_data_yjr6/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_check_data_yjr6() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_check_data_yjr6_middle-0">tdt_check_data_yjr6_middle/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_check_data_yjr6_middle() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_check_data_yjr6_small-0">tdt_check_data_yjr6_small/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_check_data_yjr6_small() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_check_data_yjr6_yjr6yg2s-0">tdt_check_data_yjr6_yjr6yg2s/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_check_data_yjr6_yjr6yg2s() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_flush_local-0">tdt_flush_local/0</a></h3>
+<div class="spec">
+<p><tt>tdt_flush_local() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_flush_local_db_bdbnif-0">tdt_flush_local_db_bdbnif/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_flush_local_db_bdbnif() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_flush_local_mnesia_qlc-0">tdt_flush_local_mnesia_qlc/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_flush_local_mnesia_qlc() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_flush_yjr6-0">tdt_flush_yjr6/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_flush_yjr6() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_investigate-0">tdt_investigate/0</a></h3>
+<div class="spec">
+<p><tt>tdt_investigate() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_investigate_store_middle-0">tdt_investigate_store_middle/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_investigate_store_middle() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_investigate_store_small-0">tdt_investigate_store_small/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_investigate_store_small() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_investigate_store_yjr6yg2s-0">tdt_investigate_store_yjr6yg2s/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_investigate_store_yjr6yg2s() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_node_connection-0">tdt_node_connection/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_node_connection() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_put_get_save_load-0">tdt_put_get_save_load/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_put_get_save_load() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_register_local-0">tdt_register_local/0</a></h3>
+<div class="spec">
+<p><tt>tdt_register_local() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_register_yjr2-0">tdt_register_yjr2/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_register_yjr2() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_register_yjr6-0">tdt_register_yjr6/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_register_yjr6() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_reset_string_id-0">tdt_reset_string_id/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_reset_string_id() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_send_empty-1">tdt_send_empty/1 *</a></h3>
+<div class="spec">
+<p><tt>tdt_send_empty(TPQN) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_site-1">tdt_site/1 *</a></h3>
+<div class="spec">
+<p><tt>tdt_site(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_store-0">tdt_store/0</a></h3>
+<div class="spec">
+<p><tt>tdt_store() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_store_pbl-0">tdt_store_pbl/0</a></h3>
+<div class="spec">
+<p><tt>tdt_store_pbl() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_store_pbl-1">tdt_store_pbl/1 *</a></h3>
+<div class="spec">
+<p><tt>tdt_store_pbl(DstAlg) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_store_pbl_pd-0">tdt_store_pbl_pd/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_store_pbl_pd() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tdt_store_pbl_rnd-0">tdt_store_pbl_rnd/0 *</a></h3>
+<div class="spec">
+<p><tt>tdt_store_pbl_rnd() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason::term(), State::<a href="#type-td_state">td_state()</a>) -&gt; none()</tt><br></p>
+</div><p>Process termination.
+ </p>
+
+<h3 class="function"><a name="tim_confirm-2">tim_confirm/2 *</a></h3>
+<div class="spec">
+<p><tt>tim_confirm(Id, Count) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="tim_start-3">tim_start/3 *</a></h3>
+<div class="spec">
+<p><tt>tim_start(Mode, Id, File) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="trl_set_remote_env-3">trl_set_remote_env/3 *</a></h3>
+<div class="spec">
+<p><tt>trl_set_remote_env(Node, Par, Val) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ttqs_empty-3">ttqs_empty/3 *</a></h3>
+<div class="spec">
+<p><tt>ttqs_empty(QNId, Node, ResultList) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ttqs_empty_assert-3">ttqs_empty_assert/3 *</a></h3>
+<div class="spec">
+<p><tt>ttqs_empty_assert(X1, ResultList, Node) -&gt; any()</tt></p>
+</div>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Aug 25 2016, 11:26:42.</i></p>
+</body>
+</html>

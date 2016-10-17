@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module node_state</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module node_state</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Manage global resources of one node.
+<p>Copyright © 2014-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+
+<p><b>Version:</b> 0.3</p>
+<p><b>Introduced in:</b> August, 2014</p>
+<p><b>Authors:</b> Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
+<p><b>See also:</b> <a href="b3s.html">b3s</a>, <a href="b3s_state.html">b3s_state</a>.</p>
+
+<h2><a name="description">Description</a></h2><p>Manage global resources of one node. This is a gen_server  
+process running on each node that belongs to the distributed  
+big3store system.</p>
+ 
+  <table bgcolor="lemonchiffon">
+  <tr><th>Section Index</th></tr>
+  <tr><td><a href="#property_list">property list</a></td></tr>
+  <tr><td><a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></td></tr>
+  <tr><td><a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></td></tr>
+  </table>
+ 
+  <h3><a name="property_list">property list</a></h3>
+ 
+  <p>(LINK: <a href="#property_list">property list</a>)</p>
+ 
+  <table border="3">
+  <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+ 
+  <tr> <td>created</td> <td>boolean()</td> <td>true denotes that
+  process dictionary was created and used. false denotes that
+  completely new process.</td> </tr>
+ 
+  <tr> <td>b3s_state_pid</td> <td><code><a href="#type-ns_pid">ns_pid()</a></code></td> <td>global id
+  of b3s state process. (not cloned)</td> </tr>
+ 
+  <tr> <td>clm_row_conf</td> <td>maps:map()</td> <td>mapping from
+  <code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code> to <code><a href="node_state.html#type-ns_rows">node_state:ns_rows()</a></code>.</td> </tr>
+ 
+  <tr> <td>pred_clm</td> <td>maps:map()</td> <td>mapping from <a href="tp_query_node.html#type-qn_predicate"><code>tp_query_node:qn_predicate()</code></a> to <code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code>.</td> </tr>
+ 
+  <tr> <td>tree_id_format</td> <td>string()</td> <td>format string
+  for generating <a href="query_tree.html#type-qt_id"><code>query_tree:qt_id()</code></a>.</td> </tr>
+ 
+  <tr> <td>tree_id_current</td> <td>integer()</td> <td>seed integer
+  for generating <a href="query_tree.html#type-qt_id"><code>query_tree:qt_id()</code></a>.</td> </tr>
+ 
+  <tr> <td>start_date_time</td> <td>calendar:datetime()</td>
+  <td>started date and time of the process.</td> </tr>
+ 
+  <tr> <td>update_date_time</td> <td>calendar:datetime()</td>
+  <td>updated date and time of process properties.</td> </tr>
+ 
+  <tr> <td>db_interface_cursor</td> <td><code><a href="db_interface.html#type-di_bdbnif_cursor">db_interface:di_bdbnif_cursor()</a></code></td> <td>session information for a
+  table.</td> </tr>
+ 
+  </table>
+ 
+  <h3><a name="handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>)</p>
+ 
+  <table border="3">
+ 
+  <tr> <th>Message</th> <th>Args</th> <th>Returns</th>
+  <th>Description</th> </tr>
+ 
+  <tr> <td><a href="#{get,_PropertyName}">{get, PropertyName}</a></td> <td>atom()</td>
+  <td>term() | undefined</td> <td>get value</td> </tr>
+ 
+  <tr> <td><a href="#{put,_PropertyName,_Value}">{put, PropertyName, Value}</a></td> <td>atom(),
+  term()</td> <td>ok | {error, term()}</td> <td>put value</td> </tr>
+ 
+  </table>
+ 
+  <h4><a name="{get,_PropertyName}">{get, PropertyName}</a></h4>
+ 
+  <p>This message takes PropertyName::atom() as an argument and returns
+  the value Result::term() of the specified global property managed
+  by the node_state process. It returns undefined, if the property
+  was not defined yet. (LINK: <a href="#{get,_PropertyName}">{get, PropertyName}</a>)</p>
+ 
+  <h4><a name="{put,_PropertyName,_Value}">{put, PropertyName, Value}</a></h4>
+ 
+  <p>This message takes PropertyName::atom() and Value::term() as
+  arguments. If it successfully puts the value to the property, it
+  returns ok. Otherwise, it returns {error, Reason::term()}. (LINK:
+  <a href="#{put,_PropertyName,_Value}">{put, PropertyName, Value}</a>)</p>
+ 
+  <h3><a name="handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a>)</p>
+ 
+  <table border="3">
+ 
+  <tr> <th>Message</th> <th>Args</th> <th>Returns</th>
+  <th>Description</th> </tr>
+ 
+  <tr> <td></td> <td></td> <td></td> <td></td> </tr>
+ 
+  </table>
+ 
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-ns_column_id">ns_column_id()</a></h3>
+<p><tt>ns_column_id() = integer()</tt></p>
+<p>A column identifier of natual
+  number.
+ </p>
+
+<h3 class="typedecl"><a name="type-ns_node_location">ns_node_location()</a></h3>
+<p><tt>ns_node_location() = {<a href="#type-ns_column_id">ns_column_id()</a>, <a href="#type-ns_row_id">ns_row_id()</a>}</tt></p>
+<p>Column
+  and row representation of a node location. It can be resolved to
+  node() using the map structure obtained from clm_row_conf
+  property. (See <a href="#property_list">property list</a>)
+ </p>
+
+<h3 class="typedecl"><a name="type-ns_pid">ns_pid()</a></h3>
+<p><tt>ns_pid() = {atom(), node()}</tt></p>
+<p>A process identifier in
+  distributed environment. The first element atom() must be a locally
+  registered name of pid().
+ </p>
+
+<h3 class="typedecl"><a name="type-ns_pid_list">ns_pid_list()</a></h3>
+<p><tt>ns_pid_list() = [{atom(), node()}]</tt></p>
+<p>List of <code><a href="#type-ns_pid">ns_pid()</a></code>.
+ </p>
+
+<h3 class="typedecl"><a name="type-ns_row_id">ns_row_id()</a></h3>
+<p><tt>ns_row_id() = integer()</tt></p>
+<p>A row identifier of natual number.
+ </p>
+
+<h3 class="typedecl"><a name="type-ns_rows">ns_rows()</a></h3>
+<p><tt>ns_rows() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+<p>A mapping object from <code><a href="#type-ns_row_id">ns_row_id()</a></code> to node().
+ </p>
+
+<h3 class="typedecl"><a name="type-ns_state">ns_state()</a></h3>
+<p><tt>ns_state() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#child_spec-0">child_spec/0</a></td><td>Return child spec for this process.</td></tr>
+<tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Process code change action.</td></tr>
+<tr><td valign="top"><a href="#error_msg-4">error_msg/4</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle synchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
+<tr><td valign="top"><a href="#im_cond-3">im_cond/3*</a></td><td>Report an information issue to the error_logger with specified
+  format and argument if current debug level is greater than
+  ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#im_cond-4">im_cond/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#info_msg-5">info_msg/5</a></td><td>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a triple_distributor process.</td></tr>
+<tr><td valign="top"><a href="#ns_test_-0">ns_test_/0*</a></td><td>Unit tests.</td></tr>
+<tr><td valign="top"><a href="#nt_site-1">nt_site/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="child_spec-0">child_spec/0</a></h3>
+<div class="spec">
+<p><tt>child_spec() -&gt; <a href="supervisor.html#type-child_spec">supervisor:child_spec()</a></tt><br></p>
+</div><p>Return child spec for this process. It can be used in
+  supervisor:init/0 callback implementation.
+ </p>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><tt>code_change(OldVsn::term(), State::<a href="#type-ns_state">ns_state()</a>, Extra::term()) -&gt; {ok, <a href="#type-ns_state">ns_state()</a>}</tt><br></p>
+</div><p>Process code change action.
+ </p>
+
+<h3 class="function"><a name="error_msg-4">error_msg/4</a></h3>
+<div class="spec">
+<p><tt>error_msg(ModName::atom(), FunName::atom(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
+</div><p>Report an error issue to the error_logger.
+ </p>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><tt>handle_call(Request::term(), From::pid(), State::<a href="#type-ns_state">ns_state()</a>) -&gt; {reply, term(), <a href="#type-ns_state">ns_state()</a>}</tt><br></p>
+</div><p>Handle synchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><tt>handle_cast(Request::term(), State::<a href="#type-ns_state">ns_state()</a>) -&gt; {noreply, <a href="#type-ns_state">ns_state()</a>}</tt><br></p>
+</div><p>Handle asynchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><tt>handle_info(Info::term(), State::<a href="#type-ns_state">ns_state()</a>) -&gt; {noreply, <a href="#type-ns_state">ns_state()</a>}</tt><br></p>
+</div><p>Handle exceptional query requests.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd-2">hc_restore_pd/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd(X1::[{atom(), term()}] | undefined, State::<a href="#type-ns_state">ns_state()</a>) -&gt; ok</tt><br></p>
+</div><p>Restore process dictionaries from state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd_1-1">hc_restore_pd_1/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd_1(T) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_save_pd-0">hc_save_pd/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_save_pd() -&gt; <a href="#type-ns_state">ns_state()</a></tt><br></p>
+</div><p>Save process all dictionary contents into state map structure.
+ </p>
+
+<h3 class="function"><a name="im_cond-3">im_cond/3 *</a></h3>
+<div class="spec">
+<p><tt>im_cond(Format::atom(), Argument::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger with specified
+  format and argument if current debug level is greater than
+  ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="im_cond-4">im_cond/4 *</a></h3>
+<div class="spec">
+<p><tt>im_cond(Format, Argument, DL, TDL) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="info_msg-5">info_msg/5</a></h3>
+<div class="spec">
+<p><tt>info_msg(ModName::atom(), FunName::atom(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(X1::[]) -&gt; {ok, <a href="#type-ns_state">ns_state()</a>}</tt><br></p>
+</div><p>Initialize a triple_distributor process.
+ </p>
+
+<h3 class="function"><a name="ns_test_-0">ns_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>ns_test_() -&gt; any()</tt></p>
+</div><p>Unit tests.
+ </p>
+
+<h3 class="function"><a name="nt_site-1">nt_site/1 *</a></h3>
+<div class="spec">
+<p><tt>nt_site(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason::term(), State::<a href="#type-ns_state">ns_state()</a>) -&gt; none()</tt><br></p>
+</div><p>Process termination.
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Aug 25 2016, 11:26:41.</i></p>
+</body>
+</html>

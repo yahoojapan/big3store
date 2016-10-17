@@ -1,0 +1,813 @@
+/* -*- SQL -*-
+
+   string-id encoder in PL/pgSQL
+
+   @copyright 2014-2016 UP FAMNIT and Yahoo! Japan Corporation
+   @version 0.3
+   @since December, 2015
+   @author Kiyoshi Nitta <knitta@yahoo-corp.jp>
+
+   This file defines functions that perfom string-id encoding task
+   in a PostgreSQL server.
+
+ */
+
+/* ****************************************************************** */
+/*                                                                    */
+/*                                Utility                             */
+/*                                                                    */
+/* ****************************************************************** */
+
+-- ------------------------------------------------------------------ --
+-- info_msg
+
+DO $$BEGIN RAISE NOTICE '%', 'define function info_msg'; END$$;
+CREATE OR REPLACE FUNCTION
+info_msg(
+    msg anyelement
+)
+RETURNS anyelement
+AS $$
+DECLARE
+    ts timestamp;
+BEGIN
+    EXECUTE 'SELECT clock_timestamp()' INTO ts;
+    RAISE NOTICE '(%) %', ts, msg;
+    RETURN msg;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- show tables
+
+DO $$BEGIN RAISE NOTICE '%', 'define function st'; END$$;
+CREATE OR REPLACE FUNCTION st() RETURNS void AS $$
+DECLARE
+    ut RECORD;
+    nr integer;
+    ms text;
+    fm text := ' %-31s | %-16s';
+    t1 text := '           Timestamp';
+    t2 text := '   Table Name';
+    s1 text := '---------------------------------|';
+    s2 text := '------------------';
+BEGIN
+    ms := format(fm, t1, t2);
+    RAISE NOTICE '%', ms;
+    RAISE NOTICE '%', s1 || s2;
+    FOR ut IN SELECT * FROM pg_tables
+      WHERE schemaname = 'public' ORDER BY tablename LOOP
+
+	ms := format(fm, clock_timestamp(), ut.tablename);
+	RAISE NOTICE '%', ms;
+
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- show tables and their sizes of records
+
+DO $$BEGIN RAISE NOTICE '%', 'define function sts'; END$$;
+CREATE OR REPLACE FUNCTION sts() RETURNS void AS $$
+DECLARE
+    ut RECORD;
+    nr integer;
+    ms text;
+    fm text := ' %-31s | %-16s | %17s';
+    t1 text := '           Timestamp';
+    t2 text := '   Table Name';
+    t3 text := 'Number of Records';
+    s1 text := '---------------------------------|';
+    s2 text := '------------------|';
+    s3 text := '-------------------';
+BEGIN
+    ms := format(fm, t1, t2, t3);
+    RAISE NOTICE '%', ms;
+    RAISE NOTICE '%', s1 || s2 || s3;
+    FOR ut IN SELECT * FROM pg_tables
+      WHERE schemaname = 'public' AND
+            tablename NOT LIKE '%yago%' AND
+            tablename NOT LIKE '%5x1%'
+      ORDER BY tablename LOOP
+
+        EXECUTE 'SELECT count(*) FROM ' || ut.tablename INTO nr;
+	ms := format(fm, clock_timestamp(), ut.tablename, nr);
+--	EXECUTE	'SELECT info_msg($1)' USING ms;
+	RAISE NOTICE '%', ms;
+
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- encode test
+
+DO $$BEGIN RAISE NOTICE '%', 'define function enc'; END$$;
+CREATE OR REPLACE FUNCTION enc() RETURNS integer AS $$
+DECLARE
+    nr integer;
+BEGIN
+
+    SELECT encode_triples('ts1', 'ts1o', 'si1', 'spool') INTO nr;
+
+    RETURN nr;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- clear test
+
+DO $$BEGIN RAISE NOTICE '%', 'define function clr'; END$$;
+CREATE OR REPLACE FUNCTION clr() RETURNS void AS $$
+BEGIN
+
+    PERFORM reset_tse('ts1o');
+    PERFORM reset_si('si1');
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- dump table
+
+DO $$BEGIN RAISE NOTICE '%', 'define function dump'; END$$;
+CREATE OR REPLACE FUNCTION
+dump(
+    ts_tab text,
+    si_tab text
+)
+RETURNS integer AS $$
+DECLARE
+    nr integer;
+    tr integer := 0;
+    tn text;
+    ms text;
+    fm text := ' %-31s | %-16s | %17s';
+    t1 text := '           Timestamp';
+    t2 text := '   Table Name';
+    t3 text := 'Number of Records';
+    s1 text := '---------------------------------|';
+    s2 text := '------------------|';
+    s3 text := '-------------------';
+BEGIN
+    ms := format(fm, t1, t2, t3);
+    RAISE NOTICE '%', ms;
+    RAISE NOTICE '%', s1 || s2 || s3;
+    FOREACH tn IN ARRAY ARRAY [ts_tab, si_tab] LOOP
+
+        EXECUTE 'SELECT count(*) FROM ' || tn INTO nr;
+	tr := tr + nr;
+	EXECUTE 'COPY ' || tn ||
+	        ' TO ''/tmp/' || tn || '.csv'' (FORMAT csv)';
+	ms := format(fm, clock_timestamp(), tn, nr);
+	RAISE NOTICE '%', ms;
+
+    END LOOP;
+    RETURN tr;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- reset string-id master table
+
+DO $$BEGIN RAISE NOTICE '%', 'define function reset_si'; END$$;
+CREATE OR REPLACE FUNCTION
+reset_si(
+    si_tab text
+)
+RETURNS integer AS $$
+DECLARE
+    qa text[];
+    nq integer := 0;
+    nq1 integer := 0;
+    sq text;
+    rc integer := 0;
+    ms text;
+    fm text := ' %2s | %-29s | %-48s | %9s';
+    t1 text := '          Timestamp';
+    t2 text := '                       SQL';
+    t3 text := 'Row Count';
+    s0 text := '----|';
+    s1 text := '-------------------------------|';
+    s2 text := '--------------------------------------------------|';
+    s3 text := '-----------';
+BEGIN
+    ms := format(fm, '', t1, t2, t3);
+    RAISE NOTICE '%', ms;
+    RAISE NOTICE '%', s0 || s1 || s2 || s3;
+
+    qa[1] := 'DROP TABLE IF EXISTS ' || si_tab || ' CASCADE';
+    qa[2] := 'DROP SEQUENCE IF EXISTS ' || si_tab || '_serial CASCADE';
+    qa[3] := 'CREATE SEQUENCE ' || si_tab || '_serial';
+    qa[4] := 'CREATE TABLE ' || si_tab || ' (' ||
+    	       'id bigint PRIMARY KEY DEFAULT nextval(''' ||
+	         si_tab || '_serial''), ' ||
+	       'str text NOT NULL CHECK (str <> ''''))';
+
+    FOREACH sq IN ARRAY qa LOOP
+
+    	EXECUTE sq;
+	GET DIAGNOSTICS rc = ROW_COUNT;
+    	nq := nq + 1;
+	ms := format(fm, nq, clock_timestamp(), sq, rc);
+	RAISE NOTICE '%', ms;
+
+    END LOOP;
+
+    nq1 := reset_sip(si_tab, 'spool');
+    EXECUTE 'CREATE TRIGGER insert_' || si_tab || '_trigger ' ||
+    	    '  BEFORE INSERT ON ' || si_tab ||
+    	    '  FOR EACH ROW EXECUTE PROCEDURE' ||
+    	    '    si_insert_trigger(' || si_tab ||');';
+
+    RETURN nq + nq1;
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$BEGIN RAISE NOTICE '%', 'define function si_insert_trigger'; END$$;
+CREATE OR REPLACE FUNCTION si_insert_trigger()
+RETURNS TRIGGER AS $$
+DECLARE
+    si_tab text;
+BEGIN
+    si_tab := TG_ARGV[0];
+    EXECUTE 'INSERT INTO ' || si_tab || '_spool (id, str) VALUES ($1, $2)'
+        USING NEW.id, NEW.str;
+    RETURN NULL;
+END;
+$$
+LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- reset string-id partition table
+
+DO $$BEGIN RAISE NOTICE '%', 'define function reset_sip'; END$$;
+CREATE OR REPLACE FUNCTION
+reset_sip(
+    si_tab text,
+    part_nam text
+)
+RETURNS integer AS $$
+DECLARE
+    sip_tab text := si_tab || '_' || part_nam;
+    qa text[];
+    nq integer := 0;
+    sq text;
+    rc integer := 0;
+    ms text;
+    fm text := ' %2s | %-29s | %-48s | %9s';
+    t1 text := '          Timestamp';
+    t2 text := '                       SQL';
+    t3 text := 'Row Count';
+    s0 text := '----|';
+    s1 text := '-------------------------------|';
+    s2 text := '--------------------------------------------------|';
+    s3 text := '-----------';
+BEGIN
+    ms := format(fm, '', t1, t2, t3);
+    RAISE NOTICE '%', ms;
+    RAISE NOTICE '%', s0 || s1 || s2 || s3;
+
+    qa[1] := 'DROP TABLE IF EXISTS ' || sip_tab || ' CASCADE';
+    qa[2] := 'CREATE TABLE ' || sip_tab ||
+               ' () INHERITS (' || si_tab || ')';
+    qa[3] := 'DROP INDEX IF EXISTS ' || sip_tab || '_ix_str_h1k';
+    qa[4] := 'CREATE INDEX ' || sip_tab || '_ix_str_h1k ON ' ||
+               sip_tab || ' (left(str, 1000))';
+    qa[5] := 'DROP INDEX IF EXISTS ' || sip_tab || '_ix_id';
+    qa[6] := 'CREATE INDEX ' || sip_tab || '_ix_id ON ' ||
+               sip_tab || ' (id)';
+
+    FOREACH sq IN ARRAY qa LOOP
+
+    	EXECUTE sq;
+	GET DIAGNOSTICS rc = ROW_COUNT;
+    	nq := nq + 1;
+	ms := format(fm, nq, clock_timestamp(), sq, rc);
+	RAISE NOTICE '%', ms;
+
+    END LOOP;
+    RETURN nq;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- reset triple-store table
+
+DO $$BEGIN RAISE NOTICE '%', 'define function reset_ts'; END$$;
+CREATE OR REPLACE FUNCTION
+reset_ts(
+    ts_tab text
+)
+RETURNS integer AS $$
+DECLARE
+    qa text[];
+    nq integer := 0;
+    sq text;
+    rc integer := 0;
+    ms text;
+    fm text := ' %2s | %-29s | %-48s | %9s';
+    t1 text := '          Timestamp';
+    t2 text := '                       SQL';
+    t3 text := 'Row Count';
+    s0 text := '----|';
+    s1 text := '-------------------------------|';
+    s2 text := '--------------------------------------------------|';
+    s3 text := '-----------';
+BEGIN
+    ms := format(fm, '', t1, t2, t3);
+    RAISE NOTICE '%', ms;
+    RAISE NOTICE '%', s0 || s1 || s2 || s3;
+
+    qa[1] := 'DROP TABLE IF EXISTS ' || ts_tab || ' CASCADE';
+    qa[2] := 'DROP SEQUENCE IF EXISTS ' || ts_tab || '_serial CASCADE';
+    qa[3] := 'CREATE SEQUENCE ' || ts_tab || '_serial';
+    qa[4] := 'CREATE TABLE ' || ts_tab || ' (' ||
+	       'sid integer PRIMARY KEY DEFAULT nextval(''' ||
+	       ts_tab || '_serial''), ' ||
+	       'tid text, ' ||
+	       's text NOT NULL, ' ||
+	       'p text NOT NULL, ' ||
+	       'o text NOT NULL)';
+
+    FOREACH sq IN ARRAY qa LOOP
+
+    	EXECUTE sq;
+	GET DIAGNOSTICS rc = ROW_COUNT;
+    	nq := nq + 1;
+	ms := format(fm, nq, clock_timestamp(), sq, rc);
+	RAISE NOTICE '%', ms;
+
+    END LOOP;
+    RETURN nq;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- reset encoded triple-store table
+
+DO $$BEGIN RAISE NOTICE '%', 'define function reset_tse'; END$$;
+CREATE OR REPLACE FUNCTION
+reset_tse(
+    tse_tab text
+)
+RETURNS integer AS $$
+DECLARE
+    qa text[];
+    nq integer := 0;
+    sq text;
+    rc integer := 0;
+    ms text;
+    fm text := ' %2s | %-29s | %-48s | %9s';
+    t1 text := '          Timestamp';
+    t2 text := '                       SQL';
+    t3 text := 'Row Count';
+    s0 text := '----|';
+    s1 text := '-------------------------------|';
+    s2 text := '--------------------------------------------------|';
+    s3 text := '-----------';
+BEGIN
+    ms := format(fm, '', t1, t2, t3);
+    RAISE NOTICE '%', ms;
+    RAISE NOTICE '%', s0 || s1 || s2 || s3;
+
+    qa[1] := 'DROP TABLE IF EXISTS ' || tse_tab || ' CASCADE';
+    qa[2] := 'DROP SEQUENCE IF EXISTS ' || tse_tab || '_serial CASCADE';
+    qa[3] := 'CREATE SEQUENCE ' || tse_tab || '_serial';
+    qa[4] := 'CREATE TABLE ' || tse_tab || ' (' ||
+	       'sid integer PRIMARY KEY DEFAULT nextval(''' ||
+	       tse_tab || '_serial''), ' ||
+	       'tid bigint, ' ||
+	       's   bigint NOT NULL, ' ||
+	       'p   bigint NOT NULL, ' ||
+	       'o   bigint, ' ||
+	       'orl real, ' ||
+	       'oty smallint)';
+
+    FOREACH sq IN ARRAY qa LOOP
+
+    	EXECUTE sq;
+	GET DIAGNOSTICS rc = ROW_COUNT;
+    	nq := nq + 1;
+	ms := format(fm, nq, clock_timestamp(), sq, rc);
+	RAISE NOTICE '%', ms;
+
+    END LOOP;
+    RETURN nq;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- index encoded triple-store table
+
+DO $$BEGIN RAISE NOTICE '%', 'define function index_tse'; END$$;
+CREATE OR REPLACE FUNCTION
+index_tse(
+    tse_tab text
+)
+RETURNS integer AS $$
+DECLARE
+    qa text[];
+    nq integer := 0;
+    sq text;
+    rc integer := 0;
+    ms text;
+    fm text := ' %2s | %-29s | %-48s | %9s';
+    t1 text := '          Timestamp';
+    t2 text := '                       SQL';
+    t3 text := 'Row Count';
+    s0 text := '----|';
+    s1 text := '-------------------------------|';
+    s2 text := '--------------------------------------------------|';
+    s3 text := '-----------';
+BEGIN
+    ms := format(fm, '', t1, t2, t3);
+    RAISE NOTICE '%', ms;
+    RAISE NOTICE '%', s0 || s1 || s2 || s3;
+
+    qa[1] := 'DROP INDEX IF EXISTS ' || tse_tab || '_ix_tid';
+    qa[2] := 'CREATE INDEX ' || tse_tab || '_ix_tid ON ' ||
+               tse_tab || ' (tid)';
+    qa[3] := 'DROP INDEX IF EXISTS ' || tse_tab || '_ix_s';
+    qa[4] := 'CREATE INDEX ' || tse_tab || '_ix_s ON ' ||
+               tse_tab || ' (s)';
+    qa[5] := 'DROP INDEX IF EXISTS ' || tse_tab || '_ix_p';
+    qa[6] := 'CREATE INDEX ' || tse_tab || '_ix_p ON ' ||
+               tse_tab || ' (p)';
+    qa[7] := 'DROP INDEX IF EXISTS ' || tse_tab || '_ix_o';
+    qa[8] := 'CREATE INDEX ' || tse_tab || '_ix_o ON ' ||
+               tse_tab || ' (o)';
+    qa[9] := 'DROP INDEX IF EXISTS ' || tse_tab || '_ix_sp';
+    qa[10] := 'CREATE INDEX ' || tse_tab || '_ix_sp ON ' ||
+               tse_tab || ' (s, p)';
+    qa[11] := 'DROP INDEX IF EXISTS ' || tse_tab || '_ix_so';
+    qa[12] := 'CREATE INDEX ' || tse_tab || '_ix_so ON ' ||
+               tse_tab || ' (s, o)';
+    qa[13] := 'DROP INDEX IF EXISTS ' || tse_tab || '_ix_po';
+    qa[14] := 'CREATE INDEX ' || tse_tab || '_ix_po ON ' ||
+               tse_tab || ' (p, o)';
+    qa[15] := 'DROP INDEX IF EXISTS ' || tse_tab || '_ix_spo';
+    qa[16] := 'CREATE INDEX ' || tse_tab || '_ix_spo ON ' ||
+               tse_tab || ' (s, p, o)';
+    -- qa[17] := 'DROP INDEX IF EXISTS ' || tse_tab || '_ix_orl';
+    -- qa[18] := 'CREATE INDEX ' || tse_tab || '_ix_orl ON ' ||
+    --            tse_tab || ' (orl)';
+    -- qa[19] := 'DROP INDEX IF EXISTS ' || tse_tab || '_ix_oty';
+    -- qa[20] := 'CREATE INDEX ' || tse_tab || '_ix_oty ON ' ||
+    --            tse_tab || ' (oty)';
+
+    FOREACH sq IN ARRAY qa LOOP
+
+    	EXECUTE sq;
+	GET DIAGNOSTICS rc = ROW_COUNT;
+    	nq := nq + 1;
+	ms := format(fm, nq, clock_timestamp(), sq, rc);
+	RAISE NOTICE '%', ms;
+
+    END LOOP;
+    RETURN nq;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- index str field of string-integer mapping table
+
+DO $$BEGIN RAISE NOTICE '%', 'define function index_si_str_h1k'; END$$;
+CREATE OR REPLACE FUNCTION
+index_si_str_h1k(
+    si_tab text
+)
+RETURNS integer AS $$
+DECLARE
+    qa text[];
+    nq integer := 0;
+    sq text;
+    rc integer := 0;
+    ms text;
+    fm text := ' %2s | %-29s | %-48s | %9s';
+    t1 text := '          Timestamp';
+    t2 text := '                       SQL';
+    t3 text := 'Row Count';
+    s0 text := '----|';
+    s1 text := '-------------------------------|';
+    s2 text := '--------------------------------------------------|';
+    s3 text := '-----------';
+BEGIN
+    ms := format(fm, '', t1, t2, t3);
+    RAISE NOTICE '%', ms;
+    RAISE NOTICE '%', s0 || s1 || s2 || s3;
+
+    qa[1] := 'DROP INDEX IF EXISTS ' || si_tab || '_ix_str_h1k';
+    qa[2] := 'CREATE INDEX ' || si_tab || '_ix_str_h1k ON ' ||
+               si_tab || ' (left(str, 1000))';
+    qa[3] := 'SELECT setval(''' || si_tab ||
+    	       '_serial'', max(id)) FROM ' || si_tab;
+
+    FOREACH sq IN ARRAY qa LOOP
+
+    	EXECUTE sq;
+	GET DIAGNOSTICS rc = ROW_COUNT;
+    	nq := nq + 1;
+	ms := format(fm, nq, clock_timestamp(), sq, rc);
+	RAISE NOTICE '%', ms;
+
+    END LOOP;
+    RETURN nq;
+END;
+$$ LANGUAGE plpgsql;
+
+/* ****************************************************************** */
+/*                                                                    */
+/*                                Encode                              */
+/*                                                                    */
+/* ****************************************************************** */
+
+-- ------------------------------------------------------------------ --
+-- encode_string
+
+DO $$BEGIN RAISE NOTICE '%', 'define function encode_string'; END$$;
+CREATE OR REPLACE FUNCTION
+encode_string(
+    si_tab text,
+    part_nam text,
+    str text
+)
+RETURNS bigint
+AS $$
+DECLARE
+    id bigint;
+    rc integer;
+    sip_tab text := si_tab || '_' || part_nam;
+BEGIN
+    EXECUTE 'SELECT id FROM ' || si_tab ||
+    	    ' WHERE left(str, 1000) = left($1, 1000) AND str = $1'
+      INTO id USING str;
+    GET DIAGNOSTICS rc = ROW_COUNT;
+    IF rc = 0 THEN
+        EXECUTE 'INSERT INTO ' || sip_tab || ' (str) VALUES ($1)'
+          || 'RETURNING id' INTO id USING str;
+    END IF;
+
+    RETURN id;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- insert_timestamp
+
+DO $$BEGIN RAISE NOTICE '%', 'define function insert_timestamp'; END$$;
+CREATE OR REPLACE FUNCTION
+insert_timestamp(
+    str text,
+    sri integer,
+    srt bigint,
+    srs bigint,
+    srp bigint,
+    qins text,
+    sit text,
+    pnm text
+)
+RETURNS void
+AS $$
+DECLARE
+    q4      text := 'SELECT EXTRACT(EPOCH FROM TIMESTAMP ''';
+    di      bigint;
+    em      text;
+    sro     bigint;
+BEGIN
+    EXECUTE q4 || str || ''')' INTO di;
+    di = di + 62167219200;
+    EXECUTE qins USING sri, srt, srs, srp, di, 0, 4;
+EXCEPTION
+    WHEN invalid_datetime_format OR datetime_field_overflow THEN
+        sro = encode_string(sit, pnm, str);
+        em = 'timestamp parse failed';
+        RAISE NOTICE '[%] %(%)', clock_timestamp(), em, str;
+	EXECUTE qins USING sri, srt, srs, srp, sro, 0, 1;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- encode_triples
+
+DO $$BEGIN RAISE NOTICE '%', 'define function encode_triples'; END$$;
+CREATE OR REPLACE FUNCTION
+encode_triples(
+    src_tab text,
+    dst_tab text,
+    si_tab text,
+    part_nam text
+)
+RETURNS integer
+AS $$
+DECLARE
+    src_row RECORD;
+    q1      text := 'SELECT * FROM ';
+    q2      text := 'INSERT INTO ';
+    q3      text := ' VALUES ($1, $2, $3, $4, $5, $6, $7)';
+    q4      text := 'SELECT EXTRACT(EPOCH FROM TIMESTAMP ''';
+    q5      text := 'SELECT count(*) FROM ';
+    nr      integer := 0;
+    nrmax   integer;
+    rehd    text := '^[\s\t"]*';
+    reft    text := '[\s\t"]*$';
+    re1     text := '(-?[0-9]+)';
+    re2     text := '(-?[0-9]+\.[0-9]+([eE][\+\-]?[0-9]+)?)';
+    re3     text := '([0-9]+)(-|/)([0-9#]+)(-|/)([0-9#]+)';
+    re4     text := '(\s+([0-9]+):([0-9]+)(:([0-9]+))?)?';
+    reint   text;
+    rerea   text;
+    redat   text;
+    qins    text;
+    sri     integer;
+    srt     bigint;
+    srs     bigint;
+    srp     bigint;
+    sro     bigint;
+
+    dt      text;
+    rm      text[];
+    ii      bigint;
+    rr      real;
+    -- rf	    integer := 596; 
+    rf	    integer := 20000; 
+    eq72    text := '========================================================================';
+    tss     timestamp := now();
+    tsc     timestamp;
+    tse     timestamp;
+    et      numeric;
+    pp      real;
+    fm      text := 'encoded %8s/%8s triples (%s%%).';
+    ms      text;
+BEGIN
+    RAISE NOTICE '[%] perform encoding: % -> % (str-id: %_%)',
+      clock_timestamp(), src_tab, dst_tab, si_tab, part_nam;
+
+    EXECUTE q5 || src_tab INTO nrmax;
+
+    reint := rehd || re1 || reft;
+    rerea := rehd || re2 || reft;
+    redat := rehd || re3 || re4 || reft;
+    qins  := q2 || dst_tab || q3;
+    FOR src_row IN EXECUTE q1 || src_tab LOOP
+
+        sri = src_row.sid;
+	srt = encode_string(si_tab, part_nam, src_row.tid);
+	srs = encode_string(si_tab, part_nam, src_row.s);
+	srp = encode_string(si_tab, part_nam, src_row.p);
+
+    	CASE
+    	  WHEN src_row.o ~ reint THEN
+            rm = regexp_matches(src_row.o, reint);
+	    ii = rm[1];
+            EXECUTE qins USING sri, srt, srs, srp, ii, 0, 2;
+    	  WHEN src_row.o ~ rerea THEN
+            rm = regexp_matches(src_row.o, rerea);
+	    rr = rm[1];
+            EXECUTE qins USING sri, srt, srs, srp, 0, rr, 3;
+    	  WHEN src_row.o ~ redat THEN
+	    dt = substring(src_row.o, '"([^"]+)"');
+	    dt = regexp_replace(dt, '##', '01', 'g');
+	    PERFORM insert_timestamp(dt, sri, srt, srs, srp,
+	    	    		     qins, si_tab, part_nam);
+	  ELSE
+	    sro = encode_string(si_tab, part_nam, src_row.o);
+            EXECUTE qins USING sri, srt, srs, srp, sro, 0, 1;
+	END CASE;
+
+	nr := nr + 1;
+	IF (nr % rf) = 0 THEN
+	    tsc = clock_timestamp();
+	    SELECT EXTRACT(epoch FROM (tsc - tss)) INTO et;
+	    et  = et / nr * nrmax;
+	    tse = tss + et * INTERVAL '1 second';
+	    pp  = nr::REAL / nrmax * 100;
+	    ms  = format(fm, nr, nrmax, trunc(pp::NUMERIC, 2));
+	    RAISE NOTICE '%', eq72;
+	    RAISE NOTICE '[%] started.', tss;
+    	    RAISE NOTICE '[%] %', tsc, ms;
+	    RAISE NOTICE '[%] estimated finish time.', tse;
+	    RAISE NOTICE '%', eq72;
+	END IF;
+
+    END LOOP;
+
+    RAISE NOTICE '[%] finished.', clock_timestamp();
+    RETURN nr;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------------ --
+-- encode_triples with blocks (incomplete)
+
+DO $$BEGIN RAISE NOTICE '%', 'define function encode_triples_block'; END$$;
+CREATE OR REPLACE FUNCTION
+encode_triples_block(
+    src_tab text,
+    dst_tab text,
+    si_tab text,
+    blk_size integer
+)
+RETURNS integer
+AS $$
+DECLARE
+    src_row RECORD;
+    q1      text := 'SELECT * FROM ';
+    q2      text := 'INSERT INTO ';
+    q3      text := ' VALUES ($1, $2, $3, $4, $5, $6, $7)';
+    q4      text := 'SELECT EXTRACT(EPOCH FROM TIMESTAMP ''';
+    q5      text := 'SELECT count(*) FROM ';
+    nr      integer := 0;
+    nrmax   integer;
+    rehd    text := '^[\s\t"]*';
+    reft    text := '[\s\t"]*$';
+    re1     text := '(-?[0-9]+)';
+    re2     text := '(-?[0-9]+\.[0-9]+([eE][\+\-]?[0-9]+)?)';
+    re3     text := '([0-9]+)(-|/)([0-9#]+)(-|/)([0-9#]+)';
+    re4     text := '(\s+([0-9]+):([0-9]+)(:([0-9]+))?)?';
+    reint   text;
+    rerea   text;
+    redat   text;
+    qins    text;
+    sri     integer;
+    srt     text;
+    srs     text;
+    srp     text;
+    sro     text;
+
+    it      text;
+    rt      text;
+    dt      text;
+    rm      text[];
+    ii      bigint;
+    rr      real;
+    di      bigint;
+    -- rf	    integer := 596; 
+    rf	    integer := 10000; 
+    eq72    text := '========================================================================';
+    tss     timestamp := now();
+    tsc     timestamp;
+    tse     timestamp;
+    et      numeric;
+    pp      real;
+    fm      text := 'encoded %8s/%8s triples (%s%%).';
+    ms      text;
+BEGIN
+    RAISE NOTICE '[%] perform encoding: % -> % (str-id: %)',
+      clock_timestamp(), src_tab, dst_tab, si_tab;
+
+    EXECUTE q5 || src_tab INTO nrmax;
+
+    reint := rehd || re1 || reft;
+    rerea := rehd || re2 || reft;
+    redat := rehd || re3 || re4 || reft;
+    qins  := q2 || dst_tab || q3;
+    FOR src_row IN EXECUTE q1 || src_tab LOOP
+
+        sri = src_row.sid;
+	srt = encode_string(si_tab, src_row.tid);
+	srs = encode_string(si_tab, src_row.s);
+	srp = encode_string(si_tab, src_row.p);
+
+    	CASE
+    	  WHEN src_row.o ~ reint THEN
+            rm = regexp_matches(src_row.o, reint);
+	    ii = rm[1];
+            EXECUTE qins USING sri, srt, srs, srp, ii, 0, 2;
+    	  WHEN src_row.o ~ rerea THEN
+            rm = regexp_matches(src_row.o, rerea);
+	    rr = rm[1];
+            EXECUTE qins USING sri, srt, srs, srp, '', rr, 3;
+    	  WHEN src_row.o ~ redat THEN
+	    dt = substring(src_row.o, '"([^"]+)"');
+	    dt = regexp_replace(dt, '##', '01', 'g');
+	    PERFORM insert_timestamp(dt, sri, srt, srs, srp, qins);
+	  ELSE
+            sro = encode_string(si_tab, src_row.o);
+            EXECUTE qins USING sri, srt, srs, srp, sro, 0, 1;
+	END CASE;
+
+	nr := nr + 1;
+	IF (nr % rf) = 0 THEN
+	    tsc = clock_timestamp();
+	    SELECT EXTRACT(epoch FROM (tsc - tss)) INTO et;
+	    et  = et / nr * nrmax;
+	    tse = tss + et * INTERVAL '1 second';
+	    pp  = nr::REAL / nrmax * 100;
+	    ms  = format(fm, nr, nrmax, trunc(pp::NUMERIC, 2));
+	    RAISE NOTICE '%', eq72;
+	    RAISE NOTICE '[%] started.', tss;
+    	    RAISE NOTICE '[%] %', tsc, ms;
+	    RAISE NOTICE '[%] estimated finish time.', tse;
+	    RAISE NOTICE '%', eq72;
+	END IF;
+
+    END LOOP;
+
+    RETURN nr;
+END;
+$$ LANGUAGE plpgsql;
+
+/* ====> END OF LINE <==== */

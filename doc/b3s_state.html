@@ -1,0 +1,435 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module b3s_state</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module b3s_state</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Manage global resources of distributed b3s system.
+<p>Copyright © 2014-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+
+<p><b>Version:</b> 0.3</p>
+<p><b>Introduced in:</b> August, 2014</p>
+<p><b>Authors:</b> Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
+<p><b>See also:</b> <a href="b3s.html">b3s</a>, <a href="node_state.html">node_state</a>.</p>
+
+<h2><a name="description">Description</a></h2><p>Manage global resources of distributed b3s system. This is a  
+gen_server process that runs one instance in a distributed b3s  
+system. Typically, this process will be invoked on a front server  
+node of the distributed big3store system.</p>
+ 
+  <table bgcolor="lemonchiffon">
+  <tr><th>Section Index</th></tr>
+  <tr><td><a href="#property_list">property list</a></td></tr>
+  <tr><td><a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></td></tr>
+  <tr><td><a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></td></tr>
+  </table>
+ 
+  <h3><a name="property_list">property list</a></h3>
+ 
+  <p>(LINK: <a href="#property_list">property list</a>)</p>
+ 
+  <p>See <a href="b3s.html#environment_variables"> b3s application
+  configuration properties </a>. Some of the definitions are copied  
+to this process. Following properties includes them.</p>
+ 
+  <table border="3">
+  <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+ 
+  <tr> <td>created</td> <td>boolean()</td> <td>true denotes that
+  process dictionary was created and used. false denotes that
+  completely new process.</td> </tr>
+ 
+  <tr> <td>pid</td> <td>pid()</td> <td>local id of this process. (not
+  cloned)</td> </tr>
+ 
+  <tr> <td>b3s_state_pid</td> <td><code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code></td>
+  <td>global id of this process. (not cloned) (propagated)</td> </tr>
+ 
+  <tr> <td>start_date_time</td> <td>calendar:datetime()</td>
+  <td>started date and time of the process. (not cloned)</td> </tr>
+ 
+  <tr> <td>clone_date_time</td> <td>calendar:datetime()</td>
+  <td>cloned date and time of the process.</td> </tr>
+ 
+  <tr> <td>update_date_time</td> <td>calendar:datetime()</td>
+  <td>updated date and time of process properties.</td> </tr>
+ 
+  <tr> <td>push_prop_list</td> <td>[atom()]</td> <td>properties to be
+  distributed to <a href="node_state.html"><code>node_state</code></a>.</td> </tr>
+ 
+  <tr> <td>clm_row_conf</td> <td>maps:map()</td> <td>mapping from
+  <code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code> to <code><a href="node_state.html#type-ns_rows">node_state:ns_rows()</a></code>. (propagated)</td> </tr>
+ 
+  <tr> <td>num_of_empty_msgs</td> <td>integer()</td> <td>The number of
+  empty messages that can be sent at once.</td> </tr>
+ 
+  <tr> <td>name_of_triple_tables</td> <td>[{node(), atom()}]</td>
+  <td>Names of triple tables for data server columns.</td> </tr>
+ 
+  <tr> <td>name_of_pred_clm_table</td> <td>atom()</td> <td>Name of
+  pred_clm table.</td> </tr>
+ 
+  <tr> <td>name_of_pred_freq_table</td> <td>atom()</td> <td>Name of
+  pred_freq table.</td> </tr>
+ 
+  <tr> <td>name_of_string_id_table</td> <td>atom()</td> <td>Name of
+  string id conversion table.</td> </tr>
+ 
+  <tr> <td>store_report_frequency</td> <td>integer()</td>
+  <td>Report frequency of storing process.</td> </tr>
+ 
+  <tr> <td>triple_id_skel</td> <td>string()</td> <td>Skeleton string
+  for generating triple id.</td> </tr>
+ 
+  <tr> <td>triple_distributor_pid</td> <td><code><a href="node_state.html#type-ns_pid">node_state:ns_pid()</a></code> | undefined</td> <td>id of the
+  triple_distributor process. (propagated)</td> </tr>
+ 
+  <tr> <td>pred_clm</td> <td>maps:map()</td> <td>mapping from <a href="tp_query_node.html#type-qn_predicate"><code>tp_query_node:qn_predicate()</code></a> to <code><a href="node_state.html#type-ns_column_id">node_state:ns_column_id()</a></code>. (propagated)</td> </tr>
+ 
+  <tr> <td>pred_freq</td> <td>maps:map()</td> <td>mapping from <a href="tp_query_node.html#type-qn_predicate"><code>tp_query_node:qn_predicate()</code></a> to Frequency::integer().</td> </tr>
+ 
+  <tr> <td>front_server_nodes</td> <td>[atom()]</td> <td>list of
+  front server node names. (propagated)</td> </tr>
+ 
+  <tr> <td>benchmark_task</td> <td>atom()</td> <td>name of executing
+  benchmark task.</td> </tr>
+ 
+  <tr> <td>epgsql_host</td> <td>string()</td> <td>host name of
+  postgres used in <a href="db_interface.html"><code>db_interface</code></a>.</td> </tr>
+ 
+  <tr> <td>epgsql_user</td> <td>string()</td> <td>user name to access
+  postgres used in <a href="db_interface.html"><code>db_interface</code></a>.</td> </tr>
+ 
+  <tr> <td>epgsql_pass</td> <td>string()</td> <td>password to access
+  postgres used in <a href="db_interface.html"><code>db_interface</code></a>.</td> </tr>
+ 
+  <tr> <td>result_record_max</td> <td>integer()</td> <td>Max number
+  of records to be reported.</td> </tr>
+ 
+  </table>
+ 
+  <h3><a name="handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>)</p>
+ 
+  <table border="3">
+ 
+  <tr> <th>Message</th> <th>Args</th> <th>Returns</th>
+  <th>Description</th> </tr>
+ 
+  <tr> <td><a href="#{get,_PropertyName}">{get, PropertyName}</a></td> <td>atom()</td>
+  <td>term() | undefined</td> <td>get value</td> </tr>
+ 
+  <tr> <td><a href="#{put,_PropertyName,_Value}">{put, PropertyName, Value}</a></td> <td>atom(),
+  term()</td> <td>ok | {error, term()}</td> <td>put value</td> </tr>
+ 
+  <tr> <td><a href="#{clone,_Node}">{clone, Node}</a></td> <td>node()</td> <td>ok |
+  {error, term()}</td> <td>clone the process</td> </tr>
+ 
+  <tr> <td><a href="#propagate">propagate</a></td> <td></td> <td>[node()] | {error,
+  term()}</td> <td>propergate some properties</td> </tr>
+ 
+  </table>
+ 
+  <h4><a name="{get,_PropertyName}">{get, PropertyName}</a></h4>
+ 
+  <p>This message takes PropertyName::atom() as an argument and returns
+  the value Result::term() of the specified global property managed
+  by the b3s_state process. It returns undefined, if the property was
+  not defined yet. (LINK: <a href="#{get,_PropertyName}">{get, PropertyName}</a>)</p>
+ 
+  <h4><a name="{put,_PropertyName,_Value}">{put, PropertyName, Value}</a></h4>
+ 
+  <p>This message takes PropertyName::atom() and Value::term() as
+  arguments. If it successfully puts the value to the property, it
+  returns ok. Otherwise, it returns {error, Reason::term()}. (LINK:
+  <a href="#{put,_PropertyName,_Value}">{put, PropertyName, Value}</a>)</p>
+ 
+  <h4><a name="{clone,_Node}">{clone, Node}</a></h4>
+ 
+  <p>This message takes Node::node() as an argument. If it successfully
+  invoke a clone process on the Node, it returns ok. Otherwise, it
+  returns {error, Reason::term()}. Because it always use 'b3s_state'
+  as local process id, Node must be different from the node, on which
+  currently running b3s_state process exists. If a b3s_state process
+  was already running on the node, it simply copies properties. Some
+  properties will not copied because of its locality (See {<a href="#property_list">property list</a>}). (LINK: <a href="#{clone,_Node}">{clone, Node}</a>)</p>
+ 
+  <h4><a name="propagate">propagate</a></h4>
+ 
+  <p>This message propagates properties listed in 'push_prop_list'
+  property to nodes obtained from 'clm_row_conf' and
+  'front_server_nodes' property. It returns a list of nodes, to which
+  it succeeded copying the properties.  (LINK: <a href="#propagate">propagate</a>)</p>
+ 
+  <h3><a name="handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></h3>
+ 
+  <p>(LINK: <a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a>)</p>
+ 
+  <table border="3">
+ 
+  <tr> <th>Message</th> <th>Args</th> <th>Returns</th>
+  <th>Description</th> </tr>
+ 
+  <tr> <td></td> <td></td> <td></td> <td></td> </tr>
+ 
+  </table>
+ 
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-bs_state">bs_state()</a></h3>
+<p><tt>bs_state() = <a href="maps.html#type-map">maps:map()</a></tt></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bs_test_-0">bs_test_/0*</a></td><td>Unit tests.</td></tr>
+<tr><td valign="top"><a href="#bt_site-1">bt_site/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#btl_clone-0">btl_clone/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#btl_propagate-0">btl_propagate/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#child_spec-0">child_spec/0</a></td><td>Return child spec for this process.</td></tr>
+<tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Process code change action.</td></tr>
+<tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#get-1">get/1</a></td><td>(<em>Deprecated</em>.) Get property.</td></tr>
+<tr><td valign="top"><a href="#get_perform-1">get_perform/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle synchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
+<tr><td valign="top"><a href="#hc_clone_process-1">hc_clone_process/1*</a></td><td>This function invokes a clone process on the specified node.</td></tr>
+<tr><td valign="top"><a href="#hc_propagate_properties-0">hc_propagate_properties/0*</a></td><td>This function propagates properties listed in 'push_prop_list'
+  property to nodes obtained from 'clm_row_conf' and
+  'front_server_nodes' property.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
+<tr><td valign="top"><a href="#hcp_copy_one_property-2">hcp_copy_one_property/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcp_copy_property-1">hcp_copy_property/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcp_invoke-2">hcp_invoke/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcp_node-3">hcp_node/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hgn_proc_column-2">hgn_proc_column/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hpp_copy_properties-2">hpp_copy_properties/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hpp_get_nodes-1">hpp_get_nodes/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hpp_get_nodes_test_-0">hpp_get_nodes_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a b3s_state process.</td></tr>
+<tr><td valign="top"><a href="#put-2">put/2</a></td><td>(<em>Deprecated</em>.) Put a value to a property.</td></tr>
+<tr><td valign="top"><a href="#sae_confirm-1">sae_confirm/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#sae_crc-2">sae_crc/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#sae_find_tp-1">sae_find_tp/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#sae_update_node-1">sae_update_node/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#sync_app_env-0">sync_app_env/0</a></td><td>(<em>Deprecated</em>.) Synchronize all application environment properties on
+  configured nodes.</td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="bs_test_-0">bs_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>bs_test_() -&gt; any()</tt></p>
+</div><p>Unit tests.
+ </p>
+
+<h3 class="function"><a name="bt_site-1">bt_site/1 *</a></h3>
+<div class="spec">
+<p><tt>bt_site(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="btl_clone-0">btl_clone/0 *</a></h3>
+<div class="spec">
+<p><tt>btl_clone() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="btl_propagate-0">btl_propagate/0 *</a></h3>
+<div class="spec">
+<p><tt>btl_propagate() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="child_spec-0">child_spec/0</a></h3>
+<div class="spec">
+<p><tt>child_spec() -&gt; <a href="supervisor.html#type-child_spec">supervisor:child_spec()</a></tt><br></p>
+</div><p>Return child spec for this process. It can be used in
+  supervisor:init/0 callback implementation.
+ </p>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><tt>code_change(OldVsn::term(), State::<a href="#type-bs_state">bs_state()</a>, Extra::term()) -&gt; {ok, <a href="#type-bs_state">bs_state()</a>}</tt><br></p>
+</div><p>Process code change action.
+ </p>
+
+<h3 class="function"><a name="error_msg-3">error_msg/3 *</a></h3>
+<div class="spec">
+<p><tt>error_msg(FunName::atom(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
+</div><p>Report an error issue to the error_logger.
+ </p>
+
+<h3 class="function"><a name="get-1">get/1</a></h3>
+<div class="spec">
+<p><tt>get(PropName::atom()) -&gt; PropValue::term() | undefined</tt><br></p>
+</div><p><b>This function is deprecated:</b> Please use <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>.
+ </p>
+<p>Get property.
+ </p>
+
+<h3 class="function"><a name="get_perform-1">get_perform/1 *</a></h3>
+<div class="spec">
+<p><tt>get_perform(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><tt>handle_call(Request::term(), From::pid(), State::<a href="#type-bs_state">bs_state()</a>) -&gt; {reply, term(), <a href="#type-bs_state">bs_state()</a>}</tt><br></p>
+</div><p>Handle synchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><tt>handle_cast(Request::term(), State::<a href="#type-bs_state">bs_state()</a>) -&gt; {noreply, <a href="#type-bs_state">bs_state()</a>}</tt><br></p>
+</div><p>Handle asynchronous query requests.
+ </p>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><tt>handle_info(Info::term(), State::<a href="#type-bs_state">bs_state()</a>) -&gt; {noreply, <a href="#type-bs_state">bs_state()</a>}</tt><br></p>
+</div><p>Handle exceptional query requests.
+ </p>
+
+<h3 class="function"><a name="hc_clone_process-1">hc_clone_process/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_clone_process(Node::node()) -&gt; ok | {error, Reason::term()}</tt><br></p>
+</div><p>This function invokes a clone process on the specified node.
+ </p>
+
+<h3 class="function"><a name="hc_propagate_properties-0">hc_propagate_properties/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_propagate_properties() -&gt; [node()]</tt><br></p>
+</div><p>This function propagates properties listed in 'push_prop_list'
+  property to nodes obtained from 'clm_row_conf' and
+  'front_server_nodes' property.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd-2">hc_restore_pd/2 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd(X1::[{atom(), term()}] | undefined, State::<a href="#type-bs_state">bs_state()</a>) -&gt; ok</tt><br></p>
+</div><p>Restore process dictionaries from state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_restore_pd_1-1">hc_restore_pd_1/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_restore_pd_1(T) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hc_save_pd-0">hc_save_pd/0 *</a></h3>
+<div class="spec">
+<p><tt>hc_save_pd() -&gt; <a href="#type-bs_state">bs_state()</a></tt><br></p>
+</div><p>Save process all dictionary contents into state map structure.
+ </p>
+
+<h3 class="function"><a name="hcp_copy_one_property-2">hcp_copy_one_property/2 *</a></h3>
+<div class="spec">
+<p><tt>hcp_copy_one_property(X1, F) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcp_copy_property-1">hcp_copy_property/1 *</a></h3>
+<div class="spec">
+<p><tt>hcp_copy_property(Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcp_invoke-2">hcp_invoke/2 *</a></h3>
+<div class="spec">
+<p><tt>hcp_invoke(X1, Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcp_node-3">hcp_node/3 *</a></h3>
+<div class="spec">
+<p><tt>hcp_node(Rest, PL, Succeeded) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hgn_proc_column-2">hgn_proc_column/2 *</a></h3>
+<div class="spec">
+<p><tt>hgn_proc_column(Rest, NodeSet) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hpp_copy_properties-2">hpp_copy_properties/2 *</a></h3>
+<div class="spec">
+<p><tt>hpp_copy_properties(PPL, NL) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hpp_get_nodes-1">hpp_get_nodes/1</a></h3>
+<div class="spec">
+<p><tt>hpp_get_nodes(MapCRC) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hpp_get_nodes_test_-0">hpp_get_nodes_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>hpp_get_nodes_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
+<div class="spec">
+<p><tt>info_msg(FunName::atom(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
+</div><p>Report an information issue to the error_logger if current
+  debug level is greater than ThresholdDL.
+ </p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(X1::[]) -&gt; {ok, <a href="#type-bs_state">bs_state()</a>}</tt><br></p>
+</div><p>Initialize a b3s_state process.
+ </p>
+
+<h3 class="function"><a name="put-2">put/2</a></h3>
+<div class="spec">
+<p><tt>put(PropName::atom(), PropValue::term()) -&gt; ok</tt><br></p>
+</div><p><b>This function is deprecated:</b> Please use <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>.
+ </p>
+<p>Put a value to a property.
+ </p>
+
+<h3 class="function"><a name="sae_confirm-1">sae_confirm/1 *</a></h3>
+<div class="spec">
+<p><tt>sae_confirm(A) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="sae_crc-2">sae_crc/2 *</a></h3>
+<div class="spec">
+<p><tt>sae_crc(X1, CRCMap) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="sae_find_tp-1">sae_find_tp/1 *</a></h3>
+<div class="spec">
+<p><tt>sae_find_tp(TP) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="sae_update_node-1">sae_update_node/1 *</a></h3>
+<div class="spec">
+<p><tt>sae_update_node(Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="sync_app_env-0">sync_app_env/0</a></h3>
+<div class="spec">
+<p><tt>sync_app_env() -&gt; ok | {error, Reason}</tt><br></p>
+</div><p><b>This function is deprecated:</b> Please use <a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a>.
+ </p>
+<p>Synchronize all application environment properties on
+  configured nodes.
+ </p>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason::term(), State::<a href="#type-bs_state">bs_state()</a>) -&gt; none()</tt><br></p>
+</div><p>Process termination.
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Aug 25 2016, 11:26:41.</i></p>
+</body>
+</html>
