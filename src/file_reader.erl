@@ -1,7 +1,7 @@
 %%
 %% File reader process of simple triplestore application.
 %%
-%% @copyright 2013-2016 UP FAMNIT and Yahoo! Japan Corporation
+%% @copyright 2013-2016 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since August, 2013
 %% @author Kiyoshi Nitta <knitta@yahoo-corp.jp>

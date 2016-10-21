@@ -34,13 +34,18 @@ are described.
 The documentation of big3store system is provided in edoc format. The types, 
 data structures and functions are described for the Erlang modules of big3store.
 
-[big3store Edoc documentation](doc/index.html)
+[big3store Edoc documentation](https://big3store.github.io/big3store)
 
 ## Contribution guidelines ##
 
-In the case that you would like to contribute to the development of big3store please 
-send a mail to Kiyoshi Nitta (knitta@yahoo-corp.jp) or Iztok Savnik (iztok.savnik@famnit.upr.si).
+In the case that you would like to contribute to the development of
+big3store please send a mail to Kiyoshi Nitta (knitta@yahoo-corp.jp)
+or Iztok Savnik (iztok.savnik@famnit.upr.si). You will be asked for
+agreeing
+[Contributor License Agreement (CLA)](https://gist.github.com/ydnjp/3095832f100d5c3d2592).
 
 ## Contact and discussion ##
 
-[big3store mailing list](https://groups.google.com/forum/#!forum/big3store)
+### mail
+* Iztok Savnik (iztok.savnik@famnit.upr.si)
+* Kiyoshi Nitta (knitta@yahoo-corp.jp)

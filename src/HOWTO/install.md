@@ -2,7 +2,7 @@
 
 This document instructs how to install the big3store system.
 
-* Copyright (C) 2016 UP FAMNIT and Yahoo! Japan Corporation
+* Copyright (C) 2016 UP FAMNIT and Yahoo Japan Corporation
 * Version 0.3
 * Since: January, 2016
 * Author: Kiyoshi Nitta <knitta@yahoo-corp.jp>
@@ -14,7 +14,7 @@ The first task is installing the Erlang/OTP 18 programming language and
 the development environment on which most of big3store system code was developed and
 tested. The task can be performed by following the instruction on
 
-* http://erlang.org/doc/installation_guide/INSTALL.html
+* [http://erlang.org/doc/installation_guide/INSTALL.html](http://erlang.org/doc/installation_guide/INSTALL.html)
 
 ### 2. Install PostgreSQL (and epgsql) ###
 
@@ -24,7 +24,7 @@ the partitioned sets of triples. We use
 as the Erlang interface to PostgreSQL. Installation of PostgreSQL
 and epgsql can be performed by following the instruction on
 
-* https://github.com/epgsql/epgsql#test-setup
+* [https://github.com/epgsql/epgsql#test-setup](https://github.com/epgsql/epgsql#test-setup)
 
 #### example ####
 

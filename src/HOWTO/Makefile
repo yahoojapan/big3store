@@ -1,3 +1,11 @@
+# -*- Makefile -*-
+#
+#	big3store/HOWTO Makefile
+# 
+# 	Copyright (C) 2014-2016 UP FAMNIT and Yahoo Japan Corporation
+# 	Iztok Savnik <iztok.savnik@famnit.upr.si>
+# 	Kiyoshi Nitta <knitta@yahoo-corp.jp>
+# 
 SOURCE = load-triples.md configure-system.md install.md user-interface.md
 TARGET = $(SOURCE:%.md=%.html)
 

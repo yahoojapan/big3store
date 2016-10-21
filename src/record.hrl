@@ -1,7 +1,7 @@
 %%
 %% Common header for record and constant definition
 %%
-%% @copyright 2015 UP FAMNIT and Yahoo! Japan Corporation
+%% @copyright 2015 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since September, 2015
 %% @author Kiyoshi Nitta <knitta@yahoo-corp.jp>

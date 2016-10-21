@@ -2,59 +2,57 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Module mj_query_node</title>
+<title>Module hj_query_node</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
 <body bgcolor="white">
 <div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
 <hr>
 
-<h1>Module mj_query_node</h1>
-<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Main-memory join query node is implemented as independent gen_process.
-<p>Copyright © 2014-2016 UP FAMNIT and Yahoo! Japan Corporation</p>
+<h1>Module hj_query_node</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Hash-join query node is implemented as independent gen_process.
+<p>Copyright © 2014-2016 UP FAMNIT and Yahoo Japan Corporation</p>
 
 <p><b>Version:</b> 0.3</p>
 <p><b>Introduced in:</b> February, 2016</p>
 <p><b>Authors:</b> Iztok Savnik (<a href="mailto:iztok.savnik@famnit.upr.si"><tt>iztok.savnik@famnit.upr.si</tt></a>), Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
 
-<h2><a name="description">Description</a></h2><p>Main-memory join query node is implemented as independent gen_process. Main-memory  
-join query node is a state-machine realizing main-memory join algorithm as protocol among  
-join query node and the outer and inner query nodes. It is expected that there is enough  
-room that all graphs from outer and inner query nodes are stored in main memory.</p>
+<h2><a name="description">Description</a></h2><p>Hash-join query node is implemented as independent gen_process. Hash-join query node is  
+a state-machine realizing hash-join algorithm as protocol among join query node and the outer  
+and inner query nodes. This implementation of hash-join algorithm expects that  
+there is enough main memory that all graphs from outer query nodes are stored in index.</p>
  
   <table bgcolor="lemonchiffon">
   <tr><th>Section Index</th></tr>
-  <tr><td><a href="#main-memory_join_algorithm">main-memory join algorithm</a></td></tr>
+  <tr><td><a href="#hash_join_algorithm">hash join algorithm</a></td></tr>
   <tr><td><a href="#property_list">property list</a></td></tr>
   <tr><td><a href="#handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></td></tr>
   <tr><td><a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></td></tr>
   </table>
  
-  <h3><a name="main-memory_join_algorithm">main-memory join algorithm</a></h3>
+  <h3><a name="hash_join_algorithm">hash join algorithm</a></h3>
  
-  <p>(LINK: <a href="#main-memory_join_algorithm">main-memory join algorithm</a>)</p>
+  <p>(LINK: <a href="#hash_join_algorithm">hash join algorithm</a>)</p>
  
-  <p>Main-memory join query node is independent gen_server process that can have multiple  
+  <p>Join query node is independent gen_server process that can have multiple  
 outer query nodes as well as multiple inner query nodes--each of them is implemented as  
 separate gen_server process.</p>
  
-  <p>Main-memory join algorithm loads results of inner query nodes into main memory creating  
-main memory hash-index. At the same time results of outer query nodes are pre-loaded into  
-the queue. After all inner results are loaded into the main-memory index, process starts to  
-compute join between outer graphs and inner triples as well as further loading of outer  
-graphs.</p>
+  <p>A variant of hash-join algorithm is implemented. It retrieves all results from outer query  
+node and creates index in main memory based on join attributes. Each graph from inner  
+query node is joined with outer graphs from index that have the same values of join  
+attributes.</p>
  
   <p>State-machine has the following states: inactive, active, wait_next_outer, wait_next_inner,  
-and eos. Message start set state of protocol to active. Message eval starts the evaluation  
-of all inner and outer query nodes, and, moves state  
-to wait_next_inner, the first phase of algorithm. In this phase main-memory join reads  
-results from inner query nodes and creates main-memory index on join attributes.  
-All the resulted graphs from outer query nodes are in this pahase stored in the queue.</p>
+and eos. Message start set state of protocol to active. Message eval moves state  
+to wait_next_outer, the first phase of algorithm. In this phase hash-join reads results  
+from outer query nodes and creates in-memory index on join attributes. After reading  
+all results from outer query node protocol enters second phase and state is changed  
+wait_next_inner.</p>
  
-  <p>After reading all results from inner query node protocol enters second phase and state  
-is changed wait_next_outer. In the second phase of the algorithm graphs from outer  
-query nodes are joined with triples from inner query nodes. After end_of_stream is received  
-from all outer query nodes, state moves to eos.</p>
+  <p>In the second phase of protocol, results from inner query nodes are joined with  
+outer triples by using in-memory index. After end_of_stream is received from all inner  
+query nodes, state of protocol moves to eos.</p>
  
   <h3><a name="property_list">property list</a></h3>
  
@@ -126,7 +124,7 @@ from all outer query nodes, state moves to eos.</p>
   structure from outer child pid() to atom() (alive | eos).</td> </tr>
  
   <tr> <td>empty_outer_sent</td> <td>boolean()</td> <td>N empty messages
-  are sent to each of outer processes when eval message of mj_query_node
+  are sent to each of outer processes when eval message of hj_query_node
   is processed.</td> </tr>
  
   <tr> <td>state_of_inner_streams</td> <td>maps:map()</td> <td> Map
@@ -288,22 +286,23 @@ there is a message in queue_to_parent then send it to parent.</p>
 <tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle synchronous query requests.</td></tr>
 <tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
 <tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
-<tr><td valign="top"><a href="#hc_data_inner-1">hc_data_inner/1*</a></td><td>Co-routine for processing data message from inner children.</td></tr>
-<tr><td valign="top"><a href="#hc_data_outer-1">hc_data_outer/1*</a></td><td>Co-routine for processing data block from outer children.</td></tr>
+<tr><td valign="top"><a href="#hc_data_inner-1">hc_data_inner/1*</a></td><td>Co-routine for processing data block from inner children.</td></tr>
+<tr><td valign="top"><a href="#hc_data_outer-1">hc_data_outer/1*</a></td><td>Co-routine for processing data message from outer child.</td></tr>
 <tr><td valign="top"><a href="#hc_empty-1">hc_empty/1*</a></td><td>Co-routine for processing empty message from parent.</td></tr>
 <tr><td valign="top"><a href="#hc_eval-2">hc_eval/2*</a></td><td>Initiate evaluation of join query node.</td></tr>
 <tr><td valign="top"><a href="#hc_eval_test_-0">hc_eval_test_/0*</a></td><td>Main test function of module.</td></tr>
 <tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
 <tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
-<tr><td valign="top"><a href="#hc_start-12">hc_start/12*</a></td><td>Initialize mj_query_node process.</td></tr>
+<tr><td valign="top"><a href="#hc_start-12">hc_start/12*</a></td><td>Initialize hj_query_node process.</td></tr>
 <tr><td valign="top"><a href="#hc_start_test_-0">hc_start_test_/0*</a></td><td>Test function for hc_start.</td></tr>
+<tr><td valign="top"><a href="#hcdi_match_outer_graphs-0">hcdi_match_outer_graphs/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hcdi_process_eos-1">hcdi_process_eos/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hcdi_process_graph-1">hcdi_process_graph/1*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#hcdo_match_inner_graphs-0">hcdo_match_inner_graphs/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcdi_send_parent_eos-0">hcdi_send_parent_eos/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcdo_activate_inner-0">hcdo_activate_inner/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hcdo_process_eos-1">hcdo_process_eos/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hcdo_process_graph-1">hcdo_process_graph/1*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#hcdo_send_parent_eos-0">hcdo_send_parent_eos/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hce_get_node_id-2">hce_get_node_id/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hce_get_var_value-2">hce_get_var_value/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hcet_get_PD-1">hcet_get_PD/1*</a></td><td></td></tr>
@@ -341,7 +340,7 @@ there is a message in queue_to_parent then send it to parent.</p>
 <tr><td valign="top"><a href="#hcst_sne-0">hcst_sne/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
   debug level is greater than ThresholdDL.</td></tr>
-<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a mj_query_node process.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a hj_query_node process.</td></tr>
 <tr><td valign="top"><a href="#receive_empty-0">receive_empty/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#send_N_empty-1">send_N_empty/1*</a></td><td>Send N empty messages to Pid.</td></tr>
 <tr><td valign="top"><a href="#send_N_empty_1-2">send_N_empty_1/2*</a></td><td></td></tr>
@@ -411,14 +410,14 @@ there is a message in queue_to_parent then send it to parent.</p>
 
 <h3 class="function"><a name="hc_data_inner-1">hc_data_inner/1 *</a></h3>
 <div class="spec">
-<p><tt>hc_data_inner(State::atom()) -&gt; ok</tt><br></p>
-</div><p>Co-routine for processing data message from inner children.
+<p><tt>hc_data_inner(State::atom()) -&gt; ok | fail</tt><br></p>
+</div><p>Co-routine for processing data block from inner children.
  </p>
 
 <h3 class="function"><a name="hc_data_outer-1">hc_data_outer/1 *</a></h3>
 <div class="spec">
-<p><tt>hc_data_outer(State::atom()) -&gt; ok | fail</tt><br></p>
-</div><p>Co-routine for processing data block from outer children.
+<p><tt>hc_data_outer(State::atom()) -&gt; ok</tt><br></p>
+</div><p>Co-routine for processing data message from outer child.
  </p>
 
 <h3 class="function"><a name="hc_empty-1">hc_empty/1 *</a></h3>
@@ -461,7 +460,7 @@ there is a message in queue_to_parent then send it to parent.</p>
 <h3 class="function"><a name="hc_start-12">hc_start/12 *</a></h3>
 <div class="spec">
 <p><tt>hc_start(QueryNodeId::<a href="query_node.html#type-qn_id">query_node:qn_id()</a>, QueryId::string(), SessionId::string(), Self::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>, GraphPattern::[<a href="query_node.html#type-qn_triple_pattern">query_node:qn_triple_pattern()</a>], SelectPred::<a href="query_node.html#type-qn_select_predicate">query_node:qn_select_predicate()</a>, ProjectList::<a href="query_node.html#type-qn_project_list">query_node:qn_project_list()</a>, ParentPid::<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>, OuterPids::[<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>], InnerPids::[<a href="node_state.html#type-ns_pid">node_state:ns_pid()</a>], VarsPositions::<a href="#type-jqn_var_position">jqn_var_position()</a>, JoinVars::[<a href="query_node.html#type-qn_var">query_node:qn_var()</a>]) -&gt; ok</tt><br></p>
-</div><p>Initialize mj_query_node process.
+</div><p>Initialize hj_query_node process.
  </p>
 
 <h3 class="function"><a name="hc_start_test_-0">hc_start_test_/0 *</a></h3>
@@ -470,6 +469,11 @@ there is a message in queue_to_parent then send it to parent.</p>
 </div><p>Test function for hc_start.
  </p>
 
+<h3 class="function"><a name="hcdi_match_outer_graphs-0">hcdi_match_outer_graphs/0 *</a></h3>
+<div class="spec">
+<p><tt>hcdi_match_outer_graphs() -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="hcdi_process_eos-1">hcdi_process_eos/1 *</a></h3>
 <div class="spec">
 <p><tt>hcdi_process_eos(From) -&gt; any()</tt></p>
@@ -477,12 +481,17 @@ there is a message in queue_to_parent then send it to parent.</p>
 
 <h3 class="function"><a name="hcdi_process_graph-1">hcdi_process_graph/1 *</a></h3>
 <div class="spec">
-<p><tt>hcdi_process_graph(Graph) -&gt; any()</tt></p>
+<p><tt>hcdi_process_graph(GList) -&gt; any()</tt></p>
 </div>
 
-<h3 class="function"><a name="hcdo_match_inner_graphs-0">hcdo_match_inner_graphs/0 *</a></h3>
+<h3 class="function"><a name="hcdi_send_parent_eos-0">hcdi_send_parent_eos/0 *</a></h3>
 <div class="spec">
-<p><tt>hcdo_match_inner_graphs() -&gt; any()</tt></p>
+<p><tt>hcdi_send_parent_eos() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcdo_activate_inner-0">hcdo_activate_inner/0 *</a></h3>
+<div class="spec">
+<p><tt>hcdo_activate_inner() -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="hcdo_process_eos-1">hcdo_process_eos/1 *</a></h3>
@@ -492,12 +501,7 @@ there is a message in queue_to_parent then send it to parent.</p>
 
 <h3 class="function"><a name="hcdo_process_graph-1">hcdo_process_graph/1 *</a></h3>
 <div class="spec">
-<p><tt>hcdo_process_graph(GList) -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="hcdo_send_parent_eos-0">hcdo_send_parent_eos/0 *</a></h3>
-<div class="spec">
-<p><tt>hcdo_send_parent_eos() -&gt; any()</tt></p>
+<p><tt>hcdo_process_graph(Graph) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="hce_get_node_id-2">hce_get_node_id/2 *</a></h3>
@@ -685,7 +689,7 @@ there is a message in queue_to_parent then send it to parent.</p>
 <h3 class="function"><a name="init-1">init/1</a></h3>
 <div class="spec">
 <p><tt>init(X1::[]) -&gt; {ok, <a href="#type-jqn_state">jqn_state()</a>}</tt><br></p>
-</div><p>Initialize a mj_query_node process.
+</div><p>Initialize a hj_query_node process.
  </p>
 
 <h3 class="function"><a name="receive_empty-0">receive_empty/0</a></h3>
@@ -717,6 +721,6 @@ there is a message in queue_to_parent then send it to parent.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Aug 25 2016, 11:26:41.</i></p>
+<p><i>Generated by EDoc, Oct 21 2016, 14:07:00.</i></p>
 </body>
 </html>

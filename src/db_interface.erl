@@ -1,7 +1,7 @@
 %%
 %% Interface functions for accessing DB layer
 %%
-%% @copyright 2014-2016 UP FAMNIT and Yahoo! Japan Corporation
+%% @copyright 2014-2016 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since May, 2014
 %% @author Kiyoshi Nitta <knitta@yahoo-corp.jp>

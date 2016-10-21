@@ -2,7 +2,7 @@
 #
 #	big3store Makefile
 # 
-# 	Copyright (C) 2014-2016 UP FAMNIT and Yahoo! Japan Corporation
+# 	Copyright (C) 2014-2016 UP FAMNIT and Yahoo Japan Corporation
 # 	Iztok Savnik <iztok.savnik@famnit.upr.si>
 # 	Kiyoshi Nitta <knitta@yahoo-corp.jp>
 # 
@@ -23,7 +23,7 @@ HSTNAM = $(shell hostname -f)
 
 PRJNAM = big3store
 EBIN   = ../ebin
-EDOC   = ../edoc
+EDOC   = ../docs
 ELOG   = ../elog
 SNDNAM = b3ss01@$(HSTNAM)
 CNDNAM = b3ss02@$(HSTNAM)
@@ -373,7 +373,7 @@ rebar:
 	ln -s $(PRJPTH)/rebar/rebar
 
 clean: bak logclean
-	rm -fr $(EBIN) $(EDOC) ../erl_crash.dump bak $(BDBDRV) $(BDBNIF)
+	rm -fr $(EBIN) ../erl_crash.dump bak $(BDBDRV) $(BDBNIF)
 	-mv -f *~ *.beam edoc elog erl_crash.dump TAGS *.log sr0*.png $(BAKDIR)
 
 logclean:

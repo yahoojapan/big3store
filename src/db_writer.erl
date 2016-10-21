@@ -1,7 +1,7 @@
 %%
 %% Perform database access
 %%
-%% @copyright 2015-2016 UP FAMNIT and Yahoo! Japan Corporation
+%% @copyright 2015-2016 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since July, 2015
 %% @author Kiyoshi Nitta <knitta@yahoo-corp.jp>

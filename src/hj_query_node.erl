@@ -1,7 +1,7 @@
 %%
 %% Hash Join Query Node processes
 %%
-%% @copyright 2014-2016 UP FAMNIT and Yahoo! Japan Corporation
+%% @copyright 2014-2016 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since February, 2016
 %% @author Iztok Savnik <iztok.savnik@famnit.upr.si>

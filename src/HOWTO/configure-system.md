@@ -7,7 +7,7 @@ application default file. Precise meanings of those parameters will be
 described. Before configuring a big3store system, it must be
 installed (see [install.md](install.md)).
 
-* Copyright (C) 2016 UP FAMNIT and Yahoo! Japan Corporation
+* Copyright (C) 2016 UP FAMNIT and Yahoo Japan Corporation
 * Version 0.3
 * Since: January, 2016
 * Author: Kiyoshi Nitta <knitta@yahoo-corp.jp>
@@ -79,9 +79,11 @@ servers. At least one front server must be set.
 
 ##### data_server_nodes (MANDATED)
 
-This parameter specifies a list of two element columns, each of which
-consists of data server Erlang node name and corresponding column
-number. At least one data server must be set.
+This parameter defines a configuration of data servers. It specifies a
+list of two element columns, each of which consists of data server
+Erlang node name and corresponding column number. At least one data
+server must be set. An example of plural data server configuration
+can be found in 'b3s.app.sample5' file.
 
 ##### name_of_triple_tables (MANDATED)
 
@@ -155,7 +157,10 @@ to *n*.
 ##### triple_id_skel
 
 This parameter specifies skeleton string for generating unique triple
-ids assigned to triples that have no triple id URIs.
+ids assigned to triples that have no triple id URIs. While most
+published triples have their own ids, some triples do not. The triple
+loader of big3store assigns unique ids to them. The string provided by
+this parameter is used for generating such ids.
 
 ##### data_files
 

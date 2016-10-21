@@ -5,7 +5,7 @@ interface. It is invoked by entring following command.
 
     $ make ui-main
 
-* Copyright (C) 2016 UP FAMNIT and Yahoo! Japan Corporation
+* Copyright (C) 2016 UP FAMNIT and Yahoo Japan Corporation
 * Version 0.3
 * Since: January, 2016
 * Author: Iztok Savnik <iztok.savnik@famnit.upr.si>
@@ -268,8 +268,9 @@ commands for executing and measuring them.
 This command starts a benchmark task. However, it only spawns the
 task. Command *cb* should be used for checking the termination of the
 task. Command *rb* should be used for reporting its precise
-result. Command *kill* (described above) should be used for
-terminating unnecessary benchmark task processes on the front server.
+result. Command *eps* and *kill* (described above) should be used for
+investigating and terminating unnecessary benchmark task processes on
+the front server.
 
     cb {all | BenchmarkTaskNameList}
 

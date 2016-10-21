@@ -1,7 +1,7 @@
 %%
 %% User Interface
 %%
-%% @copyright 2015-2016 UP FAMNIT and Yahoo! Japan Corporation
+%% @copyright 2015-2016 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since September, 2015
 %% @author Iztok Savnik <iztok.savnik@famnit.upr.si>

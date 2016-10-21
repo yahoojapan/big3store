@@ -8,9 +8,11 @@ environment, and started successfully (see
 [configure-system.md](configure-system.md)). Concrete examples are
 provided for tasks described below. These examples enable to load
 whole YAGO2s TSV data into the big3store system that is configured to
-run on 5 server machines.
+run on 5 server machines. This loading task uses several commands
+provided by the user interface tool. Detailed command descriptions can
+be referred from [user-interface.md](user-interface.md).
 
-* Copyright (C) 2016 UP FAMNIT and Yahoo! Japan Corporation
+* Copyright (C) 2016 UP FAMNIT and Yahoo Japan Corporation
 * Version 0.3
 * Since: January, 2016
 * Author: Kiyoshi Nitta <knitta@yahoo-corp.jp>
