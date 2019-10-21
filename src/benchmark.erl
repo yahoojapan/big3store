@@ -1,7 +1,7 @@
 %%
 %% Perform benchmark tasks.
 %%
-%% @copyright 2014-2016 UP FAMNIT and Yahoo Japan Corporation
+%% @copyright 2014-2019 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since September, 2014
 %% @author Kiyoshi Nitta <knitta@yahoo-corp.jp>
@@ -155,85 +155,85 @@
 %% <tr> <td>{@section task_local2_0005}</td> <td></td> <td>start a
 %% benchmark task for unit test</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0001}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0001}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0002}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0002}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0003}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0003}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0003h}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0003h}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0004}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0004}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0004m}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0004m}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0005}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0005}</td> <td></td> <td>start a
 %% benchmark task [NW08] YAGO B1</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0005m}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0005m}</td> <td></td> <td>start a
 %% benchmark task [NW08] YAGO B1</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0006}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0006}</td> <td></td> <td>start a
 %% benchmark task [NW08] YAGO C2</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0007}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0007}</td> <td></td> <td>start a
 %% benchmark task [NW08] YAGO C1</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0008}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0008}</td> <td></td> <td>start a
 %% benchmark task [NW08] YAGO A1</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0008m}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0008m}</td> <td></td> <td>start a
 %% benchmark task [NW08] YAGO A1</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0009}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0009}</td> <td></td> <td>start a
 %% benchmark task [NW08] YAGO B3</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0010}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0010}</td> <td></td> <td>start a
 %% benchmark task [NW08] YAGO B2</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0010h}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0010h}</td> <td></td> <td>start a
 %% benchmark task [NW08] YAGO B2</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0010m}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0010m}</td> <td></td> <td>start a
 %% benchmark task [NW08] YAGO B2</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0011}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0011}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0011m}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0011m}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0012}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0012}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0013}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0013}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0013m}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0013m}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0014}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0014}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0014m}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0014m}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0015}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0015}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0015m}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0015m}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0016}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0016}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
-%% <tr> <td>{@section task_yjr5x1_0017}</td> <td></td> <td>start a
+%% <tr> <td>{@section task_yg_0017}</td> <td></td> <td>start a
 %% benchmark task</td> </tr>
 %% 
 %% <tr> <td>{@section @{data_outer, Pid, Graph@}}</td> <td></td>
@@ -281,251 +281,246 @@
 %% process on the same node. It uses {@link query_tree}. (LINK:
 %% {@section task_local2_0005})
 %% 
-%% === task_yjr5x1_0001 ===
+%% === task_yg_0001 ===
 %% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It only uses triple pattern query
-%% nodes. Important events are recorded in the {@link stop_watch}
-%% process on the same node. It is implemented in function {@link
-%% hc_task_yjr5x1_0001/0}. (LINK: {@section task_yjr5x1_0001})
+%% This message starts a benchmark task for YAGO2s environment. It
+%% only uses triple pattern query nodes. Important events are recorded
+%% in the {@link stop_watch} process on the same node. It is
+%% implemented in function {@link hc_task_yg_0001/0}. (LINK: {@section
+%% task_yg_0001})
 %% 
-%% === task_yjr5x1_0002 ===
+%% === task_yg_0002 ===
 %% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a join query node. Important events
-%% are recorded in the {@link stop_watch} process on the same node. It
-%% is implemented in function {@link hc_task_yjr5x1_0002/0}. (LINK:
-%% {@section task_yjr5x1_0002})
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a join query node. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It is implemented in function
+%% {@link hc_task_yg_0002/0}. (LINK: {@section task_yg_0002})
 %% 
-%% === task_yjr5x1_0003 ===
+%% === task_yg_0003 ===
 %% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a join query node. Important events
-%% are recorded in the {@link stop_watch} process on the same node. It
-%% is implemented in function {@link hc_task_yjr5x1_0003/0}. (LINK:
-%% {@section task_yjr5x1_0003})
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a join query node. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It is implemented in function
+%% {@link hc_task_yg_0003/0}. (LINK: {@section task_yg_0003})
 %% 
-%% === task_yjr5x1_0003h ===
+%% === task_yg_0003h ===
 %% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a hash join query node. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It is implemented in function {@link
-%% hc_task_yjr5x1_0003/0}. (LINK: {@section task_yjr5x1_0003})
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a hash join query node. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It is implemented in
+%% function {@link hc_task_yg_0003/0}. (LINK: {@section task_yg_0003})
 %% 
-%% === task_yjr5x1_0004 ===
+%% === task_yg_0004 ===
 %% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a join query node. Important events
-%% are recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. It is implemented in function {@link
-%% hc_task_yjr5x1_0004/0}. (LINK: {@section task_yjr5x1_0004})
-%% 
-%% === task_yjr5x1_0004m ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a memory join query node. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. It is implemented in function
-%% {@link hc_task_yjr5x1_0004/0}. (LINK: {@section task_yjr5x1_0004})
-%% 
-%% === task_yjr5x1_0005 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses join query nodes. Important events are
-%% recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. This is the equivalent query of [NW08]
-%% YAGO B1. It is implemented in function {@link
-%% hc_task_yjr5x1_0005/0}. (LINK: {@section task_yjr5x1_0005})
-%% 
-%% === task_yjr5x1_0005m ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses memory join query nodes. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. This is the equivalent query of
-%% [NW08] YAGO B1. It is implemented in function {@link
-%% hc_task_yjr5x1_0005/0}. (LINK: {@section task_yjr5x1_0005})
-%% 
-%% === task_yjr5x1_0006 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a join query node. Important events
-%% are recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. This is the equivalent query of [NW08]
-%% YAGO C2. It is implemented in function {@link
-%% hc_task_yjr5x1_0006/0}. (LINK: {@section task_yjr5x1_0006})
-%% 
-%% === task_yjr5x1_0007 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a join query node. Important events
-%% are recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. This is the equivalent query of [NW08]
-%% YAGO C1. It is implemented in function {@link
-%% hc_task_yjr5x1_0007/0}. (LINK: {@section task_yjr5x1_0007})
-%% 
-%% === task_yjr5x1_0008 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses join query nodes. Important events are
-%% recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. This is the equivalent query of [NW08]
-%% YAGO A1. It is implemented in function {@link
-%% hc_task_yjr5x1_0008/0}. (LINK: {@section task_yjr5x1_0008})
-%% 
-%% === task_yjr5x1_0008m ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses memory join query nodes. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. This is the equivalent query of
-%% [NW08] YAGO A1. It is implemented in function {@link
-%% hc_task_yjr5x1_0008/0}. (LINK: {@section task_yjr5x1_0008})
-%% 
-%% === task_yjr5x1_0009 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a join query node. Important events
-%% are recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. This is the equivalent query of [NW08]
-%% YAGO B3. It is implemented in function {@link
-%% hc_task_yjr5x1_0009/0}. (LINK: {@section task_yjr5x1_0009})
-%% 
-%% === task_yjr5x1_0010 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses join query nodes. Important events are
-%% recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. This is the equivalent query of [NW08]
-%% YAGO B2. It is implemented in function {@link
-%% hc_task_yjr5x1_0010/0}. (LINK: {@section task_yjr5x1_0010})
-%% 
-%% === task_yjr5x1_0010h ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses hash join query nodes. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. This is the equivalent query of
-%% [NW08] YAGO B2. It is implemented in function {@link
-%% hc_task_yjr5x1_0010h/0}. (LINK: {@section task_yjr5x1_0010h})
-%% 
-%% === task_yjr5x1_0010m ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses memory join query nodes. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. This is the equivalent query of
-%% [NW08] YAGO B2. It is implemented in function {@link
-%% hc_task_yjr5x1_0010m/0}. (LINK: {@section task_yjr5x1_0010m})
-%% 
-%% === task_yjr5x1_0011 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses join query nodes. Important events are
-%% recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. It is implemented in function {@link
-%% hc_task_yjr5x1_0011/0}. (LINK: {@section task_yjr5x1_0011})
-%% 
-%% === task_yjr5x1_0011m ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses memory join query nodes. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. It is implemented in function
-%% {@link hc_task_yjr5x1_0011/0}. (LINK: {@section task_yjr5x1_0011})
-%% 
-%% === task_yjr5x1_0012 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a join query node. Important events
-%% are recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. It is implemented in function {@link
-%% hc_task_yjr5x1_0012/0}. (LINK: {@section task_yjr5x1_0012})
-%% 
-%% === task_yjr5x1_0013 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses join query nodes. Important events
-%% are recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. It is implemented in function {@link
-%% hc_task_yjr5x1_0013/0}. (LINK: {@section task_yjr5x1_0013})
-%% 
-%% === task_yjr5x1_0013m ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a memory join query node. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. It is implemented in function
-%% {@link hc_task_yjr5x1_0013/0}. (LINK: {@section task_yjr5x1_0013})
-%% 
-%% === task_yjr5x1_0014 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses join query nodes. Important events are
-%% recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. It is implemented in function {@link
-%% hc_task_yjr5x1_0014/0}. (LINK: {@section task_yjr5x1_0014})
-%% 
-%% === task_yjr5x1_0014m ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a memory join query node. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. It is implemented in function
-%% {@link hc_task_yjr5x1_0014/0}. (LINK: {@section task_yjr5x1_0014})
-%% 
-%% === task_yjr5x1_0015 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses join query nodes. Important events are
-%% recorded in the {@link stop_watch} process on the same node. It
-%% uses {@link query_tree}. It is implemented in function {@link
-%% hc_task_yjr5x1_0015/0}. (LINK: {@section task_yjr5x1_0015})
-%% 
-%% === task_yjr5x1_0015m ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses a memory join query node. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. It is implemented in function
-%% {@link hc_task_yjr5x1_0015/0}. (LINK: {@section task_yjr5x1_0015})
-%% 
-%% === task_yjr5x1_0016 ===
-%% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It is a part of task_yjr5x1_0010. It uses a
-%% join query node. Important events are recorded in the {@link
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a join query node. Important events are recorded in the {@link
 %% stop_watch} process on the same node. It uses {@link
 %% query_tree}. It is implemented in function {@link
-%% hc_task_yjr5x1_0016/0}. (LINK: {@section task_yjr5x1_0016})
+%% hc_task_yg_0004/0}. (LINK: {@section task_yg_0004})
 %% 
-%% === task_yjr5x1_0017 ===
+%% === task_yg_0004m ===
 %% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It is a part of task_yjr5x1_0010. It uses a
-%% join query node. Important events are recorded in the {@link
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a memory join query node. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. It is implemented in function {@link
+%% hc_task_yg_0004/0}. (LINK: {@section task_yg_0004})
+%% 
+%% === task_yg_0005 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses join query nodes. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO B1. It is
+%% implemented in function {@link hc_task_yg_0005/0}. (LINK: {@section
+%% task_yg_0005})
+%% 
+%% === task_yg_0005m ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses memory join query nodes. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO B1. It is
+%% implemented in function {@link hc_task_yg_0005/0}. (LINK: {@section
+%% task_yg_0005})
+%% 
+%% === task_yg_0006 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a join query node. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO C2. It is
+%% implemented in function {@link hc_task_yg_0006/0}. (LINK: {@section
+%% task_yg_0006})
+%% 
+%% === task_yg_0007 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a join query node. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO C1. It is
+%% implemented in function {@link hc_task_yg_0007/0}. (LINK: {@section
+%% task_yg_0007})
+%% 
+%% === task_yg_0008 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses join query nodes. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO A1. It is
+%% implemented in function {@link hc_task_yg_0008/0}. (LINK: {@section
+%% task_yg_0008})
+%% 
+%% === task_yg_0008m ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses memory join query nodes. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO A1. It is
+%% implemented in function {@link hc_task_yg_0008/0}. (LINK: {@section
+%% task_yg_0008})
+%% 
+%% === task_yg_0009 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a join query node. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO B3. It is
+%% implemented in function {@link hc_task_yg_0009/0}. (LINK: {@section
+%% task_yg_0009})
+%% 
+%% === task_yg_0010 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses join query nodes. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO B2. It is
+%% implemented in function {@link hc_task_yg_0010/0}. (LINK: {@section
+%% task_yg_0010})
+%% 
+%% === task_yg_0010h ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses hash join query nodes. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO B2. It is
+%% implemented in function {@link hc_task_yg_0010h/0}. (LINK:
+%% {@section task_yg_0010h})
+%% 
+%% === task_yg_0010m ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses memory join query nodes. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO B2. It is
+%% implemented in function {@link hc_task_yg_0010m/0}. (LINK:
+%% {@section task_yg_0010m})
+%% 
+%% === task_yg_0011 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses join query nodes. Important events are recorded in the {@link
 %% stop_watch} process on the same node. It uses {@link
 %% query_tree}. It is implemented in function {@link
-%% hc_task_yjr5x1_0017/0}. (LINK: {@section task_yjr5x1_0017})
+%% hc_task_yg_0011/0}. (LINK: {@section task_yg_0011})
 %% 
-%% === task_yjr5x1_0018 ===
+%% === task_yg_0011m ===
 %% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses hash join query nodes. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. This is the equivalent query of
-%% [NW08] YAGO B2 and task_yjr5x1_0010. It is implemented in function
-%% {@link hc_task_yjr5x1_0018/0}. (LINK: {@section task_yjr5x1_0018})
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses memory join query nodes. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. It is implemented in function {@link
+%% hc_task_yg_0011/0}. (LINK: {@section task_yg_0011})
 %% 
-%% === task_yjr5x1_0019 ===
+%% === task_yg_0012 ===
 %% 
-%% This message starts a benchmark task for Yahoo Japan Research 6
-%% servers environment. It uses hash join query nodes. Important
-%% events are recorded in the {@link stop_watch} process on the same
-%% node. It uses {@link query_tree}. This is the equivalent query of
-%% [NW08] YAGO B2 and task_yjr5x1_0010. It is implemented in function
-%% {@link hc_task_yjr5x1_0019/0}. (LINK: {@section task_yjr5x1_0019})
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a join query node. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It uses {@link
+%% query_tree}. It is implemented in function {@link
+%% hc_task_yg_0012/0}. (LINK: {@section task_yg_0012})
+%% 
+%% === task_yg_0013 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses join query nodes. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It uses {@link
+%% query_tree}. It is implemented in function {@link
+%% hc_task_yg_0013/0}. (LINK: {@section task_yg_0013})
+%% 
+%% === task_yg_0013m ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a memory join query node. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. It is implemented in function {@link
+%% hc_task_yg_0013/0}. (LINK: {@section task_yg_0013})
+%% 
+%% === task_yg_0014 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses join query nodes. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It uses {@link
+%% query_tree}. It is implemented in function {@link
+%% hc_task_yg_0014/0}. (LINK: {@section task_yg_0014})
+%% 
+%% === task_yg_0014m ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a memory join query node. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. It is implemented in function {@link
+%% hc_task_yg_0014/0}. (LINK: {@section task_yg_0014})
+%% 
+%% === task_yg_0015 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses join query nodes. Important events are recorded in the {@link
+%% stop_watch} process on the same node. It uses {@link
+%% query_tree}. It is implemented in function {@link
+%% hc_task_yg_0015/0}. (LINK: {@section task_yg_0015})
+%% 
+%% === task_yg_0015m ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses a memory join query node. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. It is implemented in function {@link
+%% hc_task_yg_0015/0}. (LINK: {@section task_yg_0015})
+%% 
+%% === task_yg_0016 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It is
+%% a part of task_yg_0010. It uses a join query node. Important events
+%% are recorded in the {@link stop_watch} process on the same node. It
+%% uses {@link query_tree}. It is implemented in function {@link
+%% hc_task_yg_0016/0}. (LINK: {@section task_yg_0016})
+%% 
+%% === task_yg_0017 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It is
+%% a part of task_yg_0010. It uses a join query node. Important events
+%% are recorded in the {@link stop_watch} process on the same node. It
+%% uses {@link query_tree}. It is implemented in function {@link
+%% hc_task_yg_0017/0}. (LINK: {@section task_yg_0017})
+%% 
+%% === task_yg_0018 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses hash join query nodes. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO B2 and
+%% task_yg_0010. It is implemented in function {@link
+%% hc_task_yg_0018/0}. (LINK: {@section task_yg_0018})
+%% 
+%% === task_yg_0019 ===
+%% 
+%% This message starts a benchmark task for YAGO2s environment. It
+%% uses hash join query nodes. Important events are recorded in the
+%% {@link stop_watch} process on the same node. It uses {@link
+%% query_tree}. This is the equivalent query of [NW08] YAGO B2 and
+%% task_yg_0010. It is implemented in function {@link
+%% hc_task_yg_0019/0}. (LINK: {@section task_yg_0019})
 %% 
 %% === {data_outer, Pid, Graph} ===
 %% 
@@ -755,139 +750,139 @@ handle_cast(task_local2_0001, State) ->
     hc_task_local2_0001(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0017, State) ->
+handle_cast(task_yg_0017, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0017(),
+    hc_task_yg_0017(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0016, State) ->
+handle_cast(task_yg_0016, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0016(),
+    hc_task_yg_0016(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0015m, State) ->
+handle_cast(task_yg_0015m, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0015m(),
+    hc_task_yg_0015m(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0015, State) ->
+handle_cast(task_yg_0015, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0015(),
+    hc_task_yg_0015(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0014m, State) ->
+handle_cast(task_yg_0014m, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0014m(),
+    hc_task_yg_0014m(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0014, State) ->
+handle_cast(task_yg_0014, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0014(),
+    hc_task_yg_0014(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0013m, State) ->
+handle_cast(task_yg_0013m, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0013m(),
+    hc_task_yg_0013m(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0013, State) ->
+handle_cast(task_yg_0013, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0013(),
+    hc_task_yg_0013(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0012, State) ->
+handle_cast(task_yg_0012, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0012(),
+    hc_task_yg_0012(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0011m, State) ->
+handle_cast(task_yg_0011m, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0011m(),
+    hc_task_yg_0011m(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0011, State) ->
+handle_cast(task_yg_0011, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0011(),
+    hc_task_yg_0011(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0010m, State) ->
+handle_cast(task_yg_0010m, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0010m(),
+    hc_task_yg_0010m(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0010h, State) ->
+handle_cast(task_yg_0010h, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0010h(),
+    hc_task_yg_0010h(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0010, State) ->
+handle_cast(task_yg_0010, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0010(),
+    hc_task_yg_0010(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0009, State) ->
+handle_cast(task_yg_0009, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0009(),
+    hc_task_yg_0009(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0008m, State) ->
+handle_cast(task_yg_0008m, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0008m(),
+    hc_task_yg_0008m(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0008, State) ->
+handle_cast(task_yg_0008, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0008(),
+    hc_task_yg_0008(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0007, State) ->
+handle_cast(task_yg_0007, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0007(),
+    hc_task_yg_0007(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0006, State) ->
+handle_cast(task_yg_0006, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0006(),
+    hc_task_yg_0006(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0005m, State) ->
+handle_cast(task_yg_0005m, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0005m(),
+    hc_task_yg_0005m(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0005, State) ->
+handle_cast(task_yg_0005, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0005(),
+    hc_task_yg_0005(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0004m, State) ->
+handle_cast(task_yg_0004m, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0004m(),
+    hc_task_yg_0004m(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0004, State) ->
+handle_cast(task_yg_0004, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0004(),
+    hc_task_yg_0004(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0003h, State) ->
+handle_cast(task_yg_0003h, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0003h(),
+    hc_task_yg_0003h(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0003, State) ->
+handle_cast(task_yg_0003, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0003(),
+    hc_task_yg_0003(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0002, State) ->
+handle_cast(task_yg_0002, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0002(),
+    hc_task_yg_0002(),
     {noreply, hc_save_pd()};
 
-handle_cast(task_yjr5x1_0001, State) ->
+handle_cast(task_yg_0001, State) ->
     hc_restore_pd(erlang:get(created), State),
-    hc_task_yjr5x1_0001(),
+    hc_task_yg_0001(),
     {noreply, hc_save_pd()};
 
 %% default
@@ -1052,6 +1047,7 @@ hc_report_legacy() ->
     hr_property(current_date_time),
     erase(current_date_time),
     hr_b3s_property(block_size),
+    hr_property_list(query_string, get(query_string)),
 
     hr_separator($-),
     hr_map(pid_elapse, 0.4, microseconds),
@@ -1477,29 +1473,28 @@ hc_task_local2_0001() ->
     info_msg(hc_task_local2_0001, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. It is a part of
-%% task_yjr5x1_0010.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. It is a part of task_yg_0010.
 %% 
 %% <pre>
 %% ?p1    &lt;wasBornIn&gt;          ?city
 %% </pre>
 %% 
-hc_task_yjr5x1_0017() ->
-    hc_task_yjr5x1_0017(use_query_tree).
+hc_task_yg_0017() ->
+    hc_task_yg_0017(use_query_tree).
 
-hc_task_yjr5x1_0017(direct) ->
+hc_task_yg_0017(direct) ->
     ok;
 
-hc_task_yjr5x1_0017(use_query_tree) ->
+hc_task_yg_0017(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0017",
+    TN = "task_yg_0017",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0017, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0017, [use_query_tree], RS, 50),
 
     SessionId = "0017",
     QueryId   = "1",
@@ -1532,32 +1527,31 @@ hc_task_yjr5x1_0017(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0017, [], RF, 50).
+    info_msg(hc_task_yg_0017, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. It is a part of
-%% task_yjr5x1_0010.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. It is a part of task_yg_0010.
 %% 
 %% <pre>
 %% ?p1    &lt;isMarriedTo&gt;        ?p2
 %% </pre>
 %% 
-hc_task_yjr5x1_0016() ->
-    hc_task_yjr5x1_0016(use_query_tree).
+hc_task_yg_0016() ->
+    hc_task_yg_0016(use_query_tree).
 
-hc_task_yjr5x1_0016(direct) ->
+hc_task_yg_0016(direct) ->
     ok;
 
-hc_task_yjr5x1_0016(use_query_tree) ->
+hc_task_yg_0016(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0016",
+    TN = "task_yg_0016",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0016, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0016, [use_query_tree], RS, 50),
 
     SessionId = "0016",
     QueryId   = "1",
@@ -1590,12 +1584,12 @@ hc_task_yjr5x1_0016(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0016, [], RF, 50).
+    info_msg(hc_task_yg_0016, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is another light query
-%% that produces no so big traffic.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is another light query that produces no so big
+%% traffic.
 %% 
 %% <table bgcolor="#E8FFFB">
 %% <tr> <th>subject</th> <th>predicate</th> <th>object</th>
@@ -1624,15 +1618,15 @@ hc_task_yjr5x1_0016(use_query_tree) ->
 %% } ;
 %% </pre>
 %% 
-hc_task_yjr5x1_0015m() ->
+hc_task_yg_0015m() ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0015m",
+    TN = "task_yg_0015m",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0015m, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0015m, [use_query_tree], RS, 50),
 
     SessionId = "0015m",
     QueryId   = "1",
@@ -1656,12 +1650,12 @@ hc_task_yjr5x1_0015m() ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0015m, [], RF, 50).
+    info_msg(hc_task_yg_0015m, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is another light query
-%% that produces no so big traffic.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is another light query that produces no so big
+%% traffic.
 %% 
 %% <table bgcolor="#E8FFFB">
 %% <tr> <th>subject</th> <th>predicate</th> <th>object</th>
@@ -1690,26 +1684,26 @@ hc_task_yjr5x1_0015m() ->
 %% } ;
 %% </pre>
 %% 
-hc_task_yjr5x1_0015() ->
-    hc_task_yjr5x1_0015(use_query_tree).
+hc_task_yg_0015() ->
+    hc_task_yg_0015(use_query_tree).
 
 %% 
 %% <tr> <td>?pl</td> <td>&lt;linksTo&gt;</td>
 %% <td>&lt;Erlang_(programming_language)&gt;</td> <td
 %% align="right">106</td> </tr>
 %% 
-hc_task_yjr5x1_0015(direct) ->
+hc_task_yg_0015(direct) ->
     ok;
 
-hc_task_yjr5x1_0015(use_query_tree) ->
+hc_task_yg_0015(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0015",
+    TN = "task_yg_0015",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0015, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0015, [use_query_tree], RS, 50),
 
     SessionId = "0015",
     QueryId   = "1",
@@ -1733,12 +1727,12 @@ hc_task_yjr5x1_0015(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0015, [], RF, 50).
+    info_msg(hc_task_yg_0015, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is another light query
-%% that produces no so big traffic.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is another light query that produces no so big
+%% traffic.
 %% 
 %% <table bgcolor="#E8FFFB">
 %% <tr> <th>subject</th> <th>predicate</th> <th>object</th>
@@ -1766,15 +1760,15 @@ hc_task_yjr5x1_0015(use_query_tree) ->
 %% } ;
 %% </pre>
 %% 
-hc_task_yjr5x1_0014m() ->
+hc_task_yg_0014m() ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0014m",
+    TN = "task_yg_0014m",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0014m, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0014m, [use_query_tree], RS, 50),
 
     SessionId = "0014m",
     QueryId   = "1",
@@ -1797,12 +1791,12 @@ hc_task_yjr5x1_0014m() ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0014m, [], RF, 50).
+    info_msg(hc_task_yg_0014m, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is another light query
-%% that produces no so big traffic.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is another light query that produces no so big
+%% traffic.
 %% 
 %% <table bgcolor="#E8FFFB">
 %% <tr> <th>subject</th> <th>predicate</th> <th>object</th>
@@ -1830,21 +1824,21 @@ hc_task_yjr5x1_0014m() ->
 %% } ;
 %% </pre>
 %% 
-hc_task_yjr5x1_0014() ->
-    hc_task_yjr5x1_0014(use_query_tree).
+hc_task_yg_0014() ->
+    hc_task_yg_0014(use_query_tree).
 
-hc_task_yjr5x1_0014(direct) ->
+hc_task_yg_0014(direct) ->
     ok;
 
-hc_task_yjr5x1_0014(use_query_tree) ->
+hc_task_yg_0014(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0014",
+    TN = "task_yg_0014",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0014, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0014, [use_query_tree], RS, 50),
 
     SessionId = "0014",
     QueryId   = "1",
@@ -1867,12 +1861,12 @@ hc_task_yjr5x1_0014(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0014, [], RF, 50).
+    info_msg(hc_task_yg_0014, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is another light query
-%% that produces no so big traffic.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is another light query that produces no so big
+%% traffic.
 %% 
 %% <table bgcolor="#E8FFFB">
 %% <tr> <th>subject</th> <th>predicate</th> <th>object</th>
@@ -1901,15 +1895,15 @@ hc_task_yjr5x1_0014(use_query_tree) ->
 %% } ;
 %% </pre>
 %% 
-hc_task_yjr5x1_0013m() ->
+hc_task_yg_0013m() ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0013m",
+    TN = "task_yg_0013m",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0013m, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0013m, [], RS, 50),
 
     SessionId = "0013m",
     QueryId   = "1",
@@ -1935,12 +1929,12 @@ hc_task_yjr5x1_0013m() ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0013m, [], RF, 50).
+    info_msg(hc_task_yg_0013m, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is another light query
-%% that produces no so big traffic.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is another light query that produces no so big
+%% traffic.
 %% 
 %% <table bgcolor="#E8FFFB">
 %% <tr> <th>subject</th> <th>predicate</th> <th>object</th>
@@ -1969,21 +1963,21 @@ hc_task_yjr5x1_0013m() ->
 %% } ;
 %% </pre>
 %% 
-hc_task_yjr5x1_0013() ->
-    hc_task_yjr5x1_0013(use_query_tree).
+hc_task_yg_0013() ->
+    hc_task_yg_0013(use_query_tree).
 
-hc_task_yjr5x1_0013(direct) ->
+hc_task_yg_0013(direct) ->
     ok;
 
-hc_task_yjr5x1_0013(use_query_tree) ->
+hc_task_yg_0013(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0013",
+    TN = "task_yg_0013",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0013, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0013, [use_query_tree], RS, 50),
 
     SessionId = "0013",
     QueryId   = "1",
@@ -2009,12 +2003,12 @@ hc_task_yjr5x1_0013(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0013, [], RF, 50).
+    info_msg(hc_task_yg_0013, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is another light query
-%% that produces no so big traffic.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is another light query that produces no so big
+%% traffic.
 %% 
 %% <table bgcolor="#E8FFFB">
 %% <tr> <th>subject</th> <th>predicate</th> <th>object</th> </tr>
@@ -2079,21 +2073,21 @@ hc_task_yjr5x1_0013(use_query_tree) ->
 %% 
 %% </table>
 %% 
-hc_task_yjr5x1_0012() ->
-    hc_task_yjr5x1_0012(use_query_tree).
+hc_task_yg_0012() ->
+    hc_task_yg_0012(use_query_tree).
 
-hc_task_yjr5x1_0012(direct) ->
+hc_task_yg_0012(direct) ->
     ok;
 
-hc_task_yjr5x1_0012(use_query_tree) ->
+hc_task_yg_0012(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0012",
+    TN = "task_yg_0012",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0012, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0012, [use_query_tree], RS, 50),
 
     SessionId = "0012",
     QueryId   = "1",
@@ -2169,12 +2163,11 @@ hc_task_yjr5x1_0012(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0012, [], RF, 50).
+    info_msg(hc_task_yg_0012, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. It tries to test a circular
-%% query.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. It tries to test a circular query.
 %% 
 %% <table bgcolor="#E8FFFB">
 %% <tr> <th>subject</th> <th>predicate</th> <th>object</th> </tr>
@@ -2201,15 +2194,15 @@ hc_task_yjr5x1_0012(use_query_tree) ->
 %% 
 %% </table>
 %% 
-hc_task_yjr5x1_0011m() ->
+hc_task_yg_0011m() ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0011m",
+    TN = "task_yg_0011m",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0011m, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0011m, [use_query_tree], RS, 50),
 
     SessionId = "0011m",
     QueryId   = "1",
@@ -2252,12 +2245,11 @@ hc_task_yjr5x1_0011m() ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0011m, [], RF, 50).
+    info_msg(hc_task_yg_0011m, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. It tries to test a circular
-%% query.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. It tries to test a circular query.
 %% 
 %% <table bgcolor="#E8FFFB">
 %% <tr> <th>subject</th> <th>predicate</th> <th>object</th> </tr>
@@ -2284,21 +2276,21 @@ hc_task_yjr5x1_0011m() ->
 %% 
 %% </table>
 %% 
-hc_task_yjr5x1_0011() ->
-    hc_task_yjr5x1_0011(use_query_tree).
+hc_task_yg_0011() ->
+    hc_task_yg_0011(use_query_tree).
 
-hc_task_yjr5x1_0011(direct) ->
+hc_task_yg_0011(direct) ->
     ok;
 
-hc_task_yjr5x1_0011(use_query_tree) ->
+hc_task_yg_0011(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0011",
+    TN = "task_yg_0011",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0011, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0011, [use_query_tree], RS, 50),
 
     SessionId = "0011",
     QueryId   = "1",
@@ -2341,12 +2333,12 @@ hc_task_yjr5x1_0011(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0011, [], RF, 50).
+    info_msg(hc_task_yg_0011, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is the equivalent query
-%% of [NW08] YAGO B2 and task_yjr5x1_0010:
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is the equivalent query of [NW08] YAGO B2 and
+%% task_yg_0010:
 %% 
 %% <pre>
 %% ?p1    rdfs:label                 ?n1
@@ -2356,21 +2348,21 @@ hc_task_yjr5x1_0011(use_query_tree) ->
 %% ?p2    &lt;wasBornIn&gt;          ?city
 %% </pre>
 %% 
-hc_task_yjr5x1_0010m() ->
-    hc_task_yjr5x1_0010m(use_query_tree).
+hc_task_yg_0010m() ->
+    hc_task_yg_0010m(use_query_tree).
 
-hc_task_yjr5x1_0010m(direct) ->
+hc_task_yg_0010m(direct) ->
     ok;
 
-hc_task_yjr5x1_0010m(use_query_tree) ->
+hc_task_yg_0010m(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0010m",
+    TN = "task_yg_0010m",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0010m, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0010m, [use_query_tree], RS, 50),
 
     SessionId = "0010m",
     QueryId   = "1",
@@ -2402,12 +2394,12 @@ hc_task_yjr5x1_0010m(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0010m, [], RF, 50).
+    info_msg(hc_task_yg_0010m, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is the equivalent query
-%% of [NW08] YAGO B2 and task_yjr5x1_0010:
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is the equivalent query of [NW08] YAGO B2 and
+%% task_yg_0010:
 %% 
 %% <pre>
 %% ?p1    rdfs:label                 ?n1
@@ -2417,21 +2409,21 @@ hc_task_yjr5x1_0010m(use_query_tree) ->
 %% ?p2    &lt;wasBornIn&gt;          ?city
 %% </pre>
 %% 
-hc_task_yjr5x1_0010h() ->
-    hc_task_yjr5x1_0010h(use_query_tree).
+hc_task_yg_0010h() ->
+    hc_task_yg_0010h(use_query_tree).
 
-hc_task_yjr5x1_0010h(direct) ->
+hc_task_yg_0010h(direct) ->
     ok;
 
-hc_task_yjr5x1_0010h(use_query_tree) ->
+hc_task_yg_0010h(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0010h",
+    TN = "task_yg_0010h",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0010h, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0010h, [use_query_tree], RS, 50),
 
     SessionId = "0010h",
     QueryId   = "1",
@@ -2463,12 +2455,11 @@ hc_task_yjr5x1_0010h(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0010h, [], RF, 50).
+    info_msg(hc_task_yg_0010h, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is the equivalent query
-%% of [NW08] YAGO B2:
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is the equivalent query of [NW08] YAGO B2:
 %% 
 %% <pre>
 %% ?p1    rdfs:label                 ?n1
@@ -2478,21 +2469,21 @@ hc_task_yjr5x1_0010h(use_query_tree) ->
 %% ?p2    &lt;wasBornIn&gt;          ?city
 %% </pre>
 %% 
-hc_task_yjr5x1_0010() ->
-    hc_task_yjr5x1_0010(use_query_tree).
+hc_task_yg_0010() ->
+    hc_task_yg_0010(use_query_tree).
 
-hc_task_yjr5x1_0010(direct) ->
+hc_task_yg_0010(direct) ->
     ok;
 
-hc_task_yjr5x1_0010(use_query_tree) ->
+hc_task_yg_0010(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0010",
+    TN = "task_yg_0010",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0010, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0010, [use_query_tree], RS, 50),
 
     SessionId = "0010",
     QueryId   = "1",
@@ -2524,12 +2515,11 @@ hc_task_yjr5x1_0010(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0010, [], RF, 50).
+    info_msg(hc_task_yg_0010, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is the equivalent query
-%% of [NW08] YAGO B3:
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is the equivalent query of [NW08] YAGO B3:
 %% 
 %% <pre>
 %% ?p1    &lt;hasFamilyName&gt;      ?fn
@@ -2542,21 +2532,21 @@ hc_task_yjr5x1_0010(use_query_tree) ->
 %% ?p2    &lt;wasBornIn&gt;          ?city
 %% </pre>
 %% 
-hc_task_yjr5x1_0009() ->
-    hc_task_yjr5x1_0009(use_query_tree).
+hc_task_yg_0009() ->
+    hc_task_yg_0009(use_query_tree).
 
-hc_task_yjr5x1_0009(direct) ->
+hc_task_yg_0009(direct) ->
     ok;
 
-hc_task_yjr5x1_0009(use_query_tree) ->
+hc_task_yg_0009(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0009",
+    TN = "task_yg_0009",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0009, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0009, [use_query_tree], RS, 50),
 
     SessionId = "0009",
     QueryId   = "1",
@@ -2596,12 +2586,11 @@ hc_task_yjr5x1_0009(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0009, [], RF, 50).
+    info_msg(hc_task_yg_0009, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is the equivalent query
-%% of [NW08] YAGO A1:
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is the equivalent query of [NW08] YAGO A1:
 %% 
 %% <pre>
 %% ?p     &lt;hasGivenName&gt;       ?gn
@@ -2614,15 +2603,15 @@ hc_task_yjr5x1_0009(use_query_tree) ->
 %% ?city2 &lt;isLocatedIn&gt;        &lt;Germany&gt;
 %% </pre>
 %% 
-hc_task_yjr5x1_0008m() ->
+hc_task_yg_0008m() ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0008m",
+    TN = "task_yg_0008m",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0008m, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0008m, [use_query_tree], RS, 50),
 
     SessionId = "0008m",
     QueryId   = "1",
@@ -2662,12 +2651,11 @@ hc_task_yjr5x1_0008m() ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0008m, [], RF, 50).
+    info_msg(hc_task_yg_0008m, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is the equivalent query
-%% of [NW08] YAGO A1:
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is the equivalent query of [NW08] YAGO A1:
 %% 
 %% <pre>
 %% ?p     &lt;hasGivenName&gt;       ?gn
@@ -2680,21 +2668,21 @@ hc_task_yjr5x1_0008m() ->
 %% ?city2 &lt;isLocatedIn&gt;        &lt;Germany&gt;
 %% </pre>
 %% 
-hc_task_yjr5x1_0008() ->
-    hc_task_yjr5x1_0008(use_query_tree).
+hc_task_yg_0008() ->
+    hc_task_yg_0008(use_query_tree).
 
-hc_task_yjr5x1_0008(direct) ->
+hc_task_yg_0008(direct) ->
     ok;
 
-hc_task_yjr5x1_0008(use_query_tree) ->
+hc_task_yg_0008(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0008",
+    TN = "task_yg_0008",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0008, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0008, [use_query_tree], RS, 50),
 
     SessionId = "0008",
     QueryId   = "1",
@@ -2734,28 +2722,27 @@ hc_task_yjr5x1_0008(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0008, [], RF, 50).
+    info_msg(hc_task_yg_0008, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is the equivalent query
-%% of [NW08] YAGO C1.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is the equivalent query of [NW08] YAGO C1.
 %% 
-hc_task_yjr5x1_0007() ->
-    hc_task_yjr5x1_0007(use_query_tree).
+hc_task_yg_0007() ->
+    hc_task_yg_0007(use_query_tree).
 
-hc_task_yjr5x1_0007(direct) ->
+hc_task_yg_0007(direct) ->
     ok;
 
-hc_task_yjr5x1_0007(use_query_tree) ->
+hc_task_yg_0007(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0007",
+    TN = "task_yg_0007",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0007, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0007, [use_query_tree], RS, 50),
 
     SessionId = "0007",
     QueryId   = "1",
@@ -2786,12 +2773,11 @@ hc_task_yjr5x1_0007(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0007, [], RF, 50).
+    info_msg(hc_task_yg_0007, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is the equivalent query
-%% of [NW08] YAGO C2.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is the equivalent query of [NW08] YAGO C2.
 %% 
 %% <pre>
 %% sparql
@@ -2822,22 +2808,22 @@ hc_task_yjr5x1_0007(use_query_tree) ->
 %% 
 %% </pre>
 %% 
-hc_task_yjr5x1_0006() ->
-    hc_task_yjr5x1_0006(use_query_tree).
+hc_task_yg_0006() ->
+    hc_task_yg_0006(use_query_tree).
 
-hc_task_yjr5x1_0006(direct) ->
+hc_task_yg_0006(direct) ->
     ok;
 
 %%   ?c1 rdf:type yago:wordnet_village_108672738 .
-hc_task_yjr5x1_0006(use_query_tree) ->
+hc_task_yg_0006(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0006",
+    TN = "task_yg_0006",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0006, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0006, [use_query_tree], RS, 50),
 
     SessionId = "0006",
     QueryId   = "1",
@@ -2871,12 +2857,11 @@ hc_task_yjr5x1_0006(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0006, [], RF, 50).
+    info_msg(hc_task_yg_0006, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is the equivalent query
-%% of [NW08] YAGO B1.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is the equivalent query of [NW08] YAGO B1.
 %% 
 %% <table border="3">
 %% <tr><th>Pattern</th><th>Num</th></tr>
@@ -2896,15 +2881,15 @@ hc_task_yjr5x1_0006(use_query_tree) ->
 %% 
 %% </table>
 %% 
-hc_task_yjr5x1_0005m() ->
+hc_task_yg_0005m() ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0005m",
+    TN = "task_yg_0005m",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0005m, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0005m, [use_query_tree], RS, 50),
 
     SessionId = "0005m",
     QueryId   = "1",
@@ -2938,12 +2923,11 @@ hc_task_yjr5x1_0005m() ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0005m, [], RF, 50).
+    info_msg(hc_task_yg_0005m, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment. This is the equivalent query
-%% of [NW08] YAGO B1.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment. This is the equivalent query of [NW08] YAGO B1.
 %% 
 %% <table border="3">
 %% <tr><th>Pattern</th><th>Num</th></tr>
@@ -2963,168 +2947,18 @@ hc_task_yjr5x1_0005m() ->
 %% 
 %% </table>
 %% 
-hc_task_yjr5x1_0005() ->
-    hc_task_yjr5x1_0005(use_query_tree).
-    %% hc_task_yjr5x1_0005(direct).
+hc_task_yg_0005() ->
+    hc_task_yg_0005(use_query_tree).
 
-hc_task_yjr5x1_0005(direct) ->
-    SW = stop_watch,
-    TN = "task_yjr5x1_0005",
-    RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    BM = {get(process_id), node()},
-    info_msg(hc_task_yjr5x1_0005, [direct], RS, 50),
-
-    %% NC = 'b3ss02@circus.rlab.miniy.yahoo.co.jp',    % column 5
-    NI = 'b3ss02@innocents.rlab.miniy.yahoo.co.jp', % column 4
-    %% NE = 'b3ss02@erasure.rlab.miniy.yahoo.co.jp',   % column 3
-    NL = 'b3ss02@loveboat.rlab.miniy.yahoo.co.jp',  % column 2
-    %% NN = 'b3ss02@nightbird.rlab.miniy.yahoo.co.jp', % column 1
-
-    SI01 = "qn-0005",
-    QI01 = "1",
-    QN01 = "1",
-    QA01 = hty_construct_pid(SI01, QI01, QN01),
-    TP01 = {"?i6", "?c2", "<isLocatedIn>", "<England>"}, % column 2
-    VP01 = #{"?i6" => 1, "?c2" => 2},
-
-    QN02 = "2",
-    QA02 = hty_construct_pid(SI01, QI01, QN02),
-    TP02 = {"?i5", "?a2", "<livesIn>", "?c2"},	% column 4
-    VP02 = #{"?i5" => 1, "?a2" => 2, "?c2" => 4},
-
-    QN03 = "3",
-    QA03 = hty_construct_pid(SI01, QI01, QN03),
-    GP03 = maps:from_list([{QN01, TP01}, {QN02, TP02}]),
-    VP03 = #{"?i6" => [{QN01, 1}],
-    	     "?c2" => [{QN01, 2}, {QN02, 4}],
-    	     "?i5" => [{QN02, 1}],
-    	     "?a2" => [{QN02, 2}]},
-    JV03 = ["?c2"],				% column 2
-    OL03 = [{QA01, NL}],
-    IL03 = [{QA02, NI}],
-
-    QN04 = "4",
-    QA04 = hty_construct_pid(SI01, QI01, QN04),
-    TP04 = {"?i4", "?a2", "<actedIn>", "?movie"}, % column 2
-    VP04 = #{"?i4" => 1, "?a2" => 2, "?movie" => 4},
-
-    QN05 = "5",
-    QA05 = hty_construct_pid(SI01, QI01, QN05),
-    GP05 = maps:from_list([{QN01, TP01}, {QN02, TP02}, {QN04, TP04}]),
-    VP05 = #{"?i6"    => [{QN01, 1}],
-    	     "?c2"    => [{QN01, 2}, {QN02, 4}],
-    	     "?i5"    => [{QN02, 1}],
-    	     "?a2"    => [{QN02, 2}, {QN04, 2}],
-    	     "?i4"    => [{QN04, 1}],
-    	     "?movie" => [{QN04, 4}]
-	    },
-    JV05 = ["?a2"],				% column 2
-    OL05 = [{QA03, NL}],
-    IL05 = [{QA04, NL}],
-
-    QN06 = "6",
-    QA06 = hty_construct_pid(SI01, QI01, QN06),
-    TP06 = {"?i3", "?a1", "<actedIn>", "?movie"}, % column 2
-    VP06 = #{"?i3" => 1, "?a1" => 2, "?movie" => 4},
-
-    QN07 = "7",
-    QA07 = hty_construct_pid(SI01, QI01, QN07),
-    GP07 = maps:from_list([{QN01, TP01}, {QN02, TP02}, {QN04, TP04},
-			   {QN06, TP06}]),
-    VP07 = #{"?i6"    => [{QN01, 1}],
-    	     "?c2"    => [{QN01, 2}, {QN02, 4}],
-    	     "?i5"    => [{QN02, 1}],
-    	     "?a2"    => [{QN02, 2}, {QN04, 2}],
-    	     "?i4"    => [{QN04, 1}],
-    	     "?movie" => [{QN04, 4}, {QN06, 4}],
-    	     "?i3"    => [{QN06, 1}],
-    	     "?a1"    => [{QN06, 2}]
-	    },
-    JV07 = ["?movie"],				% column 2
-    OL07 = [{QA05, NL}],
-    IL07 = [{QA06, NL}],
-
-    QN08 = "8",
-    QA08 = hty_construct_pid(SI01, QI01, QN08),
-    TP08 = {"?i2", "?a1", "<livesIn>", "?c1"}, % column 4
-    VP08 = #{"?i2" => 1, "?a1" => 2, "?c1" => 4},
-
-    QN09 = "9",
-    QA09 = hty_construct_pid(SI01, QI01, QN09),
-    GP09 = maps:from_list([{QN01, TP01}, {QN02, TP02}, {QN04, TP04},
-			   {QN06, TP06}, {QN08, TP08}]),
-    VP09 = #{"?i6"    => [{QN01, 1}],
-    	     "?c2"    => [{QN01, 2}, {QN02, 4}],
-    	     "?i5"    => [{QN02, 1}],
-    	     "?a2"    => [{QN02, 2}, {QN04, 2}],
-    	     "?i4"    => [{QN04, 1}],
-    	     "?movie" => [{QN04, 4}, {QN06, 4}],
-    	     "?i3"    => [{QN06, 1}],
-    	     "?a1"    => [{QN06, 2}, {QN08, 2}],
-    	     "?i2"    => [{QN08, 1}],
-    	     "?c1"    => [{QN08, 4}]
-	    },
-    JV09 = ["?a1"],				% column 4
-    OL09 = [{QA07, NL}],
-    IL09 = [{QA08, NI}],
-
-    QN10 = "10",
-    QA10 = hty_construct_pid(SI01, QI01, QN10),
-    TP10 = {"?i1", "?c1", "<isLocatedIn>", "<England>"}, % column 2
-    VP10 = #{"?i1" => 1, "?c1" => 2},
-
-    QN11 = "11",
-    QA11 = hty_construct_pid(SI01, QI01, QN11),
-    GP11 = maps:from_list([{QN01, TP01}, {QN02, TP02}, {QN04, TP04},
-			   {QN06, TP06}, {QN08, TP08}, {QN10, TP10}]),
-    VP11 = #{"?i6"    => [{QN01, 1}],
-    	     "?c2"    => [{QN01, 2}, {QN02, 4}],
-    	     "?i5"    => [{QN02, 1}],
-    	     "?a2"    => [{QN02, 2}, {QN04, 2}],
-    	     "?i4"    => [{QN04, 1}],
-    	     "?movie" => [{QN04, 4}, {QN06, 4}],
-    	     "?i3"    => [{QN06, 1}],
-    	     "?a1"    => [{QN06, 2}, {QN08, 2}],
-    	     "?i2"    => [{QN08, 1}],
-    	     "?c1"    => [{QN08, 4}, {QN10, 2}],
-    	     "?i1"    => [{QN10, 1}]
-	    },
-    JV11 = ["?c1"],				% column 2
-    OL11 = [{QA09, NI}],
-    IL11 = [{QA10, NL}],
-
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NL, {QA03, NL}, outer),
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NI, {QA03, NL}, inner),
-    hty_restart_jqn(QN03, QI01, SI01, GP03, VP03, JV03,
-		    NL, {QA05, NL}, OL03, IL03),
-    hty_restart_tpqn(QN04, QI01, SI01, TP04, VP04, NL, {QA05, NL}, inner),
-    hty_restart_jqn(QN05, QI01, SI01, GP05, VP05, JV05,
-		    NL, {QA07, NL}, OL05, IL05),
-    hty_restart_tpqn(QN06, QI01, SI01, TP06, VP06, NL, {QA07, NL}, inner),
-    hty_restart_jqn(QN07, QI01, SI01, GP07, VP07, JV07,
-		    NL, {QA09, NI}, OL07, IL07),
-    hty_restart_tpqn(QN08, QI01, SI01, TP08, VP08, NI, {QA09, NI}, inner),
-    hty_restart_jqn(QN09, QI01, SI01, GP09, VP09, JV09,
-		    NI, {QA11, NL}, OL09, IL09),
-    hty_restart_tpqn(QN10, QI01, SI01, TP10, VP10, NL, {QA11, NL}, inner),
-    hty_restart_jqn(QN11, QI01, SI01, GP11, VP11, JV11, NL, BM, OL11, IL11),
-
-    gen_server:call({QA11, NL}, {eval, []}),
-    F = fun(_) -> gen_server:cast({QA11, NL}, {empty, BM}) end,
-    lists:map(F, lists:duplicate(1, a)),
-
-    RF = gen_server:call(SW, {record, {TN, {task_started, ok}}}),
-    info_msg(hc_task_yjr5x1_0005, [], RF, 50);
-
-hc_task_yjr5x1_0005(use_query_tree) ->
+hc_task_yg_0005(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0005",
+    TN = "task_yg_0005",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0005, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0005, [use_query_tree], RS, 50),
 
     SessionId = "0005",
     QueryId   = "1",
@@ -3158,11 +2992,11 @@ hc_task_yjr5x1_0005(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0005, [], RF, 50).
+    info_msg(hc_task_yg_0005, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment.
 %% 
 %% <pre>
 %% sparql
@@ -3173,15 +3007,15 @@ hc_task_yjr5x1_0005(use_query_tree) ->
 %% } ;
 %% </pre>
 %% 
-hc_task_yjr5x1_0004m() ->
+hc_task_yg_0004m() ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0004m",
+    TN = "task_yg_0004m",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0004m, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0004m, [], RS, 50),
 
     SessionId = "0004m",
     QueryId   = "1",
@@ -3203,11 +3037,11 @@ hc_task_yjr5x1_0004m() ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0004m, [], RF, 50).
+    info_msg(hc_task_yg_0004m, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment.
 %% 
 %% <pre>
 %% sparql
@@ -3218,21 +3052,21 @@ hc_task_yjr5x1_0004m() ->
 %% } ;
 %% </pre>
 %% 
-hc_task_yjr5x1_0004() ->
-    hc_task_yjr5x1_0004(use_query_tree).
+hc_task_yg_0004() ->
+    hc_task_yg_0004(use_query_tree).
 
-hc_task_yjr5x1_0004(direct) ->
+hc_task_yg_0004(direct) ->
     ok;
 
-hc_task_yjr5x1_0004(use_query_tree) ->
+hc_task_yg_0004(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0004",
+    TN = "task_yg_0004",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0004, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0004, [use_query_tree], RS, 50),
 
     SessionId = "0004",
     QueryId   = "1",
@@ -3254,11 +3088,11 @@ hc_task_yjr5x1_0004(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0004, [], RF, 50).
+    info_msg(hc_task_yg_0004, [use_query_tree], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment.
 %% 
 %% <table border="3">
 %% <tr><th>Pattern</th><th>Num</th></tr>
@@ -3269,15 +3103,15 @@ hc_task_yjr5x1_0004(use_query_tree) ->
 %% 
 %% </table>
 %% 
-hc_task_yjr5x1_0003h() ->
+hc_task_yg_0003h() ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0003h",
+    TN = "task_yg_0003h",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0003h, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0003h, [], RS, 50),
 
     SessionId = "0003h",
     QueryId   = "1",
@@ -3299,11 +3133,11 @@ hc_task_yjr5x1_0003h() ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0003h, [], RF, 50).
+    info_msg(hc_task_yg_0003h, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment.
 %% 
 %% <table border="3">
 %% <tr><th>Pattern</th><th>Num</th></tr>
@@ -3314,18 +3148,18 @@ hc_task_yjr5x1_0003h() ->
 %% 
 %% </table>
 %% 
-hc_task_yjr5x1_0003() ->
-    hc_task_yjr5x1_0003(use_query_tree).
+hc_task_yg_0003() ->
+    hc_task_yg_0003(use_query_tree).
 
-hc_task_yjr5x1_0003(use_query_tree) ->
+hc_task_yg_0003(use_query_tree) ->
     BS       = gen_server:call(node_state, {get, b3s_state_pid}),
     [FS | _] = gen_server:call(BS, {get, front_server_nodes}),
     RRM      = gen_server:call(BS, {get, result_record_max}),
     put(result_record_max, RRM),
     SW = stop_watch,
-    TN = "task_yjr5x1_0003",
+    TN = "task_yg_0003",
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0003, [use_query_tree], RS, 50),
+    info_msg(hc_task_yg_0003, [use_query_tree], RS, 50),
 
     SessionId = "0003",
     QueryId   = "1",
@@ -3347,102 +3181,26 @@ hc_task_yjr5x1_0003(use_query_tree) ->
     put(pid_start, maps:put(QT, os:timestamp(), get(pid_start))),
     RM = {task_started, DateTime, R01, R02},
     RF = gen_server:call(SW, {record, {TN, RM}}),
-    info_msg(hc_task_yjr5x1_0003, [], RF, 50);
-
-hc_task_yjr5x1_0003(direct) ->
-    SW = stop_watch,
-    TN = "task_yjr5x1_0003",
-    RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    BM = {get(process_id), node()},
-    info_msg(hc_task_yjr5x1_0003, [direct], RS, 50),
-
-    NC = 'b3ss02@circus.rlab.miniy.yahoo.co.jp',
-    NI = 'b3ss02@innocents.rlab.miniy.yahoo.co.jp',
-    NE = 'b3ss02@erasure.rlab.miniy.yahoo.co.jp',
-    NL = 'b3ss02@loveboat.rlab.miniy.yahoo.co.jp',
-    NN = 'b3ss02@nightbird.rlab.miniy.yahoo.co.jp',
-
-    SI01 = "qn-0003",
-    QI01 = "1",
-    QN01 = "1",
-    QA01 = hty_construct_pid(SI01, QI01, QN01),
-    TP01o = {"?id1", "<Slovenia>", "?prd", "?obj1"},
-    case ?STRING_ID_CODING_METHOD of
-	string_integer ->
-	    TP01 = string_id:encode_triple_pattern(TP01o);
-	_ ->
-	    TP01 = TP01o
-    end,
-    VP01 = #{"?id1" => 1, "?prd" => 3, "?obj1" => 4},
-
-    QN02 = "2",
-    QA02 = hty_construct_pid(SI01, QI01, QN02),
-    TP02o = {"?id2", "<Japan>", "?prd", "?obj2"},
-    case ?STRING_ID_CODING_METHOD of
-	string_integer ->
-	    TP02 = string_id:encode_triple_pattern(TP02o);
-	_ ->
-	    TP02 = TP02o
-    end,
-    VP02 = #{"?id2" => 1, "?prd" => 3, "?obj2" => 4},
-
-    QN03 = "3",
-    QA03 = hty_construct_pid(SI01, QI01, QN03),
-    GP03 = maps:from_list([{QN01, TP01}, {QN02, TP02}]),
-    VP03 = #{"?Id1"  => [{QN01, 1}],
-    	     "?prd"  => [{QN01, 3}, {QN02, 3}],
-    	     "?obj1" => [{QN01, 4}],
-    	     "?id2"  => [{QN02, 1}],
-    	     "?obj2" => [{QN02, 4}]},
-    JV03 = ["?prd"],
-    OL03 = [{QA01, NC}, {QA01, NI}, {QA01, NE}, {QA01, NL}, {QA01, NN}],
-    IL03 = [{QA02, NC}, {QA02, NI}, {QA02, NE}, {QA02, NL}, {QA02, NN}],
-
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NC, {QA03, NN}, outer),
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NI, {QA03, NN}, outer),
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NE, {QA03, NN}, outer),
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NL, {QA03, NN}, outer),
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NN, {QA03, NN}, outer),
-
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NC, {QA03, NN}, inner),
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NI, {QA03, NN}, inner),
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NE, {QA03, NN}, inner),
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NL, {QA03, NN}, inner),
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NN, {QA03, NN}, inner),
-
-    hty_restart_jqn(QN03, QI01, SI01, GP03, VP03, JV03, NN, BM, OL03, IL03),
-    gen_server:call({QA03, NN}, {eval, []}),
-    F = fun(_) -> gen_server:cast({QA03, NN}, {empty, BM}) end,
-    lists:map(F, lists:duplicate(10, a)),
-
-    RF = gen_server:call(SW, {record, {TN, {task_started, ok}}}),
-    info_msg(hc_task_yjr5x1_0003, [], RF, 50).
+    info_msg(hc_task_yg_0003, [], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment.
 %% 
-hc_task_yjr5x1_0002() ->
-    hc_task_yjr5x1_0002(direct).
+hc_task_yg_0002() ->
+    hc_task_yg_0002(direct_variable_columns).
 
-hc_task_yjr5x1_0002(use_query_tree) ->
+hc_task_yg_0002(use_query_tree) ->
     ok;
 
-hc_task_yjr5x1_0002(direct) ->
+hc_task_yg_0002(direct_variable_columns) ->
     SW = stop_watch,
-    TN = "task_yjr5x1_0002",
+    TN = "task_yg_0002",
     BM   = {list_to_atom(TN), node()},
     MEV  = {eval, []},
     MEM  = {empty, BM},
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0002, [direct], RS, 50),
-
-    %% NW = 'b3ss02@wild.rlab.miniy.yahoo.co.jp',
-    NC = 'b3ss02@circus.rlab.miniy.yahoo.co.jp',
-    NI = 'b3ss02@innocents.rlab.miniy.yahoo.co.jp',
-    NE = 'b3ss02@erasure.rlab.miniy.yahoo.co.jp',
-    NL = 'b3ss02@loveboat.rlab.miniy.yahoo.co.jp',
-    NN = 'b3ss02@nightbird.rlab.miniy.yahoo.co.jp',
+    info_msg(hc_task_yg_0002, [direct_variable_columns], RS, 50),
 
     P01 = "<startedOnDate>",
     P02 = "<endedOnDate>",
@@ -3454,9 +3212,7 @@ hc_task_yjr5x1_0002(direct) ->
     TP01o = {"?id1", "?sbj", P01, "?obj1"},
     case ?STRING_ID_CODING_METHOD of
 	string_integer ->
-	    TP01 = string_id:encode_triple_pattern(TP01o);
-	_ ->
-	    TP01 = TP01o
+	    TP01 = string_id:encode_triple_pattern(TP01o)
     end,
     VP01 = #{"?id1" => 1, "?sbj" => 2, "?obj1" => 4},
 
@@ -3466,9 +3222,7 @@ hc_task_yjr5x1_0002(direct) ->
     case ?STRING_ID_CODING_METHOD of
 	string_integer ->
 	    TP02 = string_id:encode_triple_pattern(TP02o),
-	    db_interface:db_disconnect();
-	_ ->
-	    TP02 = TP02o
+	    db_interface:db_disconnect()
     end,
     VP02 = #{"?id2" => 1, "?sbj" => 2, "?obj2" => 4},
 
@@ -3481,41 +3235,44 @@ hc_task_yjr5x1_0002(direct) ->
     	     "?id2"  => [{QN02, 1}],
     	     "?obj2" => [{QN02, 4}]},
     JV03 = ["?sbj"],
-    OL03 = [{QA01, NC}, {QA01, NI}, {QA01, NE}, {QA01, NL}, {QA01, NN}],
-    IL03 = [{QA02, NC}, {QA02, NI}, {QA02, NE}, {QA02, NL}, {QA02, NN}],
 
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NC, {QA03, NN}, outer),
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NI, {QA03, NN}, outer),
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NE, {QA03, NN}, outer),
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NL, {QA03, NN}, outer),
-    hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, NN, {QA03, NN}, outer),
+    QS1 = lists:flatten(io_lib:format("(~s) ~s ~s ~s", tuple_to_list(TP01o))),
+    QS2 = lists:flatten(io_lib:format("(~s) ~s ~s ~s", tuple_to_list(TP02o))),
+    QSL = [lists:flatten(QS1), lists:flatten(QS2)],
+    put(query_string, QSL),
 
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NC, {QA03, NN}, inner),
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NI, {QA03, NN}, inner),
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NE, {QA03, NN}, inner),
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NL, {QA03, NN}, inner),
-    hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, NN, {QA03, NN}, inner),
+    DSL = hty_get_one_nodes_for_each_column(),
+    DS1 = lists:nth(1, DSL),
+    FO = fun (N) -> {QA01, N} end,
+    FI = fun (N) -> {QA02, N} end,
+    FE = fun (_) -> gen_server:cast({QA03, DS1}, MEM) end,
+    OL03 = lists:map(FO, DSL),
+    IL03 = lists:map(FI, DSL),
+    FR = fun (N) ->
+		 hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, N, {QA03, DS1}, outer),
+		 hty_restart_tpqn(QN02, QI01, SI01, TP02, VP02, N, {QA03, DS1}, inner)
+	 end,
 
-    hty_restart_jqn(QN03, QI01, SI01, GP03, VP03, JV03, NN, BM, OL03, IL03),
-    gen_server:call({QA03, NN}, MEV),
-    F = fun(_) -> gen_server:cast({QA03, NN}, MEM) end,
-    lists:map(F, lists:duplicate(10, a)),
+    lists:map(FR, DSL),
+    hty_restart_jqn(QN03, QI01, SI01, GP03, VP03, JV03, DS1, BM, OL03, IL03),
+    gen_server:call({QA03, DS1}, MEV),
+    lists:map(FE, lists:duplicate(10, a)),
 
     RF = gen_server:call(SW, {record, {TN, {task_started, ok}}}),
-    info_msg(hc_task_yjr5x1_0002, [], RF, 50).
+    info_msg(hc_task_yg_0002, [direct_variable_columns], RF, 50).
 
 %% 
-%% @doc This function performs a benchmark task for the Yahoo Japan
-%% Research's big six server environment.
+%% @doc This function performs a benchmark task for the YAGO2s
+%% environment.
 %% 
-hc_task_yjr5x1_0001() ->
-    hc_task_yjr5x1_0001(direct).
+hc_task_yg_0001() ->
+    hc_task_yg_0001(direct_variable_columns).
 
-hc_task_yjr5x1_0001(use_query_tree) ->
+hc_task_yg_0001(use_query_tree) ->
     ok;
 
-hc_task_yjr5x1_0001(direct) ->
-    TN = "task_yjr5x1_0001",
+hc_task_yg_0001(direct) ->
+    TN = "task_yg_0001",
     BM   = {list_to_atom(TN), node()},
     MEV  = {eval, []},
     MEM  = {empty, BM},
@@ -3526,14 +3283,13 @@ hc_task_yjr5x1_0001(direct) ->
 
     SW = stop_watch,
     RS = gen_server:call(SW, {start, hty_prep(TN)}),
-    info_msg(hc_task_yjr5x1_0001, [direct], RS, 50),
+    info_msg(hc_task_yg_0001, [direct], RS, 50),
 
-    %% NW = 'b3ss02@wild.rlab.miniy.yahoo.co.jp',
-    NC = 'b3ss02@circus.rlab.miniy.yahoo.co.jp',
-    NI = 'b3ss02@innocents.rlab.miniy.yahoo.co.jp',
-    NE = 'b3ss02@erasure.rlab.miniy.yahoo.co.jp',
-    NL = 'b3ss02@loveboat.rlab.miniy.yahoo.co.jp',
-    NN = 'b3ss02@nightbird.rlab.miniy.yahoo.co.jp',
+    NC = lists:nth(1, hty_get_nodes_from_column_id(1)),
+    NI = lists:nth(1, hty_get_nodes_from_column_id(2)),
+    NE = lists:nth(1, hty_get_nodes_from_column_id(3)),
+    NL = lists:nth(1, hty_get_nodes_from_column_id(4)),
+    NN = lists:nth(1, hty_get_nodes_from_column_id(5)),
 
     SI01 = "qn-0001",
     QI01 = "1",
@@ -3543,9 +3299,7 @@ hc_task_yjr5x1_0001(direct) ->
     case ?STRING_ID_CODING_METHOD of
 	string_integer ->
 	    TP01 = string_id:encode_triple_pattern(TP01o),
-	    db_interface:db_disconnect();
-	_ ->
-	    TP01 = TP01o
+	    db_interface:db_disconnect()
     end,
     VP01 = #{"?id" => 1, "?sbj" => 2, "?obj" => 4},
     QL01 = [{QA01, NC}, {QA01, NI}, {QA01, NE}, {QA01, NL}, {QA01, NN}],
@@ -3558,7 +3312,55 @@ hc_task_yjr5x1_0001(direct) ->
     lists:map(F01, QL01),
 
     RF = gen_server:call(SW, {record, {TN, {task_started, ok}}}),
-    info_msg(hc_task_yjr5x1_0001, [], RF, 50).
+    info_msg(hc_task_yg_0001, [], RF, 50);
+
+hc_task_yg_0001(direct_variable_columns) ->
+    TN  = "task_yg_0001",
+    BM  = {list_to_atom(TN), node()},
+    MEV = {eval, []},
+    MEM = {empty, BM},
+
+    SW = stop_watch,
+    RS = gen_server:call(SW, {start, hty_prep(TN)}),
+    info_msg(hc_task_yg_0001, [direct_variable_columns], RS, 50),
+
+    SI01 = "qn-0001",
+    QI01 = "1",
+    QN01 = "1",
+    QA01 = hty_construct_pid(SI01, QI01, QN01),
+    TP01o = {"?id", "?sbj", "<startedOnDate>", "?obj"},
+    case ?STRING_ID_CODING_METHOD of
+	string_integer ->
+	    TP01 = string_id:encode_triple_pattern(TP01o),
+	    db_interface:db_disconnect()
+    end,
+    VP01 = #{"?id" => 1, "?sbj" => 2, "?obj" => 4},
+
+    QS = io_lib:format("(~s) ~s ~s ~s", tuple_to_list(TP01o)),
+    put(query_string, [lists:flatten(QS)]),
+
+    F = fun (N) -> 
+		hty_restart_tpqn(QN01, QI01, SI01, TP01, VP01, N, BM, outer),
+		gen_server:call({QA01, N}, MEV),
+		gen_server:cast({QA01, N}, MEM)
+	end,
+    lists:map(F, hty_get_one_nodes_for_each_column()),
+
+    RF = gen_server:call(SW, {record, {TN, {task_started, ok}}}),
+    info_msg(hc_task_yg_0001, [direct_variable_columns], RF, 50).
+
+hty_get_one_nodes_for_each_column() ->
+    BS = b3s_state,
+    CR = gen_server:call(BS, {get, clm_row_conf}),
+    KL = maps:keys(CR),
+    F = fun (C) -> lists:nth(1, hty_get_nodes_from_column_id(C)) end,
+    lists:map(F, KL).
+
+hty_get_nodes_from_column_id(ColumnId) ->
+    BS = b3s_state,
+    DS = gen_server:call(BS, {get, data_server_nodes}),
+    F = fun ({N, C}) when C == ColumnId -> {true, N}; (_) -> false end,
+    lists:filtermap(F, DS).
 
 hty_prep(TN) ->
     put(process_id,  list_to_atom(TN)),
@@ -3788,79 +3590,13 @@ bt_site(local2) ->
        ?_assertMatch(ok, b3s:stop())
       ]}};
 
-%% This function performs unit tests for the Yahoo Japan Research's
-%% six big server environment. It assumes that {@link b3s_state} and
-%% {@link node_state} processes are appropreately invoked. This could
-%% be performed executing unit tests of {@link node_state} module.
-bt_site(yjr6) ->
-    NW   = 'b3ss02@wild.rlab.miniy.yahoo.co.jp',
-    NC   = 'b3ss02@circus.rlab.miniy.yahoo.co.jp',
-    NI   = 'b3ss02@innocents.rlab.miniy.yahoo.co.jp',
-    NE   = 'b3ss02@erasure.rlab.miniy.yahoo.co.jp',
-    NL   = 'b3ss02@loveboat.rlab.miniy.yahoo.co.jp',
-    NN   = 'b3ss02@nightbird.rlab.miniy.yahoo.co.jp',
-    NN1  = 'b3ss01@nightbird.rlab.miniy.yahoo.co.jp',
-
-    ML   =
-	[
-	 db_interface,
-	 tp_query_node,
-	 join_query_node,
-	 node_state,
-	 repeater,
-	 stop_watch
-	],
-    UPDM = {update_modules, ML},
-    BSCS = b3s_state:child_spec(),
-
-    BMC  = {benchmark, NN},
-    BS   = b3s_state,
-    BS1  = {b3s_state, NN1},
-    NTT  = name_of_triple_tables,
-    YG2S = [
-	    {NW, ts_yago2s01},
-	    {NC, ts_yago2s01},
-	    {NI, ts_yago2s01},
-	    {NE, ts_yago2s01},
-	    {NL, ts_yago2s01},
-	    {NN, ts_yago2s01}
-	   ],
-
-    R01  = [NN1, NL, NN, NW, NC, NE, NI],
-    R02  = {ok, benchmark},
-
-    {inorder,
-     [
-      ?_assertMatch(ok,        b3s:start()),
-      ?_assertMatch(ok,        b3s:bootstrap()),
-      ?_assertMatch({ok, _},   supervisor:start_child(b3s, BSCS)),
-      ?_assertMatch(ok,        gen_server:call(BS, {put, NTT, YG2S})),
-      ?_assertMatch(ok,        gen_server:call(BS, {clone, NN1})),
-      ?_assertMatch(R01,       gen_server:call(BS1, propagate)),
-      ?_assertMatch(R02,       rpc:call(NN, c, c, [benchmark])),
-      ?_assertMatch(ok,        benchmark:stop(NN)),
-      ?_assertMatch({ok, BMC}, benchmark:start(NN)),
-      {timeout, 30,
-       [?_assertMatch(ok,        gen_server:call(BMC, UPDM, 30000))]},
-%      ?_assertMatch(ok,        gen_server:cast(BMC, task_yjr6_0001)),
-%      ?_assertMatch(ok,        gen_server:cast(BMC, task_yjr6_0002)),
-      %%%%%%%%%%%%%%%%%%%%%%%%%
-      %%                     %%
-      %% Use 'make sb1|sb2'! %%
-      %%                     %%
-      %%%%%%%%%%%%%%%%%%%%%%%%%
-      ?_assertMatch(ok,        b3s:stop())
-     ]};
-
 bt_site(_) ->
     [].
 
 bsl2() ->
     case ?STRING_ID_CODING_METHOD of
 	string_integer ->
-	    bsl2_sid();
-	_ ->
-	    bsl2_prev()
+	    bsl2_sid()
     end.
 
 bsl2_sid() ->
@@ -3919,60 +3655,6 @@ bsl2_sid() ->
       ?_assertMatch(ok,  gen_server:cast(BMD, task_local2_0005)),
       {timeout, 10000,
        ?_assertMatch(ok,  timer:sleep(10000))},
-      ?_assertMatch(351, F01('qt-0005-1')),
-      ?_assertMatch(NF,  NF)
-     ]}.    
-
-bsl2_prev() ->
-    BSF = gen_server:call(node_state, {get, b3s_state_pid}),
-    [{DSN, _}|_] = gen_server:call(BSF, {get, data_server_nodes}),
-    {_, FSN} = BSF,
-    BSD = {b3s_state, DSN},
-    BMD = {benchmark, DSN},
-    TDF = {triple_distributor, FSN},
-    CRC = gen_server:call(TDF, {get_property, clm_row_conf}),
-    PCM = gen_server:call(TDF, {get_property, pred_clm}),
-    PFM = gen_server:call(TDF, {get_property, pred_freq}),
-
-    NF  = not_finished,
-    R01 = [FSN, DSN],
-    R02 = {ok, BMD},
-    R03 = maps:put({'qn-0001-1-3', DSN}, 2, #{}),
-    F01 = fun (X) ->
-		  RQ = gen_server:call({X, DSN}, {get, result_queue}),
-		  case RQ of
-		      undefined -> NF;
-		      _ ->
-			  QL = queue:to_list(RQ),
-			  FL = fun (Y) -> length(Y) end,
-			  lists:sum(lists:map(FL, QL)) - 1
-			  %% length(queue:to_list(RQ)) - 1
-		  end
-	  end,
-
-    {inorder,
-     [
-      ?_assertMatch(ok,  gen_server:call(BSF, {put, clm_row_conf, CRC})),
-      ?_assertMatch(ok,  gen_server:call(BSF, {put, pred_clm,     PCM})),
-      ?_assertMatch(ok,  gen_server:call(BSF, {put, pred_freq,    PFM})),
-      ?_assertMatch(ok,  gen_server:call(BSF, {clone, DSN})),
-      ?_assertMatch(R01, gen_server:call(BSD, propagate)),
-      ?_assertMatch(R02, benchmark:start(DSN)),
-      ?_assertMatch(ok,  gen_server:cast(BMD, task_local2_0001)),
-      ?_assertMatch(ok,  timer:sleep(1000)),
-      ?_assertMatch(R03, gen_server:call(BMD, {get, result_freq})),
-      ?_assertMatch(ok,  gen_server:cast(BMD, task_local2_0002)),
-      ?_assertMatch(ok,  timer:sleep(1000)),
-      ?_assertMatch(2,   F01('qt-0002-1')),
-      ?_assertMatch(ok,  gen_server:cast(BMD, task_local2_0003)),
-      ?_assertMatch(ok,  timer:sleep(1000)),
-      ?_assertMatch(672, F01('qt-0003-1')),
-      %% ?_assertMatch(642, F01('qt-0003-1')),
-      ?_assertMatch(ok,  gen_server:cast(BMD, task_local2_0004)),
-      ?_assertMatch(ok,  timer:sleep(1000)),
-      ?_assertMatch(65,  F01('qt-0004-1')),
-      ?_assertMatch(ok,  gen_server:cast(BMD, task_local2_0005)),
-      ?_assertMatch(ok,  timer:sleep(4500)),
       ?_assertMatch(351, F01('qt-0005-1')),
       ?_assertMatch(NF,  NF)
      ]}.    

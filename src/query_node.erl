@@ -1,7 +1,7 @@
 %%
 %% Query Node
 %%
-%% @copyright 2015-2016 UP FAMNIT and Yahoo Japan Corporation
+%% @copyright 2015-2019 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since September, 2015
 %% @author Iztok Savnik <iztok.savnik@famnit.upr.si>
@@ -104,7 +104,6 @@
 %% The side of query node is its position in relation to parent.
 %%
 
-
 -module(query_node).
 -export(
    [
@@ -200,24 +199,6 @@ queue_empty(Queue) ->
     info_msg(queue_empty, [get(self), {queue,Queue}, {B, get(B)}, {Q, get(Q)}, {return,Res}, get(state)], check_empty, 50),
     Res.
 
-%%queue_empty(Queue) -> 
-%%  error_msg(queue_empty, [get(self), {queue,Queue}, {all,get()}, get(state)], wrong_queue),
-%%  fail.
-
-%% 
-%% @doc Check if queue Queue incudes messages prepared to be read from or 
-%% sent to remote process. 
-%% 
-%% @spec queue_prepared(Queue::atom()) -> boolean() 
-%% 
-queue_prepared(Queue) ->
-    %% gen atom for queue
-    Q = list_to_atom(string:concat("queue_",atom_to_list(Queue))),
-    B = list_to_atom(string:concat("buff_",atom_to_list(Queue))),
-    Res = not queue:is_empty(get(Q)),
-    info_msg(queue_prepared, [get(self), {queue,Queue}, {B, get(B)}, {Q, get(Q)},  {return,Res}, get(state)], check_prepared, 50),
-    Res.
-
 %% 
 %% @doc Write message Msg to queue named Queue. Functions queue_write and 
 %% queue_read deal with queue of messages solevly, and do not touch individual 
@@ -251,28 +232,6 @@ queue_read(Queue) ->
     put(Queue0, Q),
     info_msg(queue_read, [get(self), {queue,Queue}, {Queue0,get(Queue0)}, {return,Msg}, get(state)], read_done, 50), 
     Msg.
-
-%% 
-%% @doc Determines if Queue buffer holding a block of triples is at the end. 
-%% Method queue_get() must be called before calling queue_block_end() 
-%% to intialize the queue buffer. 
-%% 
-%% @spec queue_block_end(Queue::atom()) -> boolean()
-%%
-queue_block_end(Queue) ->
-
-    %% set names of dictionary variables
-    QL = atom_to_list(Queue),
-    B = list_to_atom(string:concat("buff_",QL)),
-    BV = get(B),                    % get buffer
- 
-    %% check buffer if it contains no messages
-    case BV of 
-    [] -> Ret = true;
-    _  -> Ret = fail
-    end,
-    info_msg(queue_block_end, [get(self), {queue,Queue}, {B,get(B)}, {return,Ret}, get(state)], check_block_end_done, 50), 
-    Ret.
 
 %% 
 %% @doc Read a triple Triple from input queue Queue. Input queue is a queue 
@@ -483,190 +442,6 @@ queue_t1() ->
 %% ======================================================================
 %% 
 %% select and project operation can be part of every query node
-
-%%
-%% eval_project/1
-%% 
-%% @doc Compute projection of graph by retaining values of varables specified 
-%% by the list PL and deleting triples that do not contain these variables.
-%%
-%% eval_project(PL::query_tree:qn_project_list()) -> maps:map()
-%%
-eval_project(none) -> ok;
-
-eval_project(_) -> 
-
-    %% construct new graph to return¸
-    PO = get(project_out),
-    F1 = fun (E, M) ->
-             maps:remove(E, M)
-         end,
-    G = lists:foldl(F1, get(gp_val), PO),
-    put(gp_val, G),
-    ok.
-
-%%
-%% project_prepare/0
-%% 
-%% @doc From list of variables that are retained in the projected graph 
-%% prepare list of variables to be projected out. Input list of variables 
-%% is the parameter PL. Output is stored as PD entry project_out.
-%%
-%% project_prepare(PL::query_tree:qn_project_list()) -> ok|fail
-%%
-project_prepare(PL) -> 
-    case PL of 
-    none -> put(project_out, []);
-
-    _ -> %% first get id-s of al tp-s 
-         VP = get(vars_pos),
-         L = lists:flatten(maps:values(VP)),
-
-         %% get id-s of tp-s from gp including vars from PL
-         F2 = fun (V) ->
-                  maps:get(V, VP)
-              end,
-         %%  map list of vars to list of pairs {qn_id,int}
-         L1 = lists:flatmap(F2, PL),
-            
-         %% now extract qn_id-s ie. 1st component of each pair
-            F3 = fun (P) ->
-       	             element(1, P)
-            end,
-         LA = lists:usort(lists:map(F3, L)),
-         L2 = lists:usort(lists:map(F3, L1)),
-         L3 = difference_lists(LA, L2),
-         info_msg(hc_eval, [get(self), {project_list,PL}, {all_qids,LA}, {project_qids,L2}, {project_out,L3}, get(state)], comp_project_out, 50),
-         put(project_out, L3)
-    end.
-
-%% 
-%% @doc Compute difference between two lists.
-%%
-%% difference_list(L1,L2) -> L3
-difference_lists([], _) -> [];
-
-difference_lists([X|L], L1) -> 
-    XInBoth = lists:member(X, L1),
-    case XInBoth of
-    true -> 
-        difference_lists(L, L1);
-    false -> 
-        L2 = difference_lists(L, L1), 
-        [X|L2]
-    end.
-
-%% 
-%% @doc Convert an instance of qn_attribute() to a value of a given Erlang type. 
-%%
-%% eval_attribute(Atr::qn_attribute())) -> string() | integer() | real() | timedate()
-eval_attribute(Atr) -> 
-   case Atr of 
-     {V,code} -> V;
-     {V,integer} -> V;
-     {V,timedate} -> V;
-     {V,real} -> V;
-     {V,string} -> V;
-     _  -> Atr
-   end.
-
-%%
-%% eval_select/1
-%% 
-%% @doc Compute selection predicate on a given graph Graph and return 
-%% result as boolean(). Predicate is parameter SelectPred. 
-%%
-%% eval_select(SelectPred::query_tree:qn_select_predicate()) -> any()
-%%
-eval_select(S) when is_atom(S) -> 
-    info_msg(select, [get(self), {expr,S}, {select_pred,get(select_pred)}, get(state)], select_atom_expr, 50), 
-    S == none;
-
-eval_select(S) when is_integer(S) -> 
-    info_msg(select, [get(self), {expr,S}, {select_pred,get(select_pred)}, get(state)], select_int_expr, 50), 
-    S;
-
-eval_select({V,Type}) when (Type == integer) or (Type == real) or (Type == timedate) or 
-                           (Type == code) or (Type == string) -> 
-    info_msg(select, [get(self), {expr,{V,Type}}, {select_pred,get(select_pred)}, get(state)], select_typed_expr, 50), 
-    V; 
-
-%% selection predicate is a string S.
-eval_select(S) when is_list(S) -> 
-    info_msg(select, [get(self), {expr,S}, {qnode,get(qnode)}, {select_pred,get(select_pred)}, get(state)], select_list_expr, 50), 
-
-    %% check if variable
-    IsVar = string:chr(S, $?) =:= 1, 
-
-    case get(qnode) of 
-    join -> %% return either var value or constant
-            case IsVar of 
-            true  -> %% get position and tuple
-                     [{NodeId, Pos}|_] = maps:get(S, get(vars_pos)),
-                     Tuple = maps:get(NodeId, get(gp_val)),
-
-                     %% Pos+1 since first component is table-name
-                     E = element(Pos+1, Tuple),
-                     info_msg(select, [get(self), {select_pred,get(select_pred)}, {variable,S}, {value,E}, get(state)], variable_value, 50),
-                     eval_attribute(E);
-            %% return string constant if not var
-            false -> S
-            end;
-
-    tp   -> %% return either var value or constant
-            case IsVar of 
-            true  -> Pos = maps:get(S, get(vars)),
-  	   	     E = element(Pos+1, get(tp_val)),
-                     info_msg(select, [get(self), {select_pred,get(select_pred)}, {variable,S}, {value,E}, get(state)], variable_value, 50),
-                     eval_attribute(E);
-            %% return string constant if not var
-            false -> S
-            end
-    end;
-
-%% selection predicate includes comparison ops
-eval_select({S1, equal, S2}) -> 
-    VS1 = eval_select(S1), 
-    VS2 = eval_select(S2),
-    VS1 == VS2;
-
-eval_select({S1, less, S2}) -> 
-    VS1 = eval_select(S1), 
-    VS2 = eval_select(S2),
-    VS1 < VS2;
-
-eval_select({S1, lesseq, S2}) -> 
-    VS1 = eval_select(S1), 
-    VS2 = eval_select(S2),
-    VS1 =< VS2;
-
-eval_select({S1, greater, S2}) -> 
-    VS1 = eval_select(S1), 
-    VS2 = eval_select(S2),
-    VS1 > VS2;
-
-eval_select({S1, greatereq, S2}) -> 
-    VS1 = eval_select(S1), 
-    VS2 = eval_select(S2),
-    VS1 >= VS2;
-
-eval_select({S1, land, S2}) -> 
-    VS1 = eval_select(S1), 
-    VS2 = eval_select(S2),
-    VS1 and VS2; 
-
-eval_select({S1, lor, S2}) -> 
-    VS1 = eval_select(S1), 
-    VS2 = eval_select(S2),
-    VS1 or VS2;
-
-eval_select({lnot, S1}) -> 
-    VS1 = eval_select(S1), 
-    not VS1;
-
-eval_select(Expr) ->
-    error_msg(select, [get(self), {expr,Expr}, {all,get()}, get(state)], illegal_select_expression),
-    fail.
 
 %% ===================================================================
 %% 

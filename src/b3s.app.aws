@@ -1,0 +1,84 @@
+%% -*- Erlang -*-
+{application, b3s,
+ [{description, "big3store front server for aws operation"},
+  {vsn, "0.3"},
+  {modules,
+   [
+    db_interface,
+    db_writer,
+    query_tree,
+    query_node,
+    tp_query_node,
+    join_query_node,
+    mj_query_node,
+    hj_query_node,
+    file_reader,
+    string_id,
+    triple_distributor,
+    b3s_state,
+    node_state,
+    benchmark,
+    user_interface,
+    repeater,
+    stop_watch,
+    rbutil,
+    b3s
+   ]},
+  {registered,
+   [
+   ]},
+  {applications, [kernel, stdlib, sasl]},
+  {mod, {b3s,[]}},
+  {env,
+   [
+    {b3s_mode,                 front_server},
+    {test_mode,                local},
+    {write_mode,               postgres_bulk_load},
+    {benchmark_task,           task_yjr6_0001},
+    {front_server_nodes,       ['fs@%%HSTNAM%%']},
+    {data_server_nodes,        []},
+    {name_of_triple_tables,    []},
+    {b3s_state_nodes,          ['fs@%%HSTNAM%%']},
+    {triple_distributor_nodes, ['fs@%%HSTNAM%%']},
+    {num_of_empty_msgs,        10},
+    {block_size,               100},
+    %% {distribution_algorithm,   random},
+    {distribution_algorithm,   predicate_based},
+    {name_of_triple_table,     triplestore},
+    {name_of_pred_clm_table,   pc_yg2s_col25},
+    {name_of_pred_freq_table,  pf_yg2s},
+    {name_of_string_id_table,  string_id_triplestore},
+    {name_of_pred_string_id,   psi_yg2s},
+    {ui_run_command_boot_fs, [
+			      "inv save",
+			      "aws create template front server",
+			      "ev timer:sleep(30000)",
+			      "property restore b3s state from %%DS1NOD%%",
+			      "aws sns publish front server booted"
+			     ]},
+    {ui_run_command_boot_ds, [
+			      "gc FS BS propagate",
+			      "property backup b3s state to all",
+			      "remote all gc S NS P ui_queued_jobs []",
+			      %% "remote load all encoded column tables",
+			      "aws sns publish all data server booted"
+			     ]},
+    {ui_run_command_load_ds, [
+			      "aws sns publish all table loaded"
+			     ]},
+    {ui_run_command_terminate_ds, [
+				   "aws sns publish shutting down big3store system...",
+				   "aws terminate front server"
+			     ]},
+    {store_report_frequency,   10000},
+    {triple_id_skel,           "b3sid"},
+    {data_files,               [
+			       ]},
+    {epgsql_host,              "localhost"},
+    {epgsql_user,              "b3s"},
+    {epgsql_pass,              "big3store"},
+    {epgsql_port,              5432},
+    {result_record_max,        1000},
+    {debug_level,              51}
+   ]}
+ ]}.

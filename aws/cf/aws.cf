@@ -1,0 +1,352 @@
+#
+#       big3store configuration file for using AWS
+#
+# 	Copyright (C) 2014-2019 UP FAMNIT and Yahoo Japan Corporation
+# 	Iztok Savnik <iztok.savnik@famnit.upr.si>
+# 	Kiyoshi Nitta <knitta@yahoo-corp.jp>
+#
+
+#
+# Region name of AWS EC2. All big3store instances are created in this
+# region.
+#
+# See:
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html
+#
+aws_ec2_region=us-east-1
+
+#
+# AMI ID of Ubuntu linux. We confirmed and tested big3store software
+# on Ubuntu. Update this parameter if instance creation failed.
+#
+# See: https://cloud-images.ubuntu.com/locator/ec2/
+#
+aws_ec2_ubuntu_ami_id=ami-0ac019f4fcb7cb7e6
+
+#
+# AMI ID of big3store front server. It will be created during the
+# loading procedure of huge data. Because it will take several hours
+# to load string id mapping table and build its index, the pre-loaded
+# image is convenient to perform large number of experiments. This
+# parameter is automatically updated by the user_interface operation.
+#
+# See: user_interface: aws create image <image name>
+#
+aws_ec2_ami_id_front_server=ami-07f6628db8d675806
+
+#
+# Key name of all AWS EC2 instances created by big3store system. The
+# user should create his own key pair and save it in a safe place. It
+# is required to access big3store instances.
+#
+# See:
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html
+#
+aws_ec2_key_name=id_rsa
+
+#
+# IAM fleet role arn. It is required to invoke data server instances
+# automatically using the user_interface tool of big3store. The role
+# must be created following the instruction below.
+#
+# See:
+# https://docs.aws.amazon.com/batch/latest/userguide/spot_fleet_IAM_role.html
+#
+aws_ec2_iam_fleet_role=arn:aws:iam::123412341234:role/aws-service-role/ec2fleet.amazonaws.com/AWSServiceRoleForEC2Fleet
+
+#
+# Instance profile arn. It is required for giving AWS CLI access
+# rights to created instances.
+#
+# See:
+# https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html
+#
+aws_ec2_instance_profile_arn=arn:aws:iam::123412341234:instance-profile/b3s
+
+#
+# Instance profile name. It is required for giving AWS CLI access
+# rights to created instances.
+#
+# See:
+# https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html
+#
+aws_ec2_instance_profile_name=b3s
+
+#
+# AWS EC2 launch template name for the big3store front server. It is
+# used for saving latest AMI. The launch template of this name will be
+# automatically re-created by the user_interface operation.
+#
+# See: user_interface: aws create image <image name>
+#
+aws_ec2_template_name_front_server=b3s-front-server
+
+#
+# AWS EC2 launch template name for the big3store data
+# server. Currently, it is not used. While data servers loads various
+# data tables, it often makes no sense to create a large image holding
+# all variations.
+#
+aws_ec2_template_name_data_server=b3s-data-server
+
+#
+# AWS EC2 instance type for the big3store front server. The front
+# server plays 2 important roles. One is loading triples and the other
+# is executing queries. This parameter specifies the instance type of
+# the query execution role, which requires smaller resources than the
+# loading role. It is enough using a t2.micro class instance type.
+#
+# See: https://aws.amazon.com/ec2/instance-types
+#
+aws_ec2_instance_type_front_server=t2.micro # 1cpu 1G
+#aws_ec2_instance_type_front_server=m1.large # 2cpu 7.5G
+#aws_ec2_instance_type_front_server=t3.large # 2cpu 8G
+
+#
+# AWS EC2 instance type for the big3store front server. The front
+# server plays 2 important roles. One is loading triples and the other
+# is executing queries. This parameter specifies the instance type of
+# the loading role, which requires large computing and storage
+# resources for the loading role. It is recommended to use a m1.large
+# class instance type.
+#
+# See: https://aws.amazon.com/ec2/instance-types
+#
+aws_ec2_instance_type_front_server_prep=m1.large # 2cpu 7.5G
+
+#
+# AWS EC2 instance type for the big3store front server. It is just
+# prepared for testing purpose.
+#
+# See: https://aws.amazon.com/ec2/instance-types
+#
+aws_ec2_instance_type_front_server_nano=t3.nano # 2cpu 0.5G 0.0016
+
+#
+# AWS EC2 instance type for the big3store front server. It is just
+# prepared for testing purpose.
+#
+# See: https://aws.amazon.com/ec2/instance-types
+#
+aws_ec2_instance_type_front_server_micro=t3.micro # 2cpu 1G (20) 0.0031
+
+#
+# AWS EC2 instance type for the big3store data server. Data servers
+# could be invoked automatically from the front server. While large
+# number of data servers are used for big3store experiments, the
+# number of AWS EC2 instances might exceeds the default limit value
+# (20). The limit must be extended before performing such large
+# experiments.
+#
+# See: https://aws.amazon.com/ec2/instance-types
+# See: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-resource-limits.html
+#
+#aws_ec2_instance_type_data_server=t3.nano # 2cpu 0.5G (52) 0.0016
+#aws_ec2_instance_type_data_server=t3.micro # 2cpu 1G (20) 0.0031
+#aws_ec2_instance_type_data_server=c1.medium # 2cpu 1.7G (53) 0.0130
+#aws_ec2_instance_type_data_server=t3.small # 2cpu 2G (20) 0.0063
+#aws_ec2_instance_type_data_server=m1.medium # 1cpu 3.75G (53) 0.0087
+aws_ec2_instance_type_data_server=m3.medium # 1cpu 3.75G (53) 0.0067
+#aws_ec2_instance_type_data_server=t2.medium # 2cpu 4G (53) 0.0139
+#aws_ec2_instance_type_data_server=t3.medium # 2cpu 4G (20) 0.0125
+#aws_ec2_instance_type_data_server=m1.large # 2cpu 7.5G (52) 0.0175
+#aws_ec2_instance_type_data_server=m3.large # 2cpu 7.5G (52) 0.0308
+#aws_ec2_instance_type_data_server=t3.large # 2cpu 8G (52) 0.0251
+#aws_ec2_instance_type_data_server=t3.2xlarge # 8cpu 32G (20) 0.1002
+#aws_ec2_instance_type_data_server=c3.8xlarge # 32cpu 60G (52) 0.4700
+#aws_ec2_instance_type_data_server=c4.8xlarge # 36cpu 60G (52) 0.4961
+#aws_ec2_instance_type_data_server=r4.2xlarge # 8cpu 61G (20) 0.1370
+#aws_ec2_instance_type_data_server=m2.4xlarge # 8cpu 68.4G (52) not available on us-east-1
+#aws_ec2_instance_type_data_server=r4.4xlarge # 16cpu 122G (10) 0.3046
+#aws_ec2_instance_type_data_server=r4.8xlarge # 32cpu 244G (5) 0.5443
+#aws_ec2_instance_type_data_server=x1e.2xlarge # 8cpu 244G (5) 0.5004
+
+#
+# The volume size of the front server. This parameter specifies the
+# primary disk size in GB for playing the query execution role of the
+# front server. While the front server holds string-id mapping tables
+# and indices, this value should be large enough to store them.
+#
+aws_ec2_vol_size_front_server=50
+
+#
+# The volume size of the front server. This parameter specifies the
+# primary disk size in GB for playing the preparation role of the
+# front server. While the front server holds source triple file,
+# triple tables, and string-id mapping tables with indices, this value
+# should be large enough to store them.
+#
+aws_ec2_vol_size_front_server_prep=80
+
+#
+# The volume size of the front server. This parameter specifies the
+# primary disk size in GB for testing purpose using a nano instance.
+#
+aws_ec2_vol_size_front_server_nano=10
+
+#
+# The volume size of the front server. This parameter specifies the
+# primary disk size in GB for testing purpose using a micro instance.
+#
+aws_ec2_vol_size_front_server_micro=30
+
+#
+# The volume size of the data servers. This parameter specifies the
+# primary disk size in GB for playing the query execution role of the
+# data server. While the front server holds encoded triple tables and
+# indices, this value should be large enough to store them.
+#
+aws_ec2_vol_size_data_server=30
+
+#
+# Maximum price for requesting spot instance requests.
+#
+# See: https://aws.amazon.com/ec2/spot/?nc1=h_ls
+#
+aws_ec2_spot_price=0.6
+
+#
+# The name of service tag. This tag is attached to all instances and
+# volumes that consist big3store system.
+#
+# See: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html
+#
+aws_ec2_service_tag_name=ServiceName
+
+#
+# The value of service tag. This tag is attached to all instances and
+# volumes that consist big3store system.
+#
+# See: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html
+#
+aws_ec2_service_tag_value=b3s
+
+#
+# The name of module tag. This tag is attached to all instances and
+# volumes that consist big3store system.
+#
+# See: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html
+#
+aws_ec2_module_tag_name=ModuleName
+
+#
+# The value of module tag for front servers. This tag is attached to
+# all instances and volumes of front servers.
+#
+# See: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html
+#
+aws_ec2_module_tag_front_server=b3s-front-server
+
+#
+# The value of module tag for data servers. This tag is attached to
+# all instances and volumes of data servers.
+#
+# See: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html
+#
+aws_ec2_module_tag_data_server=b3s-data-server
+
+#
+# The time zone specification of instances. This specification is
+# applied to all AWS EC2 instances created for the big3store system.
+#
+# See: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-time.html
+#
+aws_ec2_timezone=Asia/Tokyo
+
+#
+# The name of the security group. This security group is used by all
+# AWS EC2 instances created for the big3store system. You can create
+# it by your own using the AWS console or by running
+# aws/bin/create-security-group.sh script included in the big3store
+# distribution. It must contain permissions that allow ssh accesses
+# from your local terminal and all port accesses from the same AWS vpc
+# sub-net.
+#
+# See: https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
+#
+aws_ec2_security_group_name=big3store
+
+#
+# The id of the security group. This security group is used by all AWS
+# EC2 instances created for the big3store system. You can create it by
+# your own using the AWS console or by running
+# aws/bin/create-security-group.sh script included in the big3store
+# distribution. It must contain permissions that allow ssh accesses
+# from your local terminal and all port accesses from the same AWS vpc
+# sub-net. The value must be copied from the security group panel of
+# AWS EC2 console.
+#
+# See: https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
+#
+aws_ec2_security_group_id=sg-03e13e3b88a0103c7
+
+#
+# The netmask cidr for local accesses. This value is used by
+# aws/bin/create-security-group.sh script. You can leave this value
+# unchanged if you use the default vpc setting offered by AWS.
+#
+# See: https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
+#
+aws_ec2_vpc_cidr=172.31.0.0/16
+
+#
+# The minimum port number used by Erlang beam interpreters. (OBSOLETE)
+#
+aws_ec2_security_port_min=9100
+
+#
+# The maximum port number used by Erlang beam interpreters. (OBSOLETE)
+#
+aws_ec2_security_port_max=9199
+
+
+#
+# Region name of AWS S3. All S3 request will be performed on this
+# region.
+#
+# See: https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html
+#
+aws_s3_region=us-east-1
+
+#
+# Backet name of AWS S3 used for storing big3store resources.
+#
+# See: https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html
+#
+aws_s3_bucket_name=b3s-us-east-1
+
+#
+# Path name of AWS S3 bucket used for storing executable files.
+#
+aws_s3_bin_path=bin
+
+#
+# Path name of AWS S3 bucket used for storing big3store data.
+#
+aws_s3_dat_path=dat
+
+#
+# Path name of AWS S3 bucket used for storing temporary resources.
+#
+aws_s3_spool_path=spool
+
+
+#
+# Region name of AWS SNS. All notifications produced by the big3store
+# system will be performed on this region.
+#
+# See: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/US_SetupSNS.html
+#
+aws_sns_region=us-east-1
+
+#
+# SNS ARN of AWS SNS topic. All notifications produced by the
+# big3store system will be sent to this topic. You can receive timely
+# notifications after completing time consuming tasks if you set this
+# value correctly.
+#
+# See: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/US_SetupSNS.html
+#
+aws_sns_arn=arn:aws:sns:us-east-1:123412341234:b3s-slack
+
+# ====> END OF LINE <====

@@ -12,7 +12,7 @@ run on 5 server machines. This loading task uses several commands
 provided by the user interface tool. Detailed command descriptions can
 be referred from [user-interface.md](user-interface.md).
 
-* Copyright (C) 2016 UP FAMNIT and Yahoo Japan Corporation
+* Copyright (C) 2016-2019 UP FAMNIT and Yahoo Japan Corporation
 * Version 0.3
 * Since: January, 2016
 * Author: Kiyoshi Nitta <knitta@yahoo-corp.jp>
@@ -551,7 +551,7 @@ structure.
 
 Procedure (P-4-4) should be executed using *COPY* command of psql.
 
-    # COPY yago2s_5x1a_c1 FROM '/tmp/ts1.tsv;
+    # COPY yago2s_5x1a_c1 FROM '/tmp/ts1.tsv';
 
 Procedure (P-4-5) should be executed using function *index_tse*
 defined in 'encode.plpgsql'.

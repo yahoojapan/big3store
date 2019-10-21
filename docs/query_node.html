@@ -12,7 +12,7 @@
 <h1>Module query_node</h1>
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This module provides functions commonly shared by query node  
 modules.
-<p>Copyright © 2015-2016 UP FAMNIT and Yahoo Japan Corporation</p>
+<p>Copyright © 2015-2019 UP FAMNIT and Yahoo Japan Corporation</p>
 
 <p><b>Version:</b> 0.3</p>
 <p><b>Introduced in:</b> September, 2015</p>
@@ -161,26 +161,15 @@ also the fuctionality of select and project operations.</p>
  </p>
 
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#difference_lists-2">difference_lists/2*</a></td><td>Compute difference between two lists.</td></tr>
-<tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
-<tr><td valign="top"><a href="#eval_attribute-1">eval_attribute/1*</a></td><td>Convert an instance of qn_attribute() to a value of a given Erlang type.</td></tr>
-<tr><td valign="top"><a href="#eval_project-1">eval_project/1*</a></td><td>Compute projection of graph by retaining values of varables specified  
-by the list PL and deleting triples that do not contain these variables.</td></tr>
-<tr><td valign="top"><a href="#eval_select-1">eval_select/1*</a></td><td>Compute selection predicate on a given graph Graph and return  
-result as boolean().</td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
 <tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
   debug level is greater than ThresholdDL.</td></tr>
-<tr><td valign="top"><a href="#project_prepare-1">project_prepare/1*</a></td><td>From list of variables that are retained in the projected graph  
-prepare list of variables to be projected out.</td></tr>
 <tr><td valign="top"><a href="#qn_test_-0">qn_test_/0*</a></td><td>Unit tests.</td></tr>
 <tr><td valign="top"><a href="#qt_site-1">qt_site/1*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#queue_block_end-1">queue_block_end/1*</a></td><td>Determines if Queue buffer holding a block of triples is at the end.</td></tr>
 <tr><td valign="top"><a href="#queue_empty-1">queue_empty/1*</a></td><td>Check if (input|output) queue Queue is empty and return results as boolean().</td></tr>
 <tr><td valign="top"><a href="#queue_flush-1">queue_flush/1*</a></td><td>Flush output queue.</td></tr>
 <tr><td valign="top"><a href="#queue_get-1">queue_get/1*</a></td><td>Read a triple Triple from input queue Queue.</td></tr>
 <tr><td valign="top"><a href="#queue_init-3">queue_init/3*</a></td><td>Initializes queue Queue of type Type by setting appropriate PD entries.</td></tr>
-<tr><td valign="top"><a href="#queue_prepared-1">queue_prepared/1*</a></td><td>Check if queue Queue incudes messages prepared to be read from or
-  sent to remote process.</td></tr>
 <tr><td valign="top"><a href="#queue_put-2">queue_put/2*</a></td><td>Write graph Graph to output queue Queue.</td></tr>
 <tr><td valign="top"><a href="#queue_read-1">queue_read/1*</a></td><td>Read message from queue Queue.</td></tr>
 <tr><td valign="top"><a href="#queue_t1-0">queue_t1/0*</a></td><td></td></tr>
@@ -190,42 +179,10 @@ prepare list of variables to be projected out.</td></tr>
 
 <h2><a name="functions">Function Details</a></h2>
 
-<h3 class="function"><a name="difference_lists-2">difference_lists/2 *</a></h3>
-<div class="spec">
-<p><tt>difference_lists(L, L1) -&gt; any()</tt></p>
-</div><p><p>Compute difference between two lists.</p>
- 
-  difference_list(L1,L2) -&gt; L3</p>
-
 <h3 class="function"><a name="error_msg-3">error_msg/3 *</a></h3>
 <div class="spec">
 <p><tt>error_msg(FunName::atom(), Argument::term(), Result::term()) -&gt; ok</tt><br></p>
 </div><p>Report an error issue to the error_logger.
- </p>
-
-<h3 class="function"><a name="eval_attribute-1">eval_attribute/1 *</a></h3>
-<div class="spec">
-<p><tt>eval_attribute(Atr) -&gt; any()</tt></p>
-</div><p><p>Convert an instance of qn_attribute() to a value of a given Erlang type.</p>
- 
-  eval_attribute(Atr::qn_attribute())) -&gt; string() | integer() | real() | timedate()</p>
-
-<h3 class="function"><a name="eval_project-1">eval_project/1 *</a></h3>
-<div class="spec">
-<p><tt>eval_project(X1) -&gt; any()</tt></p>
-</div><p><p>Compute projection of graph by retaining values of varables specified  
-by the list PL and deleting triples that do not contain these variables.</p>
- 
-  eval_project(PL::query_tree:qn_project_list()) -&gt; maps:map()
- </p>
-
-<h3 class="function"><a name="eval_select-1">eval_select/1 *</a></h3>
-<div class="spec">
-<p><tt>eval_select(S) -&gt; any()</tt></p>
-</div><p><p>Compute selection predicate on a given graph Graph and return  
-result as boolean(). Predicate is parameter SelectPred.</p>
- 
-  eval_select(SelectPred::query_tree:qn_select_predicate()) -&gt; any()
  </p>
 
 <h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
@@ -233,16 +190,6 @@ result as boolean(). Predicate is parameter SelectPred.</p>
 <p><tt>info_msg(FunName::atom(), Argument::term(), Result::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
 </div><p>Report an information issue to the error_logger if current
   debug level is greater than ThresholdDL.
- </p>
-
-<h3 class="function"><a name="project_prepare-1">project_prepare/1 *</a></h3>
-<div class="spec">
-<p><tt>project_prepare(PL) -&gt; any()</tt></p>
-</div><p><p>From list of variables that are retained in the projected graph  
-prepare list of variables to be projected out. Input list of variables  
-is the parameter PL. Output is stored as PD entry project_out.</p>
- 
-  project_prepare(PL::query_tree:qn_project_list()) -&gt; ok|fail
  </p>
 
 <h3 class="function"><a name="qn_test_-0">qn_test_/0 *</a></h3>
@@ -255,14 +202,6 @@ is the parameter PL. Output is stored as PD entry project_out.</p>
 <div class="spec">
 <p><tt>qt_site(X1) -&gt; any()</tt></p>
 </div>
-
-<h3 class="function"><a name="queue_block_end-1">queue_block_end/1 *</a></h3>
-<div class="spec">
-<p><tt>queue_block_end(Queue::atom()) -&gt; boolean()</tt><br></p>
-</div><p>Determines if Queue buffer holding a block of triples is at the end.
-  Method queue_get() must be called before calling queue_block_end()
-  to intialize the queue buffer.
- </p>
 
 <h3 class="function"><a name="queue_empty-1">queue_empty/1 *</a></h3>
 <div class="spec">
@@ -306,13 +245,6 @@ queue_read() to read messages including blocks of elements from queue.</p>
   and queue_read() to retrieve messages from queues.
  </p>
 
-<h3 class="function"><a name="queue_prepared-1">queue_prepared/1 *</a></h3>
-<div class="spec">
-<p><tt>queue_prepared(Queue::atom()) -&gt; boolean()</tt><br></p>
-</div><p>Check if queue Queue incudes messages prepared to be read from or
-  sent to remote process.
- </p>
-
 <h3 class="function"><a name="queue_put-2">queue_put/2 *</a></h3>
 <div class="spec">
 <p><tt>queue_put(Queue::atom(), Graph::<a href="#type-qn_graph">qn_graph()</a>) -&gt; ok | fail</tt><br></p>
@@ -351,6 +283,6 @@ queue_read() to read messages including blocks of elements from queue.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 21 2016, 14:07:00.</i></p>
+<p><i>Generated by EDoc</i></p>
 </body>
 </html>

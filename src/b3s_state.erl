@@ -1,13 +1,14 @@
 %%
 %% Manage global resources of distributed b3s system.
 %%
-%% @copyright 2014-2016 UP FAMNIT and Yahoo Japan Corporation
+%% @copyright 2014-2019 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since August, 2014
 %% @author Kiyoshi Nitta <knitta@yahoo-corp.jp>
 %% 
 %% @see b3s
 %% @see node_state
+%% @see user_interface
 %% 
 %% @doc Manage global resources of distributed b3s system. This is a
 %% gen_server process that runs one instance in a distributed b3s
@@ -58,25 +59,25 @@
 %% {@type node_state:ns_column_id()} to {@type
 %% node_state:ns_rows()}. (propagated)</td> </tr>
 %% 
-%% <tr> <td>num_of_empty_msgs</td> <td>integer()</td> <td>The number of
-%% empty messages that can be sent at once.</td> </tr>
+%% <tr> <td>num_of_empty_msgs</td> <td>integer()</td> <td>the number
+%% of empty messages that can be sent at once.</td> </tr>
 %%
 %% <tr> <td>name_of_triple_tables</td> <td>[{node(), atom()}]</td>
-%% <td>Names of triple tables for data server columns.</td> </tr>
+%% <td>names of triple tables for data server columns.</td> </tr>
 %%
-%% <tr> <td>name_of_pred_clm_table</td> <td>atom()</td> <td>Name of
+%% <tr> <td>name_of_pred_clm_table</td> <td>atom()</td> <td>name of
 %% pred_clm table.</td> </tr>
 %%
-%% <tr> <td>name_of_pred_freq_table</td> <td>atom()</td> <td>Name of
+%% <tr> <td>name_of_pred_freq_table</td> <td>atom()</td> <td>name of
 %% pred_freq table.</td> </tr>
 %%
-%% <tr> <td>name_of_string_id_table</td> <td>atom()</td> <td>Name of
+%% <tr> <td>name_of_string_id_table</td> <td>atom()</td> <td>name of
 %% string id conversion table.</td> </tr>
 %%
 %% <tr> <td>store_report_frequency</td> <td>integer()</td>
-%% <td>Report frequency of storing process.</td> </tr>
+%% <td>report frequency of storing process.</td> </tr>
 %%
-%% <tr> <td>triple_id_skel</td> <td>string()</td> <td>Skeleton string
+%% <tr> <td>triple_id_skel</td> <td>string()</td> <td>skeleton string
 %% for generating triple id.</td> </tr>
 %%
 %% <tr> <td>triple_distributor_pid</td> <td>{@type
@@ -105,8 +106,30 @@
 %% <tr> <td>epgsql_pass</td> <td>string()</td> <td>password to access
 %% postgres used in {@link db_interface}.</td> </tr>
 %% 
-%% <tr> <td>result_record_max</td> <td>integer()</td> <td>Max number
+%% <tr> <td>result_record_max</td> <td>integer()</td> <td>max number
 %% of records to be reported.</td> </tr>
+%%
+%% <tr> <td>aws_node_instance_map</td> <td>maps:map()</td> <td>mapping
+%% from node to <a
+%% href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html'>AWS
+%% EC2 instance</a> id.</td> </tr>
+%%
+%% <tr> <td>aws_node_fleet_map</td> <td>maps:map()</td> <td>mapping
+%% from node to <a
+%% href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html'>AWS
+%% EC2 spot fleet</a> id.</td> </tr>
+%%
+%% <tr> <td>ui_run_command_boot_fs</td> <td>[{@type
+%% user_interface:ui_statement()}]</td> <td>user interface statements
+%% called after booting the front server.</td> </tr>
+%%
+%% <tr> <td>ui_run_command_boot_ds</td> <td>[{@type
+%% user_interface:ui_statement()}]</td> <td>user interface statements
+%% called after booting all data servers.</td> </tr>
+%%
+%% <tr> <td>ui_run_command_load_ds</td> <td>[{@type
+%% user_interface:ui_statement()}]</td> <td>user interface statements
+%% called after loading table data on all data servers.</td> </tr>
 %%
 %% </table>
 %% 
@@ -551,7 +574,14 @@ hcp_node([Node | Rest], PL, Succeeded) ->
     A  = [[Node | Rest], PL, Succeeded],
     NS = {node_state, Node},
     UpdateOneProp =
-	fun(X) -> gen_server:call(NS, {put, X, erlang:get(X)}) end,
+	fun(X) ->
+		case (catch gen_server:call(NS, {put, X, erlang:get(X)})) of
+		    {'EXIT', E} ->
+			error_msg(hcp_node, [Node | Rest], E),
+			error;
+		    R -> R
+		end
+	end,
     R = lists:map(UpdateOneProp, PL),
     info_msg(hcp_node, A, {updated, R}, 80),
     hcp_node(Rest, PL, [Node | Succeeded]).

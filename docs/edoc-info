@@ -1,6 +1,5 @@
 %% encoding: UTF-8
 {application,b3s}.
-{packages,[]}.
 {modules,[b3s,b3s_state,benchmark,db_interface,db_writer,file_reader,
           hj_query_node,join_query_node,mj_query_node,node_state,query_node,
           query_tree,rbutil,repeater,stop_watch,string_id,tp_query_node,

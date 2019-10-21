@@ -1,13 +1,14 @@
 %%
 %% Manage global resources of one node.
 %%
-%% @copyright 2014-2016 UP FAMNIT and Yahoo Japan Corporation
+%% @copyright 2014-2019 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since August, 2014
 %% @author Kiyoshi Nitta <knitta@yahoo-corp.jp>
 %% 
 %% @see b3s
 %% @see b3s_state
+%% @see user_interface
 %% 
 %% @doc Manage global resources of one node. This is a gen_server
 %% process running on each node that belongs to the distributed
@@ -58,6 +59,10 @@
 %% db_interface:di_bdbnif_cursor()}</td> <td>session information for a
 %% table.</td> </tr>
 %% 
+%% <tr> <td>ui_queued_jobs</td> <td>[{@type
+%% user_interface:ui_job_tuple()}]</td> <td>a list of running
+%% jobs.</td> </tr>
+%% 
 %% </table>
 %% 
 %% == handle_call (synchronous) message API ==
@@ -75,21 +80,51 @@
 %% <tr> <td>{@section @{put, PropertyName, Value@}}</td> <td>atom(),
 %% term()</td> <td>ok | {error, term()}</td> <td>put value</td> </tr>
 %% 
+%% <tr> <td>{@section @{perform_ui, UIStatement@}}</td>
+%% <td>[string()]</td> <td>string()</td> <td>perform a statement</td>
+%% </tr>
+%% 
+%% <tr> <td>{@section next_message}</td> <td></td> <td>string() |
+%% no_message</td> <td>obtain a result message</td> </tr>
+%% 
 %% </table>
 %% 
 %% === {get, PropertyName} ===
 %% 
-%% This message takes PropertyName::atom() as an argument and returns
-%% the value Result::term() of the specified global property managed
-%% by the node_state process. It returns undefined, if the property
-%% was not defined yet. (LINK: {@section @{get, PropertyName@}})
+%% This message gets a value of the specified property. It takes
+%% PropertyName::atom() as an argument and returns the value
+%% Result::term() of the specified global property managed by the
+%% node_state process. It returns undefined, if the property was not
+%% defined yet. (LINK: {@section @{get, PropertyName@}})
 %% 
 %% === {put, PropertyName, Value} ===
 %% 
-%% This message takes PropertyName::atom() and Value::term() as
+%% This message puts the specified value into the specified
+%% property. It takes PropertyName::atom() and Value::term() as
 %% arguments. If it successfully puts the value to the property, it
 %% returns ok. Otherwise, it returns {error, Reason::term()}. (LINK:
 %% {@section @{put, PropertyName, Value@}})
+%% 
+%% === {perform_ui, UIStatement} ===
+%% 
+%% This message performs the specified {@link user_interface}
+%% statement. It takes UIStatement::[string()] as arguments. While the
+%% user interface usually takes a space delimited string as an input
+%% statement, this message takes a list of strings splitted by
+%% spaces. It returns a result string if the statement was
+%% successfully executed within 5 seconds. Otherwise, it returns the
+%% message: 'performing job. try later: gc &lt;node&gt; NS
+%% next_message'. The result could be obtained calling {@section
+%% next_message} API later in the latter case. (LINK: {@section
+%% @{perform_ui, UIStatement@}})
+%% 
+%% === next_message ===
+%% 
+%% This message obtains the next result message of the {@link
+%% user_interface} statement that had been executed by calling
+%% {@section @{perform_ui, UIStatement@}} API. It returns the result
+%% string if the result message arrived within 1 seconds. Otherwise,
+%% it returns an atom 'no_message'. (LINK: {@section next_message})
 %% 
 %% == handle_cast (asynchronous) message API ==
 %% 
@@ -173,13 +208,15 @@ child_spec() ->
 init([]) ->
     process_flag(trap_exit, true),
 
+    NS = list_to_atom(lists:nth(1, string:split(atom_to_list(node()), "@"))),
     State = #{
-      created          => true,
-      pid              => self(),
-      node_state_pid   => {node_state, node()},
-      start_date_time  => calendar:local_time(),
-      update_date_time => calendar:local_time(),
-      tree_id_current  => 0
+	      created          => true,
+	      pid              => self(),
+	      node_state_pid   => {node_state, node()},
+	      start_date_time  => calendar:local_time(),
+	      update_date_time => calendar:local_time(),
+	      tree_id_current  => 0,
+	      ui_queued_jobs   => [{NS, 'boot-fs'}]
      },
 
     info_msg(?MODULE, init, [], State, -1),
@@ -204,6 +241,7 @@ handle_call({get, PropertyName}, _, State) ->
 
 handle_call({put, PropertyName, Value}, From, State) ->
     hc_restore_pd(erlang:get(created), State),
+    hcp_check_ui_queued_jobs(PropertyName),
     erlang:put(PropertyName, Value),
     erlang:put(update_date_time, calendar:local_time()),
     NewState = hc_save_pd(),
@@ -211,11 +249,109 @@ handle_call({put, PropertyName, Value}, From, State) ->
     info_msg(?MODULE, handle_call, A, NewState, 50),
     {reply, ok, NewState};
 
+handle_call(next_message, _, State) ->
+    hc_restore_pd(erlang:get(created), State),
+    R = receive
+	    M -> M
+	after
+	    1000 -> no_message
+	end,
+    {reply, R, State};
+
+handle_call({perform_ui, UICommands}, _, State) ->
+    hc_restore_pd(erlang:get(created), State),
+    case erlang:get(front_server_nodes) of
+	undefined ->
+	    {ok, BSN} = application:get_env(b3s, b3s_state_nodes);
+	FSN ->
+	    BSN = [lists:nth(1, FSN)]
+    end,
+    [C1 | CR] = UICommands,
+    C1A = list_to_atom(C1),
+    SF = self(),
+    FI = fun () ->
+		 erlang:put(cmd_params, CR),
+		 erlang:put(b3s_state_nodes, BSN),
+		 SF ! user_interface:ui_interpret(C1A)
+	 end,
+    spawn(FI),
+    PJ = "performing job. try later: gc <node> NS next_message\n",
+    FR = fun F(S) ->
+		 receive
+		     {'$gen_call', From, Mes} ->
+			 {reply, R, NS} = handle_call(Mes, From, S),
+			 gen_server:reply(From, R),
+			 F(NS);
+		     R ->
+			 {R, S}
+		 after
+		     5000 ->
+			 {PJ, S}
+		 end
+	 end,
+    {Result, NewState} = FR(State),
+    {reply, Result, NewState};
+
 %% default
 handle_call(Request, From, State) ->
     R = {unknown_request, Request},
     error_msg(?MODULE, handle_call, [Request, From, State], R),
     {reply, R, State}.
+
+hcp_check_ui_queued_jobs(ui_queued_jobs) ->
+    JL = ['boot-fs', 'boot-ds', 'load-ds', 'terminate-ds'],
+    case erlang:get(front_server_nodes) of
+	undefined ->
+	    {ok, BSN} = application:get_env(b3s, b3s_state_nodes);
+	FSN ->
+	    BSN = [lists:nth(1, FSN)]
+    end,
+    BS = {b3s_state, lists:nth(1, BSN)},
+    NS = {node_state, node()},
+    F = fun (J) -> 
+		erlang:put(b3s_state_nodes, BSN),
+		erlang:put(b3s_state_pid, BS),
+		erlang:put(node_state_pid, NS),
+		case user_interface:ui_batch_complete_queue(J) of
+		    completed ->
+			hcuqj_perform(J);
+		    _ ->
+			ok
+		end
+	end,
+    spawn(lists, map, [F, JL]);
+hcp_check_ui_queued_jobs(_) ->
+    ok.
+
+hcuqj_perform('boot-fs') ->
+    GC = {get, ui_run_command_boot_fs},
+    SL = gen_server:call(erlang:get(b3s_state_pid), GC),
+    lists:map(fun hcuqj_perform_ui/1, SL);
+hcuqj_perform('boot-ds') ->
+    GC = {get, ui_run_command_boot_ds},
+    SL = gen_server:call(erlang:get(b3s_state_pid), GC),
+    lists:map(fun hcuqj_perform_ui/1, SL);
+hcuqj_perform('load-ds') ->
+    GC = {get, ui_run_command_load_ds},
+    SL = gen_server:call(erlang:get(b3s_state_pid), GC),
+    lists:map(fun hcuqj_perform_ui/1, SL);
+hcuqj_perform('terminate-ds') ->
+    GC = {get, ui_run_command_terminate_ds},
+    SL = gen_server:call(erlang:get(b3s_state_pid), GC),
+    lists:map(fun hcuqj_perform_ui/1, SL);
+hcuqj_perform(_) ->
+    unknown_job.
+
+hcuqj_perform_ui(Statement) ->
+    NS = erlang:get(node_state_pid),
+    S = string:split(Statement, " ", all),
+    case (catch gen_server:call(NS, {perform_ui, S})) of
+	{'EXIT', E} ->
+	    error_msg(node_state, hcuqj_perform_ui, [Statement], E),
+	    R = io_lib:format("process ~p is busy.\n", [NS]);
+	R -> R
+    end,
+    info_msg(node_state, hcuqj_perform_ui, [Statement], R, 50).
 
 %% 
 %% handle_cast/2
@@ -382,178 +518,6 @@ nt_site(local2) ->
       ?_assertMatch(BSC, gen_server:call(NSC, {get, BSP})),
 
       ?_assertMatch(ok,        b3s:stop())
-     ]};
-
-nt_site(yjr6) ->
-    NW     = 'b3ss02@wild.rlab.miniy.yahoo.co.jp',
-    NC     = 'b3ss02@circus.rlab.miniy.yahoo.co.jp',
-    NI     = 'b3ss02@innocents.rlab.miniy.yahoo.co.jp',
-    NE     = 'b3ss02@erasure.rlab.miniy.yahoo.co.jp',
-    NL     = 'b3ss02@loveboat.rlab.miniy.yahoo.co.jp',
-    NN     = 'b3ss02@nightbird.rlab.miniy.yahoo.co.jp',
-
-    ND     = node(),
-    BS     = b3s_state,
-    NS     = node_state,
-    BSP    = b3s_state_pid,
-    CRC    = clm_row_conf,
-    PRC    = pred_clm,
-    UND    = undefined,
-
-    BSS    = {BS, ND},
-    BSN    = {BS, NN},
-    NSW    = {NS, NW},
-    NSC    = {NS, NC},
-    NSI    = {NS, NI},
-    NSE    = {NS, NE},
-    NSL    = {NS, NL},
-    NSN    = {NS, NN},
-
-    RM1    = #{1 => NW, 2 => NC},
-    RM2    = #{1 => NI, 2 => NE},
-    RM3    = #{1 => NL, 2 => NN},
-    CM1    = #{1 => RM1, 2 => RM2, 3 => RM3},
-    R01    = [NL, NN, NW, NC, NE, NI],
-
-    DF1    = #{",)>" => 2,
-	       "<actedIn>" => 1,
-	       "<byTransport>" => 3,
-	       "<created>" => 3,
-	       "<dealsWith>" => 3,
-	       "<diedIn>" => 2,
-	       "<diedOnDate>" => 1,
-	       "<directed>" => 3,
-	       "<edited>" => 3,
-	       "<endedOnDate>" => 3,
-	       "<exports>" => 1,
-	       "<extractionSource>" => 1,
-	       "<extractionTechnique>" => 3,
-	       "<graduatedFrom>" => 2,
-	       "<happenedIn>" => 2,
-	       "<happenedOnDate>" => 1,
-	       "<hasAcademicAdvisor>" => 2,
-	       "<hasAirportCode>" => 1,
-	       "<hasArea>" => 3,
-	       "<hasBudget>" => 1,
-	       "<hasCapital>" => 1,
-	       "<hasChild>" => 2,
-	       "<hasConfidence>" => 1,
-	       "<hasCurrency>" => 3,
-	       "<hasDuration>" => 1,
-	       "<hasEconomicGrowth>" => 1,
-	       "<hasExpenses>" => 2,
-	       "<hasExport>" => 1,
-	       "<hasFamilyName>" => 2,
-	       "<hasGDP>" => 3,
-	       "<hasGender>" => 1,
-	       "<hasGeonamesClassId>" => 2,
-	       "<hasGeonamesEntityId>" => 3,
-	       "<hasGini>" => 2,
-	       "<hasGivenName>" => 3,
-	       "<hasGloss>" => 1,
-	       "<hasHeight>" => 3,
-	       "<hasISBN>" => 2,
-	       "<hasImdb>" => 1,
-	       "<hasImport>" => 3,
-	       "<hasInflation>" => 2,
-	       "<hasLanguageCode>" => 1,
-	       "<hasLatitude>" => 2,
-	       "<hasLength>" => 1,
-	       "<hasLongitude>" => 1,
-	       "<hasMotto>" => 3,
-	       "<hasMusicalRole>" => 1,
-	       "<hasNumber>" => 2,
-	       "<hasNumberOfPeople>" => 1,
-	       "<hasNumberOfThings>" => 2,
-	       "<hasOfficialLanguage>" => 2,
-	       "<hasPages>" => 1,
-	       "<hasPopulationDensity>" => 1,
-	       "<hasPoverty>" => 3,
-	       "<hasPredecessor>" => 3,
-	       "<hasRevenue>" => 3,
-	       "<hasSuccessor>" => 1,
-	       "<hasSynsetId>" => 2,
-	       "<hasTLD>" => 2,
-	       "<hasThreeLetterLanguageCode>" => 3,
-	       "<hasUnemployment>" => 3,
-	       "<hasWebsite>" => 2,
-	       "<hasWeight>" => 2,
-	       "<hasWikipediaArticleLength>" => 1,
-	       "<hasWikipediaUrl>" => 3,
-	       "<hasWonPrize>" => 3,
-	       "<hasWordnetDomain>" => 2,
-	       "<holdsPoliticalPosition>" => 2,
-	       "<imports>" => 1,
-	       "<influences>" => 3,
-	       "<isAffiliatedTo>" => 1,
-	       "<isCitizenOf>" => 1,
-	       "<isConnectedTo>" => 2,
-	       "<isInterestedIn>" => 3,
-	       "<isKnownFor>" => 2,
-	       "<isLeaderOf>" => 3,
-	       "<isLocatedIn>" => 2,
-	       "<isMarriedTo>" => 2,
-	       "<isPoliticianOf>" => 1,
-	       "<isPreferredMeaningOf>" => 1,
-	       "<linksTo>" => 2,
-	       "<livesIn>" => 3,
-	       "<occursSince>" => 3,
-	       "<occursUntil>" => 2,
-	       "<owns>" => 1,
-	       "<participatedIn>" => 3,
-	       "<playsFor>" => 3,
-	       "<startedOnDate>" => 3,
-	       "<wasBornIn>" => 3,
-	       "<wasBornOnDate>" => 1,
-	       "<wasCreatedOnDate>" => 2,
-	       "<wasDestroyedOnDate>" => 2,
-	       "<worksAt>" => 2,
-	       "<wroteMusicFor>" => 1,
-	       "owl:disjointWith" => 3,
-	       "owl:equivalentClass" => 2,
-	       "owl:sameAs" => 3,
-	       "rdf:type" => 1,
-	       "rdfs:comment" => 2,
-	       "rdfs:domain" => 1,
-	       "rdfs:label" => 2,
-	       "rdfs:range" => 3,
-	       "rdfs:subClassOf" => 3,
-	       "rdfs:subPropertyOf" => 1,
-	       "skos:prefLabel" => 2},
-
-    {inorder,
-     [
-      ?_assertMatch(ok,  b3s:start()),
-      ?_assertMatch(ok,  gen_server:call(BSS, {put, CRC, CM1})),
-      ?_assertMatch(R01, sets:to_list(
-			   sets:from_list(
-			     gen_server:call(BSS, propagate)))),
-      ?_assertMatch(BSS, gen_server:call(NSW, {get, BSP})),
-      ?_assertMatch(BSS, gen_server:call(NSC, {get, BSP})),
-      ?_assertMatch(BSS, gen_server:call(NSI, {get, BSP})),
-      ?_assertMatch(BSS, gen_server:call(NSE, {get, BSP})),
-      ?_assertMatch(BSS, gen_server:call(NSL, {get, BSP})),
-      ?_assertMatch(BSS, gen_server:call(NSN, {get, BSP})),
-      ?_assertMatch(ok,  gen_server:call(BSS, {clone, NN})),
-      ?_assertMatch(ok,  gen_server:call(BSN, {put, PRC, DF1})),
-      ?_assertMatch(R01, sets:to_list(
-			   sets:from_list(
-			     gen_server:call(BSN, propagate)))),
-      ?_assertMatch(UND, gen_server:call(BSS, {get, PRC})),
-      ?_assertMatch(DF1, gen_server:call(BSN, {get, PRC})),
-      ?_assertMatch(BSN, gen_server:call(NSW, {get, BSP})),
-      ?_assertMatch(BSN, gen_server:call(NSC, {get, BSP})),
-      ?_assertMatch(BSN, gen_server:call(NSI, {get, BSP})),
-      ?_assertMatch(BSN, gen_server:call(NSE, {get, BSP})),
-      ?_assertMatch(BSN, gen_server:call(NSL, {get, BSP})),
-      ?_assertMatch(BSN, gen_server:call(NSN, {get, BSP})),
-      ?_assertMatch(DF1, gen_server:call(NSW, {get, PRC})),
-      ?_assertMatch(DF1, gen_server:call(NSC, {get, PRC})),
-      ?_assertMatch(DF1, gen_server:call(NSI, {get, PRC})),
-      ?_assertMatch(DF1, gen_server:call(NSE, {get, PRC})),
-      ?_assertMatch(DF1, gen_server:call(NSL, {get, PRC})),
-      ?_assertMatch(DF1, gen_server:call(NSN, {get, PRC})),
-      ?_assertMatch(ok,  b3s:stop())
      ]};
 
 nt_site(_) ->

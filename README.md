@@ -14,11 +14,6 @@ that splits the triples on the basis of the
 relation of each particular triple to the taxonomy of RDF classes
 and properties. 
 
-* Installation and deployment
-* big3store e-documentation
-* Contribution guidelines
-* Contact and discussion
-
 ## Installation and deployment ##
 
 The basic tasks of the big3store installation and deployment process 
@@ -28,6 +23,7 @@ are described.
 * [Configure system](src/HOWTO/configure-system.md)
 * [Loading triple-store](src/HOWTO/load-triples.md)
 * [big3store user interface](src/HOWTO/user-interface.md)
+* [getting started on AWS](src/HOWTO/aws.md)
 
 ## big3store documentation ##
 

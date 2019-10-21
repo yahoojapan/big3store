@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>A gen_server process for distributing given triples and triple
   patterns to columns of available data servers and managing schema
   information.
-<p>Copyright © 2014-2016 UP FAMNIT and Yahoo Japan Corporation</p>
+<p>Copyright © 2014-2019 UP FAMNIT and Yahoo Japan Corporation</p>
 
 <p><b>Version:</b> 0.3</p>
 <p><b>Introduced in:</b> March, 2014</p>
@@ -346,28 +346,14 @@ be constructed by the investigate_stream process.</p>
   process that runs on a front server node.</td></tr>
 <tr><td valign="top"><a href="#register_columns-1">register_columns/1</a></td><td>Register Erlang nodes to columns of triple_distributor process
   that runs on a fron server node.</td></tr>
-<tr><td valign="top"><a href="#tcdy_test_query-4">tcdy_test_query/4*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tcdy_test_query_server-6">tcdy_test_query_server/6*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#td_test_-0">td_test_/0*</a></td><td>Unit tests.</td></tr>
 <tr><td valign="top"><a href="#tdt_check_data_local-0">tdt_check_data_local/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_check_data_yjr2_small-0">tdt_check_data_yjr2_small/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_check_data_yjr6-0">tdt_check_data_yjr6/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_check_data_yjr6_middle-0">tdt_check_data_yjr6_middle/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_check_data_yjr6_small-0">tdt_check_data_yjr6_small/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_check_data_yjr6_yjr6yg2s-0">tdt_check_data_yjr6_yjr6yg2s/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tdt_flush_local-0">tdt_flush_local/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tdt_flush_local_db_bdbnif-0">tdt_flush_local_db_bdbnif/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tdt_flush_local_mnesia_qlc-0">tdt_flush_local_mnesia_qlc/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_flush_yjr6-0">tdt_flush_yjr6/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tdt_investigate-0">tdt_investigate/0</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_investigate_store_middle-0">tdt_investigate_store_middle/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_investigate_store_small-0">tdt_investigate_store_small/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_investigate_store_yjr6yg2s-0">tdt_investigate_store_yjr6yg2s/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_node_connection-0">tdt_node_connection/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tdt_put_get_save_load-0">tdt_put_get_save_load/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tdt_register_local-0">tdt_register_local/0</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_register_yjr2-0">tdt_register_yjr2/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tdt_register_yjr6-0">tdt_register_yjr6/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tdt_reset_string_id-0">tdt_reset_string_id/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tdt_send_empty-1">tdt_send_empty/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tdt_site-1">tdt_site/1*</a></td><td></td></tr>
@@ -377,11 +363,7 @@ be constructed by the investigate_stream process.</p>
 <tr><td valign="top"><a href="#tdt_store_pbl_pd-0">tdt_store_pbl_pd/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tdt_store_pbl_rnd-0">tdt_store_pbl_rnd/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
-<tr><td valign="top"><a href="#tim_confirm-2">tim_confirm/2*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#tim_start-3">tim_start/3*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#trl_set_remote_env-3">trl_set_remote_env/3*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#ttqs_empty-3">ttqs_empty/3*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#ttqs_empty_assert-3">ttqs_empty_assert/3*</a></td><td></td></tr>
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
@@ -696,16 +678,6 @@ be constructed by the investigate_stream process.</p>
   request (<a href="#hc_rn-2"><code>hc_rn/2</code></a>) from remote nodes.
  </p>
 
-<h3 class="function"><a name="tcdy_test_query-4">tcdy_test_query/4 *</a></h3>
-<div class="spec">
-<p><tt>tcdy_test_query(TP, QI, VP, RL) -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tcdy_test_query_server-6">tcdy_test_query_server/6 *</a></h3>
-<div class="spec">
-<p><tt>tcdy_test_query_server(Node, TriplePat, QNId, ColRow, VarPos, ResultList) -&gt; any()</tt></p>
-</div>
-
 <h3 class="function"><a name="td_test_-0">td_test_/0 *</a></h3>
 <div class="spec">
 <p><tt>td_test_() -&gt; any()</tt></p>
@@ -715,31 +687,6 @@ be constructed by the investigate_stream process.</p>
 <h3 class="function"><a name="tdt_check_data_local-0">tdt_check_data_local/0 *</a></h3>
 <div class="spec">
 <p><tt>tdt_check_data_local() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_check_data_yjr2_small-0">tdt_check_data_yjr2_small/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_check_data_yjr2_small() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_check_data_yjr6-0">tdt_check_data_yjr6/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_check_data_yjr6() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_check_data_yjr6_middle-0">tdt_check_data_yjr6_middle/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_check_data_yjr6_middle() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_check_data_yjr6_small-0">tdt_check_data_yjr6_small/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_check_data_yjr6_small() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_check_data_yjr6_yjr6yg2s-0">tdt_check_data_yjr6_yjr6yg2s/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_check_data_yjr6_yjr6yg2s() -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="tdt_flush_local-0">tdt_flush_local/0</a></h3>
@@ -757,34 +704,9 @@ be constructed by the investigate_stream process.</p>
 <p><tt>tdt_flush_local_mnesia_qlc() -&gt; any()</tt></p>
 </div>
 
-<h3 class="function"><a name="tdt_flush_yjr6-0">tdt_flush_yjr6/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_flush_yjr6() -&gt; any()</tt></p>
-</div>
-
 <h3 class="function"><a name="tdt_investigate-0">tdt_investigate/0</a></h3>
 <div class="spec">
 <p><tt>tdt_investigate() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_investigate_store_middle-0">tdt_investigate_store_middle/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_investigate_store_middle() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_investigate_store_small-0">tdt_investigate_store_small/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_investigate_store_small() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_investigate_store_yjr6yg2s-0">tdt_investigate_store_yjr6yg2s/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_investigate_store_yjr6yg2s() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_node_connection-0">tdt_node_connection/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_node_connection() -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="tdt_put_get_save_load-0">tdt_put_get_save_load/0 *</a></h3>
@@ -795,16 +717,6 @@ be constructed by the investigate_stream process.</p>
 <h3 class="function"><a name="tdt_register_local-0">tdt_register_local/0</a></h3>
 <div class="spec">
 <p><tt>tdt_register_local() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_register_yjr2-0">tdt_register_yjr2/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_register_yjr2() -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tdt_register_yjr6-0">tdt_register_yjr6/0 *</a></h3>
-<div class="spec">
-<p><tt>tdt_register_yjr6() -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="tdt_reset_string_id-0">tdt_reset_string_id/0 *</a></h3>
@@ -853,33 +765,13 @@ be constructed by the investigate_stream process.</p>
 </div><p>Process termination.
  </p>
 
-<h3 class="function"><a name="tim_confirm-2">tim_confirm/2 *</a></h3>
-<div class="spec">
-<p><tt>tim_confirm(Id, Count) -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="tim_start-3">tim_start/3 *</a></h3>
-<div class="spec">
-<p><tt>tim_start(Mode, Id, File) -&gt; any()</tt></p>
-</div>
-
 <h3 class="function"><a name="trl_set_remote_env-3">trl_set_remote_env/3 *</a></h3>
 <div class="spec">
 <p><tt>trl_set_remote_env(Node, Par, Val) -&gt; any()</tt></p>
 </div>
-
-<h3 class="function"><a name="ttqs_empty-3">ttqs_empty/3 *</a></h3>
-<div class="spec">
-<p><tt>ttqs_empty(QNId, Node, ResultList) -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="ttqs_empty_assert-3">ttqs_empty_assert/3 *</a></h3>
-<div class="spec">
-<p><tt>ttqs_empty_assert(X1, ResultList, Node) -&gt; any()</tt></p>
-</div>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 21 2016, 14:07:00.</i></p>
+<p><i>Generated by EDoc</i></p>
 </body>
 </html>

@@ -1,0 +1,5 @@
+%% -*- Erlang -*-
+[{kernel,[
+  {inet_dist_listen_min, %%PRTMIN%%},
+  {inet_dist_listen_max, %%PRTMAX%%}
+]}].

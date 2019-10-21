@@ -11,12 +11,12 @@
 
 <h1>Module node_state</h1>
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Manage global resources of one node.
-<p>Copyright © 2014-2016 UP FAMNIT and Yahoo Japan Corporation</p>
+<p>Copyright © 2014-2019 UP FAMNIT and Yahoo Japan Corporation</p>
 
 <p><b>Version:</b> 0.3</p>
 <p><b>Introduced in:</b> August, 2014</p>
 <p><b>Authors:</b> Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
-<p><b>See also:</b> <a href="b3s.html">b3s</a>, <a href="b3s_state.html">b3s_state</a>.</p>
+<p><b>See also:</b> <a href="b3s.html">b3s</a>, <a href="b3s_state.html">b3s_state</a>, <a href="user_interface.html">user_interface</a>.</p>
 
 <h2><a name="description">Description</a></h2><p>Manage global resources of one node. This is a gen_server  
 process running on each node that belongs to the distributed  
@@ -63,6 +63,9 @@ big3store system.</p>
   <tr> <td>db_interface_cursor</td> <td><code><a href="db_interface.html#type-di_bdbnif_cursor">db_interface:di_bdbnif_cursor()</a></code></td> <td>session information for a
   table.</td> </tr>
  
+  <tr> <td>ui_queued_jobs</td> <td>[<code><a href="user_interface.html#type-ui_job_tuple">user_interface:ui_job_tuple()</a></code>]</td> <td>a list of running
+  jobs.</td> </tr>
+ 
   </table>
  
   <h3><a name="handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></h3>
@@ -80,21 +83,48 @@ big3store system.</p>
   <tr> <td><a href="#{put,_PropertyName,_Value}">{put, PropertyName, Value}</a></td> <td>atom(),
   term()</td> <td>ok | {error, term()}</td> <td>put value</td> </tr>
  
+  <tr> <td><a href="#{perform_ui,_UIStatement}">{perform_ui, UIStatement}</a></td>
+  <td>[string()]</td> <td>string()</td> <td>perform a statement</td>
+  </tr>
+ 
+  <tr> <td><a href="#next_message">next_message</a></td> <td></td> <td>string() |
+  no_message</td> <td>obtain a result message</td> </tr>
+ 
   </table>
  
   <h4><a name="{get,_PropertyName}">{get, PropertyName}</a></h4>
  
-  <p>This message takes PropertyName::atom() as an argument and returns
-  the value Result::term() of the specified global property managed
-  by the node_state process. It returns undefined, if the property
-  was not defined yet. (LINK: <a href="#{get,_PropertyName}">{get, PropertyName}</a>)</p>
+  <p>This message gets a value of the specified property. It takes
+  PropertyName::atom() as an argument and returns the value
+  Result::term() of the specified global property managed by the
+  node_state process. It returns undefined, if the property was not
+  defined yet. (LINK: <a href="#{get,_PropertyName}">{get, PropertyName}</a>)</p>
  
   <h4><a name="{put,_PropertyName,_Value}">{put, PropertyName, Value}</a></h4>
  
-  <p>This message takes PropertyName::atom() and Value::term() as
+  <p>This message puts the specified value into the specified
+  property. It takes PropertyName::atom() and Value::term() as
   arguments. If it successfully puts the value to the property, it
   returns ok. Otherwise, it returns {error, Reason::term()}. (LINK:
   <a href="#{put,_PropertyName,_Value}">{put, PropertyName, Value}</a>)</p>
+ 
+  <h4><a name="{perform_ui,_UIStatement}">{perform_ui, UIStatement}</a></h4>
+ 
+  <p>This message performs the specified <a href="user_interface.html"><code>user_interface</code></a>
+  statement. It takes UIStatement::[string()] as arguments. While the
+  user interface usually takes a space delimited string as an input
+  statement, this message takes a list of strings splitted by
+  spaces. It returns a result string if the statement was
+  successfully executed within 5 seconds. Otherwise, it returns the
+  message: 'performing job. try later: gc &lt;node&gt; NS
+  next_message'. The result could be obtained calling <a href="#next_message">next_message</a> API later in the latter case. (LINK: <a href="#{perform_ui,_UIStatement}">{perform_ui, UIStatement}</a>)</p>
+ 
+  <h4><a name="next_message">next_message</a></h4>
+ 
+  <p>This message obtains the next result message of the <a href="user_interface.html"><code>user_interface</code></a> statement that had been executed by calling
+  <a href="#{perform_ui,_UIStatement}">{perform_ui, UIStatement}</a> API. It returns the result
+  string if the result message arrived within 1 seconds. Otherwise,
+  it returns an atom 'no_message'. (LINK: <a href="#next_message">next_message</a>)</p>
  
   <h3><a name="handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></h3>
  
@@ -161,6 +191,9 @@ big3store system.</p>
 <tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
 <tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
+<tr><td valign="top"><a href="#hcp_check_ui_queued_jobs-1">hcp_check_ui_queued_jobs/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcuqj_perform-1">hcuqj_perform/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hcuqj_perform_ui-1">hcuqj_perform_ui/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#im_cond-3">im_cond/3*</a></td><td>Report an information issue to the error_logger with specified
   format and argument if current debug level is greater than
   ThresholdDL.</td></tr>
@@ -229,6 +262,21 @@ big3store system.</p>
 </div><p>Save process all dictionary contents into state map structure.
  </p>
 
+<h3 class="function"><a name="hcp_check_ui_queued_jobs-1">hcp_check_ui_queued_jobs/1 *</a></h3>
+<div class="spec">
+<p><tt>hcp_check_ui_queued_jobs(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcuqj_perform-1">hcuqj_perform/1 *</a></h3>
+<div class="spec">
+<p><tt>hcuqj_perform(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hcuqj_perform_ui-1">hcuqj_perform_ui/1 *</a></h3>
+<div class="spec">
+<p><tt>hcuqj_perform_ui(Statement) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="im_cond-3">im_cond/3 *</a></h3>
 <div class="spec">
 <p><tt>im_cond(Format::atom(), Argument::term(), ThresholdDL::integer()) -&gt; ok</tt><br></p>
@@ -274,6 +322,6 @@ big3store system.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 21 2016, 14:07:00.</i></p>
+<p><i>Generated by EDoc</i></p>
 </body>
 </html>

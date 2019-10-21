@@ -476,10 +476,12 @@ $$ LANGUAGE plpgsql;
 DO $$BEGIN RAISE NOTICE '%', 'define function index_si_str_h1k'; END$$;
 CREATE OR REPLACE FUNCTION
 index_si_str_h1k(
-    si_tab text
+    si_tab text,
+    part_nam text
 )
 RETURNS integer AS $$
 DECLARE
+    sip_tab text := si_tab || '_' || part_nam;
     qa text[];
     nq integer := 0;
     sq text;
@@ -498,11 +500,11 @@ BEGIN
     RAISE NOTICE '%', ms;
     RAISE NOTICE '%', s0 || s1 || s2 || s3;
 
-    qa[1] := 'DROP INDEX IF EXISTS ' || si_tab || '_ix_str_h1k';
-    qa[2] := 'CREATE INDEX ' || si_tab || '_ix_str_h1k ON ' ||
-               si_tab || ' (left(str, 1000))';
+    qa[1] := 'DROP INDEX IF EXISTS ' || sip_tab || '_ix_str_h1k';
+    qa[2] := 'CREATE INDEX ' || sip_tab || '_ix_str_h1k ON ' ||
+               sip_tab || ' (left(str, 1000))';
     qa[3] := 'SELECT setval(''' || si_tab ||
-    	       '_serial'', max(id)) FROM ' || si_tab;
+    	       '_serial'', max(id)) FROM ' || sip_tab;
 
     FOREACH sq IN ARRAY qa LOOP
 

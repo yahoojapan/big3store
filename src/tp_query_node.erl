@@ -1,7 +1,7 @@
 %%
 %% Triple Pattern Query Node processes
 %%
-%% @copyright 2014-2016 UP FAMNIT and Yahoo Japan Corporation
+%% @copyright 2014-2019 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since May, 2014
 %% @author Iztok Savnik <iztok.savnik@famnit.upr.si>
@@ -803,14 +803,9 @@ hcet_site(local_two) ->
 hcet_site(_) ->
     [].
 
-%% rr("record.hrl").
-%% c("tm.erl"), tm:do(qlc:q([X||X<-mnesia:table(triple_store)])).
-
 hcet_load_db() ->
     case ?STRING_ID_CODING_METHOD of
-	string_integer -> hcet_load_db_epgsql_string_integer();
-	1              -> hcet_load_db_bdbnif();
-	_              -> hcet_load_db_mnesia_qlc()
+	string_integer -> hcet_load_db_epgsql_string_integer()
     end.
 
 hcet_load_db_epgsql_string_integer() ->
@@ -923,153 +918,6 @@ hcet_load_db_epgsql_string_integer() ->
       ?_assertMatch(ok,  db_interface:db_close())
      ]}.
 
-hcet_load_db_bdbnif() ->
-    Tab = db_interface:dot_get_tn(),
-
-    I01 = "<triple_id_0001>",
-    S01 = "<Chinese>",
-    P01 = "<eat>",
-    O01 = "<vegetables>",
-    T01 = {Tab, I01, S01, P01, O01},
-
-    I02 = "<triple_id_0002>",
-    S02 = "<Japanese>",
-    O02 = "<fishes>",
-    T02 = {Tab, I02, S02, P01, O02},
-
-    I03 = "<triple_id_0003>",
-    S03 = "<Slovenian>",
-    O03 = "<potatoes>",
-    T03 = {Tab, I03, S03, P01, O03},
-    TP01 = {I01,  "?s", "?p", "?o"},
-    TP02 = {I02,  "?s", "?p", "?o"},
-    TP03 = {I03,  "?s", "?p", "?o"},
-
-    TP11 = {"?id", "<Chinese>", "<eat>", "<vegetables>"},
-    TP12 = {"?id", "?sbj",      "<eat>", "<fishes>"},
-    TP13 = {"?id", "<Chinese>", "?prd",  "<vegetables>"},
-    TP14 = {"?id", "<Chinese>", "<eat>", "?obj"},
-    TP15 = {"?id", "<Chinese>", "?prd",  "?obj"},
-    TP16 = {"?id", "?sbj",      "<eat>", "?obj"},
-    TP17 = {"?id", "?sbj",      "?prd",  "<potatoes>"},
-    TP18 = {"?id", "?sbj",      "?prd",  "?obj"},
-    TP19 = {"_:",  "_:sbj",     "_:prd", "_:obj"},
-    TP20 = {"?id", "<Chinese>", "<eat>", "<fishes>"},
-    TP21 = {"?id", "<Chinese>", "?prd",  "<fished>"},
-
-    EOS = end_of_stream,
-
-    {inorder,
-     [
-      ?_assertMatch(ok,  db_interface:db_init()),
-      ?_assertMatch(ok,  db_interface:db_add_index()),
-      ?_assertMatch(ok,  db_interface:db_write(T01)),
-      ?_assertMatch(ok,  db_interface:db_write(T02)),
-      ?_assertMatch(ok,  db_interface:db_write(T03)),
-      ?_assertMatch(ok,  db_interface:db_close()),
-
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP01)),
-      ?_assertMatch(T01, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP02)),
-      ?_assertMatch(T02, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP03)),
-      ?_assertMatch(T03, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP12)),
-      ?_assertMatch(T02, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP13)),
-      ?_assertMatch(T01, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP14)),
-      ?_assertMatch(T01, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP15)),
-      ?_assertMatch(T01, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP16)),
-      ?_assertMatch(T02, db_interface:db_next()),
-      ?_assertMatch(T03, db_interface:db_next()),
-      ?_assertMatch(T01, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP17)),
-      ?_assertMatch(T03, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP18)),
-      ?_assertMatch(T01, db_interface:db_next()),
-      ?_assertMatch(T02, db_interface:db_next()),
-      ?_assertMatch(T03, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP19)),
-      ?_assertMatch(T01, db_interface:db_next()),
-      ?_assertMatch(T02, db_interface:db_next()),
-      ?_assertMatch(T03, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP21)),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP11)),
-      ?_assertMatch(T01, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP20)),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_close())
-     ]}.
-
-hcet_load_db_mnesia_qlc() ->
-    info_msg(hcet_load_db, [get(self),get()], start, 50),
-
-    T1 = #triple_store{id = "<triple_id_0001>",
-    		       s  = "<Chinese>",
-    		       p  = "<eat>",
-    		       o  = "<vegetables>"},
-
-    T2 = #triple_store{id = "<triple_id_0002>",
-    		       s  = "<Japanese>",
-    		       p  = "<eat>",
-    		       o  = "<fishes>"},
-
-    T3 = #triple_store{id = "<triple_id_0003>",
-    		       s  = "<Slovenian>",
-    		       p  = "<eat>",
-    		       o  = "<potatoes>"},
-
-    %% AGE = fun(X) -> application:get_env(b3s, X) end,
-    MW  = fun db_interface:db_write/1,
-
-    Q1  = qlc:q([X||X<-mnesia:table(triple_store)]),
-    Q2  = qlc:q([X||X<-mnesia:table(triple_store),
-    		    X#triple_store.s=="<Japanese>"]),
-    Q3  = qlc:q([X||X<-mnesia:table(triple_store),
-    		    X#triple_store.p=="<eat>"]),
-    Q4  = qlc:q([X||X<-mnesia:table(triple_store),
-    		    X#triple_store.p=="<eat>",
-    		    X#triple_store.o=="<potatoes>"]),
-    Q5  = qlc:q([X||X<-mnesia:table(triple_store),
-    		    true,
-    		    X#triple_store.p=="<eat>",
-    		    X#triple_store.o=="<potatoes>"]),
-
-    info_msg(hcet_load_db, [get(self), get()], testing, 50),
-    {inorder,
-     [
-      ?_assertMatch(ok, mnesia:start()),
-      ?_assertMatch(ok, timer:sleep(1000)),
-      %% ?_assertMatch({ok, triple_store}, AGE(name_of_triple_table)),
-      ?_assertMatch(ok,           db_interface:db_init()),
-      ?_assertMatch(ok,           db_interface:db_add_index()),
-      ?_assertMatch(ok,           MW(T1)),
-      ?_assertMatch(ok,           MW(T2)),
-      ?_assertMatch(ok,           MW(T3)),
-      ?_assertMatch([T3, T2, T1], tm:do(Q1)),
-      ?_assertMatch([T2],         tm:do(Q2)),
-      ?_assertMatch([T1, T2, T3], tm:do(Q3)),
-      ?_assertMatch([T3],         tm:do(Q4)),
-      ?_assertMatch([T3],         tm:do(Q5))
-     ]}.
-
 hcet_send_empty(TPQN, R) ->
     gen_server:cast(TPQN, {empty, self()}),
     receive
@@ -1081,8 +929,7 @@ hcet_send_empty(TPQN, R) ->
 
 hcet_q01() ->
     case ?STRING_ID_CODING_METHOD of
-	string_integer -> hcet_q01_string_integer();
-	_              -> hcet_q01_no_encode()
+	string_integer -> hcet_q01_string_integer()
     end.
 
 hcet_q01_string_integer() ->
@@ -1122,48 +969,6 @@ hcet_q01_string_integer() ->
 
     info_msg(hcet_q01_string_integer,
 	     [get(self), get(), {'T1', T1}, {'R1', R1}], testing, 50),
-    {inorder,
-     [
-      ?_assertMatch(ok,            gen_server:call(TPQN1, M1)),
-      ?_assertMatch(active,        gen_server:call(TPQN1, {GP, state})),
-      ?_assertMatch(ok,            gen_server:call(TPQN1, M2)),
-      ?_assertMatch(db_access,     gen_server:call(TPQN1, {GP, state})),
-      ?_assertMatch({_, R1},       hcet_send_empty(TPQN1, R1)),
-      ?_assertMatch(outer,         gen_server:call(TPQN1, {GP, inner_outer})),
-      ?_assertMatch(ok,            gen_server:cast(TPQN1, {stop, self()})),
-      ?_assertMatch(ok,            timer:sleep(1000))
-     ]}.
-
-hcet_q01_no_encode() ->
-    info_msg(hcet_q01, [get(self), get()], start, 50),
-    SessionId = "1",
-    QueryId = "1",
-    QueryNodeId   = "2",
-    Id = list_to_atom(SessionId++"-"++QueryId++"-"++QueryNodeId),
-    TPQN1 = spawn_process(Id, node()),
-    TriplePattern = {"?id", "<Chinese>", "<eat>", "?obj"},
-    SelectPred = none,
-    ProjectList = none,
-    ParentPid     = self(),
-    VarsPositions = #{"?id" => 1, "?obj" => 4},
-    M1            = {start, QueryNodeId, QueryId, SessionId, TPQN1, TriplePattern,
-		     SelectPred, ProjectList, ParentPid, VarsPositions, outer},
-    M2            = {eval, []},
-
-    T1 = #triple_store{id = "<triple_id_0001>",
-    		       s  = "<Chinese>",
-    		       p  = "<eat>",
-    		       o  = "<vegetables>"},
-
-    GP            = get_property,
-    DFO           = data_outer,
-    EOS           = end_of_stream,
-
-    R1Map         = maps:put(QueryNodeId, T1, maps:new()),
-    R1            = {DFO, {Id, node()}, [R1Map,EOS]},
-%    R2            = {DFO, {Id, node()}, EOS},
-
-    info_msg(hcet_q01, [get(self), get()], testing, 50),
     {inorder,
      [
       ?_assertMatch(ok,            gen_server:call(TPQN1, M1)),

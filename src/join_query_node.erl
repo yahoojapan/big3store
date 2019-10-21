@@ -1,7 +1,7 @@
 %%
 %% Join Query Node processes
 %%
-%% @copyright 2014-2016 UP FAMNIT and Yahoo Japan Corporation
+%% @copyright 2014-2019 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since May, 2014
 %% @author Iztok Savnik <iztok.savnik@famnit.upr.si>
@@ -1324,9 +1324,7 @@ example_table() ->
 
 hcet_load_db() ->
     case 2 of
-	2 -> hcet_load_db_postgres();
-	1 -> hcet_load_db_bdbnif();
-	_ -> hcet_load_db_mnesia_qlc()
+	2 -> hcet_load_db_postgres()
     end.
 
 hcet_load_db_postgres() ->
@@ -1385,109 +1383,6 @@ hcet_load_db_postgres() ->
       ?_assertMatch(EOS, db_interface:db_next()),
       ?_assertMatch(ok,  db_interface:db_close())
      ]}.
-
-hcet_load_db_bdbnif() ->
-    info_msg(hcet_load_db_bdbnif, [get(self)], start, 50),
-
-    Tab = db_interface:dot_get_tn(),
-    Fsto = fun (X) ->
-		   {_, Tid, Sbj, Prd, Obj} = X,
-		   D = {Tab, Tid, Sbj, Prd, Obj},
-		   db_interface:db_write(D)
-	   end,
-
-    ok = db_interface:db_init(),
-    ok = db_interface:db_add_index(),
-    lists:foreach(Fsto, example_table()),
-    ok = db_interface:db_close(),
-
-    TP01 = {"id1", "?s", "?p", "?o"},
-    TP02 = {"id11", "?s", "?p", "?o"},
-    TP03 = {"id56", "?s", "?p", "?o"},
-    R01  = {Tab, "id1", "japan", "type", "country"},
-    R02  = {Tab, "id11", "yj", "type",	"corporation"},
-    R03  = {Tab, "id56", "nika", "graduatedFrom", "ul"},
-    EOS  = end_of_stream,
-
-    {inorder,
-     [
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP01)),
-      ?_assertMatch(R01, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP02)),
-      ?_assertMatch(R02, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_open_tp(TP03)),
-      ?_assertMatch(R03, db_interface:db_next()),
-      ?_assertMatch(EOS, db_interface:db_next()),
-      ?_assertMatch(ok,  db_interface:db_close())
-     ]}.
-
-hcet_load_db_mnesia_qlc() ->
-    info_msg(hcet_load_db, [get(self)], start, 50),
-
-    Attrs = {attributes, record_info(fields, triple_store)},
-    TabDef = [Attrs, {disc_copies, [node()]}],
-    info_msg(hcet_load_db, [get(self), TabDef], display_table, 50),
-
-    ET = example_table(),
-
-    %% AGE = fun(X) -> application:get_env(b3s, X) end,
-    F = fun() ->
-            lists:foreach(fun mnesia:write/1, ET)
-        end,
-    MW = fun() -> mnesia:transaction(F) end,
-
-%    F1 = fun(QLC, List) ->
-%		 Result = tm:do(QLC),
-%		 SetR = sets:from_list(Result),
-%		 SetL = sets:from_list(List),
-%		 RL = sets:to_list(sets:subtract(SetR, SetL)),
-%		 LR = sets:to_list(sets:subtract(SetL, SetR)),
-%		 {RL, LR}
-%	 end,
-
-    Q1  = qlc:q([X||X<-mnesia:table(triple_store)]),
-    Q2  = qlc:q([X||X<-mnesia:table(triple_store), X#triple_store.s=="koper"]),
-    Q3  = qlc:q([X||X<-mnesia:table(triple_store), X#triple_store.p=="livesIn"]),
-    Q4  = qlc:q([X||X<-mnesia:table(triple_store),
-		    X#triple_store.p=="worksAt",
-		    X#triple_store.o=="yj"]),
-
-%    R2  = [{triple_store,"id26","koper","isLocatedIn","slovenia"},
-%	   {triple_store,"id3","koper","type","city"}],
-%    R3  = [{triple_store,"id35","shou","livesIn","tokyo"},
-%	   {triple_store,"id40","nika","livesIn","ljubljana"},
-%	   {triple_store,"id37","sakura","livesIn","kyoto"},
-%	   {triple_store,"id36","yoshio","livesIn","tokyo"},
-%	   {triple_store,"id38","luka","livesIn","koper"},
-%	   {triple_store,"id39","jan","livesIn","koper"}],
-%    R4  = [{triple_store,"id41","shou","worksAt","yj"},
-%	   {triple_store,"id43","yoshio","worksAt","yj"}],
-
-    %% rr("record.hrl").
-    %% c("tm.erl"), tm:do(qlc:q([X||X<-mnesia:table(triple_store)])).
-
-    info_msg(hcet_load_db, [get(self)], testing, 50),
-    {inorder,
-     [
-      %% ?_assertMatch(stopped, mnesia:stop()),
-      %% ?_assertMatch(ok, mnesia:create_schema([node()])),
-      ?_assertMatch(ok, mnesia:start()),
-      ?_assertMatch(ok, timer:sleep(1000)),
-      %% ?_assertMatch('b3ss01@shoo', node()),
-      %% ?_assertMatch({ok, triple_store}, AGE(name_of_triple_table)),
-      ?_assertMatch({atomic, ok}, mnesia:delete_table(triple_store)),
-      ?_assertMatch({atomic, ok}, mnesia:create_table(triple_store, TabDef)),
-      %% ?_assertMatch(ok,           db_interface:db_init()),
-      ?_assertMatch(ok,           db_interface:db_add_index()),
-      ?_assertMatch({atomic, ok}, MW()),
-      ?_assertMatch(57, length(tm:do(Q1))),
-      ?_assertMatch(2,  length(tm:do(Q2))),
-      ?_assertMatch(7, 	length(tm:do(Q3))),
-      ?_assertMatch(2,  length(tm:do(Q4))),
-      ?_assertMatch(stopped, mnesia:stop())
-     ]}. 
 
 hcet_send_empty(QN, R) ->
     gen_server:cast(QN, {empty, self()}),

@@ -1,7 +1,7 @@
 %%
 %% Query Tree process
 %%
-%% @copyright 2014-2016 UP FAMNIT and Yahoo Japan Corporation
+%% @copyright 2014-2019 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since May, 2014
 %% @author Iztok Savnik <iztok.savnik@famnit.upr.si>
@@ -1003,7 +1003,7 @@ hcssn_predicate_based( tp, QT ) ->
             %% [NOTE] at this point other type of row selection can be used
             %% [NOTE] based on SPO of TP
  	    %% currently: select row randomly
-	    Rid = random:uniform(length(Rids)),
+	    Rid = rand:uniform(length(Rids)),
             %% [TODO] check random generator
     	    maps:get(Rid, Rows)
         end,
@@ -1016,7 +1016,7 @@ hcssn_random(tp, TP) ->
     F = fun (C) ->
 		Rows = maps:get(C, ClmRowConf),
 		Rids = maps:keys(Rows),
-		Rid = random:uniform(length(Rids)),
+		Rid = rand:uniform(length(Rids)),
 		maps:get(Rid, Rows)
         end,
     Clms = maps:keys(ClmRowConf),

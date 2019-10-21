@@ -7,7 +7,7 @@ application default file. Precise meanings of those parameters will be
 described. Before configuring a big3store system, it must be
 installed (see [install.md](install.md)).
 
-* Copyright (C) 2016 UP FAMNIT and Yahoo Japan Corporation
+* Copyright (C) 2016-2019 UP FAMNIT and Yahoo Japan Corporation
 * Version 0.3
 * Since: January, 2016
 * Author: Kiyoshi Nitta <knitta@yahoo-corp.jp>
@@ -256,12 +256,12 @@ big3store distribution package (src/ygtsv).
 ### 2. Start big3store System ###
 
 It requires several steps for starting a big3store system. At least
-one front and one data server Erlang nodes must be invoked. The
-invocation operations can be performed using make commands. The
-bootstrap procedure must be executed to start necessary processes
-on those nodes. This operation can be performed using make command or
-command line user interface tool of big3store. PostgreSQL servers must
-be started before executing queries on all data server machines.
+one front server Erlang nodes must be invoked. The invocation
+operations can be performed using make commands. The bootstrap
+procedure must be executed to start necessary processes on those
+nodes. This operation can be performed using make command or command
+line user interface tool of big3store. PostgreSQL servers must be
+started before executing queries on all data server machines.
 
 * (P-2-1) Start a front server.
 
@@ -279,20 +279,24 @@ for running a front server.
 
 (P-2-2) A data server Erlang node can be invoked by entering the
 following command from each shell on one of physical servers machine
-reserved for running data servers. This operation must be iterated
+reserved for running data servers. This operation should be iterated
 until invoking all data servers configured in the application default
 file.
 
     $ make start-ds
 
+These invocation processes of data servers could also be performed
+using `aws` or `local` command of [command line user interface
+tool](user-interface.md).
+
 (P-2-3) When front and data servers are running, the bootstrap process
-can be executed by entering the following command from any server
+can be performed by entering the following command from any server
 machine.
 
     $ make bootstrap
 
-This process can also be executed by using
-[command line user interface tool](user-interface.md).
+This process could also be performed using `boot` command of [command
+line user interface tool](user-interface.md).
 
     $ make ui-main
     big3store=# boot
@@ -303,5 +307,59 @@ invoke each PostgreSQL server by entering following command.
 
     $ cd $(EPGSQLDIR)
     $ start_test_db.sh
+
+Some of the above tasks could be performed using shell scripts that
+were prepared for the AWS computing environment. Refer
+[aws.md](aws.md) for reading their detailed descriptions. They use
+special makefile targets that might be useful in separated uses. Some
+of those targets are described below.
+
+    $ make start-fs-aws
+
+This target copies `b3s.app.aws` to `b3s.app` and invokes a front
+server on an Erlang node which name is `fs`. The front server is
+designed to be used for performing query and benchmark executions on
+the AWS environment.
+
+    $ make start-fs-aws-boot-ds
+
+This target copies `b3s.app.aws.boot_ds` to `b3s.app` and invokes a
+front server on an Erlang node which name is `fs`. The front server is
+designed to be used for performing query and benchmark executions on
+the AWS environment. While it is almost identical to `start-fs-aws`,
+it automatically invokes data server instances on AWS EC2 after the
+front server was booted. The Erlang application preference file
+`b3s.app.aws.boot_ds` includes several typical configurations as
+comments.
+
+    $ make start-fs-prep
+
+This target copies `b3s.app.prep` to `b3s.app` and invokes a front
+server on an Erlang node which name is `fs`. The front server is
+designed to be used in the preparation process for loading triples
+described at [load-triples.md](load-triples.md) and [aws.md](aws.md).
+
+    $ make start-ds-aws DS=ds01 FSHN=123.45.67.89
+
+This target copies `b3s.app.ds` to `b3s.app` and invokes a data server
+on an Erlang node which name is `ds01`. The data server will try to
+connect the front server running at `123.45.67.89`.
+
+    $ make term FS=fs DS=ds01
+
+This target terminates a front server node having name `fs` and a data
+server node having name `ds01` if they are running.
+
+It might be useful to integrate the *readline* feature with the user
+interface for editing the statement and refering the history of
+executions. Following targets provide it if `rlwrap` command was
+installed.
+
+    $ make sui[23]*
+
+Because Erlang node names on the same server must be different, these
+targets invoke the user interface tools on different nodes. You can
+simultaneously invoke plural user interface tools on terminals of the
+front server machine by using different targets.
 
 ====> END OF LINE <====

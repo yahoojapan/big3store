@@ -1,7 +1,7 @@
 %%
 %% big3store main application.
 %%
-%% @copyright 2013-2016 UP FAMNIT and Yahoo Japan Corporation
+%% @copyright 2013-2019 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since August, 2013
 %% @author Kiyoshi Nitta <knitta@yahoo-corp.jp>
@@ -33,6 +33,9 @@
 %%
 %% <tr> <td>test_mode</td> <td>local1 | local2 | yjr6 | ...</td>
 %% <td>Site type of unit tests.</td> </tr>
+%%
+%% <tr> <td>is_test</td> <td>boolean()</td> <td>Perform the boot
+%% process in the test mode if true.</td> </tr>
 %%
 %% <tr> <td>benchmark_task</td> <td>atom()</td> <td>Name of benchmark
 %% task to be executed.</td> </tr>
@@ -163,6 +166,15 @@ bootstrap() ->
     R15 = supervisor:start_child({b3s, TDN}, string_id:child_spec()),
     R16 = gen_server:call(TD, {put_property, distribution_algorithm, DALG}),
 
+    case application:get_env(b3s, is_test) of
+	{ok, true} ->
+	    M = {omitting_for_test, bootstrap_aws},
+	    info_msg(bootstrap, [], M, 10);
+	_ -> bootstrap_aws()
+    end,
+    put(b3s_state_nodes, BSNS),
+    user_interface:ui_batch_pull_queue(BSN, 'boot-fs'),
+
     R = [
 	 {front_server_nodes,       FSNS},
 	 {data_server_nodes,        DSNS},
@@ -172,6 +184,67 @@ bootstrap() ->
 	 R11, R12, R13, R14, R15, R16
 	],
     info_msg(bootstrap, [], R, 50).
+
+bootstrap_aws() ->
+    {ok, BSNL} = application:get_env(b3s, b3s_state_nodes),
+    put(b3s_state_nodes, BSNL),
+    BSN = lists:nth(1, get(b3s_state_nodes)),
+    BS = {b3s_state, BSN},
+
+    ids_fs_aws_boot(),
+    AII = aws_instance_id,
+    ANI = aws_node_instance_map,
+    ASF = aws_spot_fleet_id,
+    ANF = aws_node_fleet_map,
+    case get(AII) of
+	undefined ->
+	    R01 = undefined;
+	_ ->
+	    R01 = gen_server:call(BS, {put, ANI, #{BSN => get(AII)}})
+    end,
+    case get(ASF) of
+	undefined ->
+	    R02 = undefined;
+	_ ->
+	    R02 = gen_server:call(BS, {put, ANF, #{BSN => get(ASF)}})
+    end,
+
+    case gen_server:call(BS, {get, distribution_algorithm}) of
+	predicate_based ->
+	    A = ["bucket", "load", "predicate", "dictionaries"],
+	    R03 = user_interface:ui_operate_aws(A);
+	_ ->
+	    R03 = none
+    end,
+
+    SI = gen_server:call(BS, {get, name_of_string_id_table}),
+    LA = ["bucket", "list", atom_to_list(SI)],
+    R04 = user_interface:ui_operate_aws(LA),
+    SF = "SELECT count(*) FROM pg_class" ++
+	 " WHERE relkind = 'r' AND relname like '~s%';",
+    SQ = io_lib:format(SF, [SI]),
+    PC = user_interface:uops_get_connection(),
+    R05 = user_interface:uops_perform_sql(PC, SQ),
+    case {R04, R05} of
+	{[], _} ->
+	    M = io_lib:format("string id table file ~s does not found.", [SI]),
+	    info_msg(bootstrap_aws, [], lists:flatten(M), 50);
+	{_, {ok, _, [{<<"0">>}]}} ->
+	    AA = ["bucket", "get", "string", "id", "tables"],
+	    AP = ["load", "string", "id", "tables"],
+	    info_msg(bootstrap_aws, [], ["aws"] ++ AA, 50),
+	    user_interface:ui_operate_aws(AA),
+	    info_msg(bootstrap_aws, [], ["psql"] ++ AP, 50),
+	    user_interface:ui_operate_psql(AP);
+	_ ->
+	    M = io_lib:format("string id table ~s was already created.", [SI]),
+	    info_msg(bootstrap_aws, [], lists:flatten(M), 50)
+    end,
+
+    R = [
+	 R01, R02, R03, R04, R05
+	],
+    info_msg(bootstrap_aws, [], R, 50).
 
 bootstrap_test_() ->
     application:load(b3s),
@@ -546,10 +619,209 @@ invoke_update_env_test_() ->
       ?_assertMatch(ok, invoke_update_env(L1))
      ]}.
 
+invoke_data_servers(data_server_aws) ->
+    info_msg(invoke_data_servers, [data_server_aws], ids_ds_aws_boot(), 50);
 invoke_data_servers(data_server) ->
     info_msg(invoke_data_servers, [data_server], ok, 50);
+invoke_data_servers(front_server_aws) ->
+    info_msg(invoke_data_servers, [front_server_aws], ok, 50);
 invoke_data_servers(front_server) ->
     info_msg(invoke_data_servers, [front_server], ok, 50).
+
+ids_fs_aws_boot() ->
+    CL1 = "curl -s http://169.254.169.254/latest/meta-data/instance-id",
+    CL2 = "../aws/bin/get-spot-fleet-id.sh",
+    AII = aws_instance_id,
+    ASF = aws_spot_fleet_id,
+    put(AII, ifab_get_id(CL1, "i-")),
+    put(ASF, ifab_get_id(CL2, "sfr-")),
+
+    R = [{AII, get(AII)}, {ASF, get(ASF)}],
+    info_msg(ids_fs_aws_boot, [], R, 50),
+    R.
+
+ids_fs_aws_boot_t() ->
+    CL1 = "curl -s http://169.254.169.254/latest/meta-data/instance-id",
+    CL2 = "../aws/bin/get-spot-fleet-id.sh",
+    AII = aws_instance_id,
+    ASF = aws_spot_fleet_id,
+    RS1 = ifab_get_id(CL1, "i-"),
+    RS2 = ifab_get_id(CL2, "sfr-"),
+    RS3 = [{AII, RS1}, {ASF, RS2}],
+    RS4 = ids_fs_aws_boot(),
+
+    [
+     ?_assertMatch(RS1, get(AII)),
+     ?_assertMatch(RS2, get(ASF)),
+     ?_assertMatch(RS3, RS4)
+    ].
+
+ifab_get_id(Result, Prefix) ->
+    R = string:trim(os:cmd(Result)),
+    case string:str(R, Prefix) of
+	1 -> RR = R;
+	_ -> RR = "undefined"
+    end,
+    list_to_atom(RR).
+
+ids_ds_aws_boot() ->
+    idab_collect_info(),
+    idab_determine_info(),
+    idab_perform_registeration().
+
+ids_ds_aws_boot_t() ->
+    ANI = aws_node_instance_map,
+    ANF = aws_node_fleet_map,
+    DSN = data_server_nodes,
+    NTT = name_of_triple_tables,
+    CRC = clm_row_conf,
+
+    [{ANI, R01}, {ANF, R02}, {DSN, R03},
+     {NTT, R04}, {CRC, R05}] = ids_ds_aws_boot(),
+    [
+     ?_assertMatch(R01, get(ANI)),
+     ?_assertMatch(R02, get(ANF)),
+     ?_assertMatch(R03, get(DSN)),
+     ?_assertMatch(R04, get(NTT)),
+     ?_assertMatch(R05, get(CRC))
+    ].
+
+idab_collect_info() ->
+    {ok, BSNS} = application:get_env(b3s, b3s_state_nodes),
+    put(b3s_state_nodes, BSNS),
+    [BSN | _] = BSNS,
+    BS = {b3s_state, BSN},
+    put(b3s_state_pid, BS),
+
+    CL1 = "curl -s http://169.254.169.254/latest/meta-data/instance-id",
+    CL2 = "../aws/bin/get-spot-fleet-id.sh",
+    DCL = list_to_atom(lists:nth(1, string:split(atom_to_list(node()), "@"))),
+
+    put(aws_instance_id, ifab_get_id(CL1, "i-")),
+    put(aws_spot_fleet_id, ifab_get_id(CL2, "sfr-")),
+    put(ds_column_label, DCL),
+    put(ds_column_table_name,
+	list_to_atom(lists:flatten(io_lib:format("ts_~s", [DCL])))),
+
+    ANI = aws_node_instance_map,
+    ANF = aws_node_fleet_map,
+    DSN = data_server_nodes,
+    NTT = name_of_triple_tables,
+    CRC = clm_row_conf,
+
+    put(ANI, gen_server:call(BS, {get, ANI})),
+    put(ANF, gen_server:call(BS, {get, ANF})),
+    put(DSN, gen_server:call(BS, {get, DSN})),
+    put(NTT, gen_server:call(BS, {get, NTT})),
+    put(CRC, gen_server:call(BS, {get, CRC})),
+
+    T = gen_server:call(BS, {get, triple_distributor_nodes}),
+    put(triple_distributor_nodes, T),
+    put(triple_distributor_pid, {triple_distributor, lists:nth(1, T)}).
+
+idab_determine_info() ->
+    N = node(),
+    DCI = ds_column_id,
+    CRC = clm_row_conf,
+    F1 = fun (_, V) ->
+		 case V of
+		     N -> true;
+		     _ -> false
+		 end
+	 end,
+    F2 = fun (C, V) ->
+		 case maps:size(maps:filter(F1, V)) of
+		     0 -> nop;
+		     _ -> put(DCI, C)
+		 end
+	 end,
+    maps:map(F2, get(CRC)),
+    case get(DCI) of
+	undefined ->
+	    put(DCI, maps:size(get(CRC)) + 1);
+	_ ->
+	    put(data_server_rebooted, true)
+    end,
+
+    AII = aws_instance_id,
+    ANI = aws_node_instance_map,
+    case get(AII) of
+	undefined -> nil;
+	_ ->
+	    case get(ANI) of
+		undefined ->
+		    put(ANI, #{node() => get(AII)});
+		_ ->
+		    put(ANI, maps:put(node(), get(AII), get(ANI)))
+	    end
+    end,
+    ASF = aws_spot_fleet_id,
+    ANF = aws_node_fleet_map,
+    case get(AII) of
+	undefined -> nil;
+	_ ->
+	    case get(ANF) of
+		undefined ->
+		    put(ANF, #{node() => get(ASF)});
+		_ ->
+		    put(ANF, maps:put(node(), get(ASF), get(ANF)))
+	    end
+    end,
+    DSN = data_server_nodes,
+    put(DSN, lists:append(get(DSN), [{node(), get(DCI)}])),
+    NTT = name_of_triple_tables,
+    put(NTT, lists:append(get(NTT), [{node(), get(ds_column_table_name)}])).
+
+idab_perform_registeration() ->
+    BS = get(b3s_state_pid),
+    TD = get(triple_distributor_pid),
+
+    ANI = aws_node_instance_map,
+    ANF = aws_node_fleet_map,
+    DSN = data_server_nodes,
+    NTT = name_of_triple_tables,
+    CRC = clm_row_conf,
+
+    gen_server:call(BS, {put, ANI, get(ANI)}),
+    gen_server:call(BS, {put, ANF, get(ANF)}),
+    gen_server:call(BS, {put, DSN, get(DSN)}),
+    gen_server:call(BS, {put, NTT, get(NTT)}),
+
+    case get(data_server_rebooted) of
+	true -> nop;
+	_ ->
+	    CI = get(ds_column_id),
+	    RN = {register_node, CI, node()},
+	    {registered, {{CI, _}, _}} = gen_server:call(TD, RN),
+	    put(CRC, gen_server:call(TD, {get_property, CRC})),
+	    gen_server:call(BS, {put, CRC, get(CRC)})
+    end,
+    gen_server:call({node_state, node()},
+		    {put, column_id, get(ds_column_id)}),
+
+    user_interface:ui_batch_pull_queue(node(), 'boot-ds'),
+
+    R = [{ANI, get(ANI)}, {ANF, get(ANF)}, {DSN, get(DSN)},
+	 {NTT, get(NTT)}, {CRC, get(CRC)}],
+    info_msg(idab_perform_registeration, [], R, 50),
+    R.
+
+invoke_data_servers_test_() ->
+    application:load(b3s),
+    ids_test_mode(b3s_state:get(test_mode)).
+
+ids_test_mode(local1) ->
+    {inorder,
+     [
+      ?_assertMatch(ok, application:start(b3s)),
+      {generator, fun()-> ids_fs_aws_boot_t() end},
+      ?_assertMatch(ok, b3s:bootstrap()),
+      {generator, fun()-> ids_ds_aws_boot_t() end},
+      ?_assertMatch(ok, application:stop(b3s))
+     ]};
+
+ids_test_mode(_) ->
+    [].
 
 %% 
 %% @doc Main loop for waiting `terminate' signal.
@@ -659,7 +931,6 @@ init(Args) ->
 	 ],
     {ok, Mode} = application:get_env(b3s, b3s_mode),
     mnesia:start(),
-%    db_interface:bdbnif_init(),
     init(Args, init_check_env(VL), Mode).
 
 init(_, undef, _) ->

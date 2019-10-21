@@ -11,7 +11,7 @@
 
 <h1>Module b3s</h1>
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Start a big3store server.
-<p>Copyright © 2013-2016 UP FAMNIT and Yahoo Japan Corporation</p>
+<p>Copyright © 2013-2019 UP FAMNIT and Yahoo Japan Corporation</p>
 
 <p><b>Version:</b> 0.3</p>
 <p><b>Introduced in:</b> August, 2013</p>
@@ -37,6 +37,9 @@ line client interfaces.</p>
  
   <tr> <td>test_mode</td> <td>local1 | local2 | yjr6 | ...</td>
   <td>Site type of unit tests.</td> </tr>
+ 
+  <tr> <td>is_test</td> <td>boolean()</td> <td>Perform the boot
+  process in the test mode if true.</td> </tr>
  
   <tr> <td>benchmark_task</td> <td>atom()</td> <td>Name of benchmark
   task to be executed.</td> </tr>
@@ -97,11 +100,21 @@ line client interfaces.</p>
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bootstrap-0">bootstrap/0</a></td><td>This function performs the bootstrapping task of destributed
   big3store system.</td></tr>
+<tr><td valign="top"><a href="#bootstrap_aws-0">bootstrap_aws/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#bootstrap_command-0">bootstrap_command/0</a></td><td>This function performs the bootstrapping task of destributed
   big3store system.</td></tr>
 <tr><td valign="top"><a href="#bootstrap_test_-0">bootstrap_test_/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
+<tr><td valign="top"><a href="#idab_collect_info-0">idab_collect_info/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#idab_determine_info-0">idab_determine_info/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#idab_perform_registeration-0">idab_perform_registeration/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ids_ds_aws_boot-0">ids_ds_aws_boot/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ids_ds_aws_boot_t-0">ids_ds_aws_boot_t/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ids_fs_aws_boot-0">ids_fs_aws_boot/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ids_fs_aws_boot_t-0">ids_fs_aws_boot_t/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ids_test_mode-1">ids_test_mode/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#if_perform-1">if_perform/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ifab_get_id-2">ifab_get_id/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
   debug level is greater than ThresholdDL.</td></tr>
 <tr><td valign="top"><a href="#init-1">init/1</a></td><td><A href="http://www.erlang.org/doc/man/supervisor.html">Supervisor</A>
@@ -114,6 +127,7 @@ line client interfaces.</p>
 <tr><td valign="top"><a href="#investigate_files-0">investigate_files/0</a></td><td>This function investigate TSV dumped triple data files.</td></tr>
 <tr><td valign="top"><a href="#invoke-0">invoke/0</a></td><td>Invoke command.</td></tr>
 <tr><td valign="top"><a href="#invoke_data_servers-1">invoke_data_servers/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#invoke_data_servers_test_-0">invoke_data_servers_test_/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#invoke_loop-0">invoke_loop/0*</a></td><td>Main loop for waiting <code>terminate</code> signal.</td></tr>
 <tr><td valign="top"><a href="#invoke_update_env-1">invoke_update_env/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#invoke_update_env_test_-0">invoke_update_env_test_/0*</a></td><td></td></tr>
@@ -150,6 +164,11 @@ line client interfaces.</p>
   application environment variables.
  </p>
 
+<h3 class="function"><a name="bootstrap_aws-0">bootstrap_aws/0 *</a></h3>
+<div class="spec">
+<p><tt>bootstrap_aws() -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="bootstrap_command-0">bootstrap_command/0</a></h3>
 <div class="spec">
 <p><tt>bootstrap_command() -&gt; none()</tt><br></p>
@@ -168,9 +187,54 @@ line client interfaces.</p>
 </div><p>Report an error issue to the error_logger.
  </p>
 
+<h3 class="function"><a name="idab_collect_info-0">idab_collect_info/0 *</a></h3>
+<div class="spec">
+<p><tt>idab_collect_info() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="idab_determine_info-0">idab_determine_info/0 *</a></h3>
+<div class="spec">
+<p><tt>idab_determine_info() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="idab_perform_registeration-0">idab_perform_registeration/0 *</a></h3>
+<div class="spec">
+<p><tt>idab_perform_registeration() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ids_ds_aws_boot-0">ids_ds_aws_boot/0 *</a></h3>
+<div class="spec">
+<p><tt>ids_ds_aws_boot() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ids_ds_aws_boot_t-0">ids_ds_aws_boot_t/0 *</a></h3>
+<div class="spec">
+<p><tt>ids_ds_aws_boot_t() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ids_fs_aws_boot-0">ids_fs_aws_boot/0 *</a></h3>
+<div class="spec">
+<p><tt>ids_fs_aws_boot() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ids_fs_aws_boot_t-0">ids_fs_aws_boot_t/0 *</a></h3>
+<div class="spec">
+<p><tt>ids_fs_aws_boot_t() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ids_test_mode-1">ids_test_mode/1 *</a></h3>
+<div class="spec">
+<p><tt>ids_test_mode(X1) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="if_perform-1">if_perform/1 *</a></h3>
 <div class="spec">
 <p><tt>if_perform(File) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ifab_get_id-2">ifab_get_id/2 *</a></h3>
+<div class="spec">
+<p><tt>ifab_get_id(Result, Prefix) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>
@@ -230,6 +294,11 @@ line client interfaces.</p>
 <h3 class="function"><a name="invoke_data_servers-1">invoke_data_servers/1 *</a></h3>
 <div class="spec">
 <p><tt>invoke_data_servers(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="invoke_data_servers_test_-0">invoke_data_servers_test_/0 *</a></h3>
+<div class="spec">
+<p><tt>invoke_data_servers_test_() -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="invoke_loop-0">invoke_loop/0 *</a></h3>
@@ -384,6 +453,6 @@ from erl command. It may take following command line options.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 21 2016, 14:07:00.</i></p>
+<p><i>Generated by EDoc</i></p>
 </body>
 </html>

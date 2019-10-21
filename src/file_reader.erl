@@ -1,7 +1,7 @@
 %%
 %% File reader process of simple triplestore application.
 %%
-%% @copyright 2013-2016 UP FAMNIT and Yahoo Japan Corporation
+%% @copyright 2013-2019 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since August, 2013
 %% @author Kiyoshi Nitta <knitta@yahoo-corp.jp>
@@ -374,22 +374,6 @@ hcsspl_sel_token(T, LN, C1, C2, C3, C4, C5, S1, TokN, LinN, CLS)
   when C3 > 0 ->
     TT = string:substr(T, 1, LN-1),
     hcsspl_sel_token(TT, LN-1, C1, C2, 0, C4, C5, S1, TokN, LinN, CLS);
-%% hcsspl_sel_token(T, LN, 1, RN, C3, C4, C5, S1, TokN, LinN, no_class) ->
-%%     TT = string:substr(T, 2, RN-2),
-%%     hcsspl_sel_token(TT, LN-2, 0, 0, C3-1,
-%% 		     C4-1, C5-1, S1-1, TokN, LinN, uri);
-%% hcsspl_sel_token(T, LN, 1, RN, C3, C4, C5, S1, TokN, LinN, CLS) ->
-%%     TT = string:substr(T, 2, RN-2),
-%%     hcsspl_sel_token(TT, LN-2, 0, 0, C3-1,
-%% 		     C4-1, C5-1, S1-1, TokN, LinN, CLS);
-%% hcsspl_sel_token(T, LN, C1, C2, C3, 1, RN, S1, TokN, LinN, no_class) ->
-%%     TT = string:substr(T, 2, RN-2),
-%%     hcsspl_sel_token(TT, LN-2, C1-1, C2-1, C3-1,
-%% 		     0, 0, S1-1, TokN, LinN, literal);
-%% hcsspl_sel_token(T, LN, C1, C2, C3, 1, RN, S1, TokN, LinN, CLS) ->
-%%     TT = string:substr(T, 2, RN-2),
-%%     hcsspl_sel_token(TT, LN-2, C1-1, C2-1, C3-1,
-%% 		     0, 0, S1-1, TokN, LinN, CLS);
 hcsspl_sel_token(Tok, LN, C1, C2, C3, C4, C5, S1, TokN, LinN, no_class) ->
     case string:to_float(Tok) of
 	{TokFlt, []} ->

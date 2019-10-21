@@ -1,0 +1,91 @@
+%% -*- Erlang -*-
+{application, b3s,
+ [{description, "big3store front server for aws operation invoking data servers"},
+  {vsn, "0.3"},
+  {modules,
+   [
+    db_interface,
+    db_writer,
+    query_tree,
+    query_node,
+    tp_query_node,
+    join_query_node,
+    mj_query_node,
+    hj_query_node,
+    file_reader,
+    string_id,
+    triple_distributor,
+    b3s_state,
+    node_state,
+    benchmark,
+    user_interface,
+    repeater,
+    stop_watch,
+    rbutil,
+    b3s
+   ]},
+  {registered,
+   [
+   ]},
+  {applications, [kernel, stdlib, sasl]},
+  {mod, {b3s,[]}},
+  {env,
+   [
+    {b3s_mode,                 front_server},
+    {test_mode,                local},
+    {write_mode,               postgres_bulk_load},
+    {benchmark_task,           task_yjr6_0001},
+    {front_server_nodes,       ['fs@%%HSTNAM%%']},
+    {data_server_nodes,        []},
+    {name_of_triple_tables,    []},
+    {b3s_state_nodes,          ['fs@%%HSTNAM%%']},
+    {triple_distributor_nodes, ['fs@%%HSTNAM%%']},
+    {num_of_empty_msgs,        10},
+    {block_size,               100},
+%    {distribution_algorithm,   random},
+    {distribution_algorithm,   predicate_based},
+    {name_of_triple_table,     triplestore},
+    {name_of_pred_clm_table,   pc_yg2s_col5},
+%    {name_of_pred_clm_table,   pc_yg2s_col10},
+%    {name_of_pred_clm_table,   pc_yg2s_col25},
+%    {name_of_pred_clm_table,   pc_yg2s_col50},
+    {name_of_pred_freq_table,  pf_yg2s},
+    {name_of_string_id_table,  string_id_triplestore},
+    {name_of_pred_string_id,   psi_yg2s},
+    {ui_run_command_boot_fs, [
+			      "aws run dsa 1 dsb 1 dsc 1 dsd 1 dse 1",
+%			      "aws run dsa 1 dsb 1 dsc 1 dsd 1 dse 1 dsf 1 dsg 1 dsh 1 dsi 1 dsj 1",
+%			      "aws run dsa 1 dsb 1 dsc 1 dsd 1 dse 1 dsf 1 dsg 1 dsh 1 dsi 1 dsj 1 dsk 1 dsl 1 dsm 1 dsn 1 dso 1 dsp 1 dsq 1 dsr 1 dss 1 dst 1 dsu 1 dsv 1 dsw 1 dsx 1 dsy 1",
+%			      "aws run dsa1 1 dsb1 1 dsc1 1 dsd1 1 dse1 1 dsf1 1 dsg1 1 dsh1 1 dsi1 1 dsj1 1 dsk1 1 dsl1 1 dsm1 1 dsn1 1 dso1 1 dsp1 1 dsq1 1 dsr1 1 dss1 1 dst1 1 dsu1 1 dsv1 1 dsw1 1 dsx1 1 dsy1 1 dsa2 1 dsb2 1 dsc2 1 dsd2 1 dse2 1 dsf2 1 dsg2 1 dsh2 1 dsi2 1 dsj2 1 dsk2 1 dsl2 1 dsm2 1 dsn2 1 dso2 1 dsp2 1 dsq2 1 dsr2 1 dss2 1 dst2 1 dsu2 1 dsv2 1 dsw2 1 dsx2 1 dsy2 1",
+			      "inv save",
+			      "aws sns publish front server booted"
+			     ]},
+    {ui_run_command_boot_ds, [
+			      "aws servers.cf",
+			      "gc FS BS propagate",
+			      "property backup b3s state to all",
+			      "remote all gc S NS P ui_queued_jobs []",
+			      "remote load all encoded column tables",
+			      "aws sns publish all data server booted"
+			     ]},
+    {ui_run_command_load_ds, [
+			      %% "bb task_yg_0001 task_yg_0002 task_yg_0004 task_yg_0013 task_yg_0014 task_yg_0004m task_yg_0013m",
+			      %% "aws sns publish all benchmark tasks performed",
+			      "aws sns publish all table loaded"
+			     ]},
+    {ui_run_command_terminate_ds, [
+				   "aws sns publish shutting down big3store system...",
+				   "aws terminate front server"
+			     ]},
+    {store_report_frequency,   10000},
+    {triple_id_skel,           "b3sid"},
+    {data_files,               [
+			       ]},
+    {epgsql_host,              "localhost"},
+    {epgsql_user,              "b3s"},
+    {epgsql_pass,              "big3store"},
+    {epgsql_port,              5432},
+    {result_record_max,        1000},
+    {debug_level,              51}
+   ]}
+ ]}.

@@ -1,6 +1,6 @@
 %% -*- Erlang -*-
 {application, b3s,
- [{description, "big3store distributed prototype application"},
+ [{description, "big3store unit test local2"},
   {vsn, "0.3"},
   {modules,
    [
@@ -33,13 +33,14 @@
    [
     {b3s_mode,                 front_server},
     {test_mode,                local2},
+    {is_test,                  true},
     {write_mode,               postgres_bulk_load},
     {benchmark_task,           task_yjr6_0001},
-    {front_server_nodes,       ['b3ss01@wild.rlab.miniy.yahoo.co.jp']},
-    {data_server_nodes,        [{'b3ss02@wild.rlab.miniy.yahoo.co.jp', 1}]},
-    {name_of_triple_tables,    [{'b3ss02@wild.rlab.miniy.yahoo.co.jp', triple_store}]},
-    {b3s_state_nodes  ,        ['b3ss01@wild.rlab.miniy.yahoo.co.jp']},
-    {triple_distributor_nodes, ['b3ss01@wild.rlab.miniy.yahoo.co.jp']},
+    {front_server_nodes,       ['b3ss01@%%HSTNAM%%']},
+    {data_server_nodes,        [{'b3ss02@%%HSTNAM%%', 1}]},
+    {name_of_triple_tables,    [{'b3ss02@%%HSTNAM%%', triple_store}]},
+    {b3s_state_nodes,          ['b3ss01@%%HSTNAM%%']},
+    {triple_distributor_nodes, ['b3ss01@%%HSTNAM%%']},
     {num_of_empty_msgs,        10},
     {block_size,               5},
     {distribution_algorithm,   predicate_based},
@@ -50,9 +51,9 @@
     {store_report_frequency,   100},
     {triple_id_skel,           "b3sid"},
     {epgsql_host,              "localhost"},
-    {epgsql_user,              "knitta"},
-    {epgsql_pass,              ""},
-    {epgsql_port,              10432},
+    {epgsql_user,              "b3s"},
+    {epgsql_pass,              "big3store"},
+    {epgsql_port,              5432},
     {result_record_max,        1000},
     {debug_level,              51}
    ]}

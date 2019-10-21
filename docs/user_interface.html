@@ -12,17 +12,29 @@
 <h1>Module user_interface</h1>
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This module provides functions for implementing user interafce
   of entire big3store system.
-<p>Copyright © 2015-2016 UP FAMNIT and Yahoo Japan Corporation</p>
+<p>Copyright © 2015-2019 UP FAMNIT and Yahoo Japan Corporation</p>
 
 <p><b>Version:</b> 0.3</p>
 <p><b>Introduced in:</b> September, 2015</p>
-<p><b>Authors:</b> Iztok Savnik (<a href="mailto:iztok.savnik@famnit.upr.si"><tt>iztok.savnik@famnit.upr.si</tt></a>).</p>
-<p><b>See also:</b> <a href="b3s.html">b3s</a>.</p>
+<p><b>Authors:</b> Iztok Savnik (<a href="mailto:iztok.savnik@famnit.upr.si"><tt>iztok.savnik@famnit.upr.si</tt></a>), Kiyoshi Nitta (<a href="mailto:knitta@yahoo-corp.jp"><tt>knitta@yahoo-corp.jp</tt></a>).</p>
+<p><b>See also:</b> <a href="b3s.html">b3s</a>, <a href="b3s_state.html">b3s_state</a>, <a href="node_state.html">node_state</a>.</p>
 
 <h2><a name="description">Description</a></h2>This module provides functions for implementing user interafce
   of entire big3store system.
  
 <h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-ui_job_tuple">ui_job_tuple()</a></h3>
+<p><tt>ui_job_tuple() = {node(), completed | 'boot-fs' | 'boot-ds' | 'load-ds'}</tt></p>
+<p>A semaphore that represents an execution of the
+  specified job on the specified node. Atom 'completed' has a special
+  meaning. It indicates that all jobs have been successfully executed
+  and finished. Job 'boot-fs' represents that a booting procedure is
+  executed on the front server node. Job 'boot-fs' represents that a
+  booting procedure is executed on the data server node. Job
+  'load-ds' represents that a loading procedure is executed on the
+  data server node.
+ </p>
 
 <h3 class="typedecl"><a name="type-ui_state">ui_state()</a></h3>
 <p><tt>ui_state() = <a href="maps.html#type-map">maps:map()</a></tt></p>
@@ -30,11 +42,19 @@
   that manages properties for operating the gen_server process.
  </p>
 
+<h3 class="typedecl"><a name="type-ui_statement">ui_statement()</a></h3>
+<p><tt>ui_statement() = string()</tt></p>
+<p>A Command string of the user
+  interface. See <a href="https://github.com/big3store/big3store/blob/master/src/HOWTO/user-interface.md">user
+  interface reference</a> for the detailed description.
+ </p>
+
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#child_spec-1">child_spec/1</a></td><td>Return child spec for this process.</td></tr>
 <tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Process code change action.</td></tr>
 <tr><td valign="top"><a href="#error_msg-3">error_msg/3*</a></td><td>Report an error issue to the error_logger.</td></tr>
 <tr><td valign="top"><a href="#file_to_term-1">file_to_term/1*</a></td><td>Convert contents of file QF to erlang term.</td></tr>
+<tr><td valign="top"><a href="#generate_prompt-0">generate_prompt/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>Handle synchronous query requests.</td></tr>
 <tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
 <tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
@@ -56,9 +76,22 @@
 <tr><td valign="top"><a href="#spawn_query_tree-1">spawn_query_tree/1*</a></td><td>Create query tree for parameter Query.</td></tr>
 <tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
 <tr><td valign="top"><a href="#uan_append-3">uan_append/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uards_process_ds-1">uards_process_ds/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ubgct_process_ds-1">ubgct_process_ds/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ublp_process_pred-1">ublp_process_pred/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ubsb_file_name-2">ubsb_file_name/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ubsb_write_file-2">ubsb_write_file/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ubsct_process_ds-1">ubsct_process_ds/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ubsect_process_ds-1">ubsect_process_ds/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ubsp_process_pred-1">ubsp_process_pred/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ubssit_process_ds-1">ubssit_process_ds/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ucab_each_process-2">ucab_each_process/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ucb_write_task-2">ucb_write_task/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ucp_perform-9">ucp_perform/9*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ucr_default-0">ucr_default/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ucr_ldds-0">ucr_ldds/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ucr_list_debug_level-0">ucr_list_debug_level/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ucr_list_down_data_servers-0">ucr_list_down_data_servers/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ucr_modules-0">ucr_modules/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ucr_modules_short-0">ucr_modules_short/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ucrm_module-2">ucrm_module/2*</a></td><td></td></tr>
@@ -67,20 +100,35 @@
 <tr><td valign="top"><a href="#ucrm_node_short-1">ucrm_node_short/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ucrmn_performe-2">ucrmn_performe/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ucrmns_performe-2">ucrmns_performe/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#udi_grep-2">udi_grep/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ugc_pdic-1">ugc_pdic/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ugc_perform-1">ugc_perform/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_all_nodes-0">ui_all_nodes/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_b3s_property-1">ui_b3s_property/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_b3s_property_list_kv-1">ui_b3s_property_list_kv/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ui_batch_complete_queue-1">ui_batch_complete_queue/1*</a></td><td>Clear the complete semaphore of job from node_state:ui_queued_jobs.</td></tr>
+<tr><td valign="top"><a href="#ui_batch_complete_queue_t-0">ui_batch_complete_queue_t/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ui_batch_pull_queue-2">ui_batch_pull_queue/2*</a></td><td>Pull a job queue item from node_state:ui_queued_jobs.</td></tr>
+<tr><td valign="top"><a href="#ui_batch_pull_queue_t-0">ui_batch_pull_queue_t/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ui_batch_push_queue-2">ui_batch_push_queue/2*</a></td><td>Push a job queue item to node_state:ui_queued_jobs.</td></tr>
+<tr><td valign="top"><a href="#ui_batch_push_queue_t-0">ui_batch_push_queue_t/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_check_all_benchmark-1">ui_check_all_benchmark/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_check_benchmark-2">ui_check_benchmark/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_config_report-1">ui_config_report/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_confirm_b3s_state_alive-0">ui_confirm_b3s_state_alive/0*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#ui_distribute-1">ui_distribute/1*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#ui_interpret-1">ui_interpret/1*</a></td><td>Interpreter of user interface commands.</td></tr>
+<tr><td valign="top"><a href="#ui_distribute-2">ui_distribute/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ui_interpret-1">ui_interpret/1</a></td><td>Interpreter of user interface commands.</td></tr>
 <tr><td valign="top"><a href="#ui_investigate-2">ui_investigate/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_loop_commands-1">ui_loop_commands/1*</a></td><td>Main UI loop.</td></tr>
 <tr><td valign="top"><a href="#ui_manage_datafiles-2">ui_manage_datafiles/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ui_operate_aws-1">ui_operate_aws/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_operate_kill-1">ui_operate_kill/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ui_operate_local-1">ui_operate_local/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ui_operate_memory-1">ui_operate_memory/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_operate_mnesia-1">ui_operate_mnesia/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ui_operate_property-1">ui_operate_property/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ui_operate_psql-1">ui_operate_psql/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ui_operate_remote-1">ui_operate_remote/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_perform_gc-2">ui_perform_gc/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_print_results-1">ui_print_results/1*</a></td><td>Read blocks from query tree QT and print graphs to terminal.</td></tr>
 <tr><td valign="top"><a href="#ui_print_results_prev-1">ui_print_results_prev/1*</a></td><td></td></tr>
@@ -103,22 +151,99 @@
 <tr><td valign="top"><a href="#ui_start_benchmark-2">ui_start_benchmark/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_td_property-1">ui_td_property/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ui_test_-0">ui_test_/0*</a></td><td>Unit tests.</td></tr>
+<tr><td valign="top"><a href="#uid_is_finished-0">uid_is_finished/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uid_perform-1">uid_perform/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uid_recdf-0">uid_recdf/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uid_recdf_close_output_file-0">uid_recdf_close_output_file/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uid_recdf_open_output_file-0">uid_recdf_open_output_file/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uid_recdf_proc_file-1">uid_recdf_proc_file/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uid_recdf_proc_line-5">uid_recdf_proc_line/5*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uii_estimate-4">uii_estimate/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uii_is_finished-0">uii_is_finished/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uii_kill_all-1">uii_kill_all/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uii_kill_finished-1">uii_kill_finished/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uii_perform-1">uii_perform/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uii_reuse_pred_freq-0">uii_reuse_pred_freq/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uii_status-1">uii_status/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#umd_list-0">umd_list/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#umd_list_perform-2">umd_list_perform/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#umd_resolve_data_file-1">umd_resolve_data_file/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket-2">uoa_bucket/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_get_column_tables-0">uoa_bucket_get_column_tables/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_get_encoded_column_table-1">uoa_bucket_get_encoded_column_table/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_get_encoded_column_table_force-1">uoa_bucket_get_encoded_column_table_force/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_get_string_id_tables-0">uoa_bucket_get_string_id_tables/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_list-2">uoa_bucket_list/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_load_predicate_dictionaries-0">uoa_bucket_load_predicate_dictionaries/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_save_benchmark-1">uoa_bucket_save_benchmark/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_save_column_tables-0">uoa_bucket_save_column_tables/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_save_elog-0">uoa_bucket_save_elog/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_save_elog_terminate-0">uoa_bucket_save_elog_terminate/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_save_encoded_column_tables-0">uoa_bucket_save_encoded_column_tables/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_save_predicate_dictionaries-0">uoa_bucket_save_predicate_dictionaries/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_bucket_save_string_id_tables-0">uoa_bucket_save_string_id_tables/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_create-1">uoa_create/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_delete-1">uoa_delete/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_describe-1">uoa_describe/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_describe_image-0">uoa_describe_image/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_describe_instances-1">uoa_describe_instances/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_is_aws_mode-0">uoa_is_aws_mode/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_metadata-1">uoa_metadata/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_reboot-1">uoa_reboot/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_run_instances-1">uoa_run_instances/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_servers_cf-1">uoa_servers_cf/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_sns-1">uoa_sns/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_sns_publish-1">uoa_sns_publish/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_terminate_instances-1">uoa_terminate_instances/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_terminate_instances_quick_and_no_save-0">uoa_terminate_instances_quick_and_no_save/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoa_unregister-1">uoa_unregister/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoadi_get_node_instance_map-0">uoadi_get_node_instance_map/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uoadi_gnim_confirm_map-1">uoadi_gnim_confirm_map/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uok_one_process-2">uok_one_process/2*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#up_each_process-3">up_each_process/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uol_restart_ds-1">uol_restart_ds/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uol_run_nodes-1">uol_run_nodes/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uol_terminate_nodes-1">uol_terminate_nodes/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uom_summary-0">uom_summary/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uop_append_ds-1">uop_append_ds/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uop_backup_b3s_state-1">uop_backup_b3s_state/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uop_cons_crc-1">uop_cons_crc/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uop_cp_property-1">uop_cp_property/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uop_find_property-2">uop_find_property/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uop_restore_b3s_state-1">uop_restore_b3s_state/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uop_write_property-1">uop_write_property/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_describe-2">uops_describe/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_encode-2">uops_encode/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_encode_ds-1">uops_encode_ds/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_encode_report-2">uops_encode_report/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_get_connection-0">uops_get_connection/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_load-2">uops_load/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_load_ds-1">uops_load_ds/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_load_encoded_column_table-1">uops_load_encoded_column_table/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_load_encoded_column_table_force-1">uops_load_encoded_column_table_force/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_load_sit_fl-1">uops_load_sit_fl/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_perform_cmd-1">uops_perform_cmd/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_perform_sql-2">uops_perform_sql/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_save-2">uops_save/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_save_ct_ds-1">uops_save_ct_ds/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_save_psi-0">uops_save_psi/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uops_save_sit_ds-1">uops_save_sit_ds/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uor_all_load_encoded_column_tables-0">uor_all_load_encoded_column_tables/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uor_all_load_encoded_column_tables_force-0">uor_all_load_encoded_column_tables_force/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uor_all_load_encoded_column_tables_skel-1">uor_all_load_encoded_column_tables_skel/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uor_all_restart_data_servers-0">uor_all_restart_data_servers/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uor_help-0">uor_help/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uor_restart_data_servers-1">uor_restart_data_servers/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#up_each_process-4">up_each_process/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#up_wriite_process-4">up_wriite_process/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#upd_with_row-1">upd_with_row/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#upp_scan_parse-1">upp_scan_parse/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#upr_perform-2">upr_perform/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uprs_perform-2">uprs_perform/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ura_apply-2">ura_apply/2*</a></td><td></td></tr>
-<tr><td valign="top"><a href="#ura_float-1">ura_float/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ura_expr-1">ura_expr/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ura_integer-1">ura_integer/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ura_term-1">ura_term/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#urn_process_node-1">urn_process_node/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#urns_process_ds-3">urns_process_ds/3*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#usb_iterate-4">usb_iterate/4*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#usb_predicate_based-1">usb_predicate_based/1*</a></td><td></td></tr>
@@ -126,6 +251,10 @@
 <tr><td valign="top"><a href="#usb_wait_termination-1">usb_wait_termination/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#usbwt_check_elapse-2">usbwt_check_elapse/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ut_site-1">ut_site/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uti_check-2">uti_check/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uti_unregister-3">uti_unregister/3*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#utn_process_node-1">utn_process_node/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uwp_perform-6">uwp_perform/6*</a></td><td></td></tr>
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
@@ -154,6 +283,11 @@
 <p><tt>file_to_term(QF::string()) -&gt; ok | fail</tt><br></p>
 </div><p>Convert contents of file QF to erlang term.
  </p>
+
+<h3 class="function"><a name="generate_prompt-0">generate_prompt/0 *</a></h3>
+<div class="spec">
+<p><tt>generate_prompt() -&gt; any()</tt></p>
+</div>
 
 <h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
 <div class="spec">
@@ -264,6 +398,51 @@
 <p><tt>uan_append(DR, FR, R) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="uards_process_ds-1">uards_process_ds/1 *</a></h3>
+<div class="spec">
+<p><tt>uards_process_ds(Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ubgct_process_ds-1">ubgct_process_ds/1 *</a></h3>
+<div class="spec">
+<p><tt>ubgct_process_ds(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ublp_process_pred-1">ublp_process_pred/1 *</a></h3>
+<div class="spec">
+<p><tt>ublp_process_pred(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ubsb_file_name-2">ubsb_file_name/2 *</a></h3>
+<div class="spec">
+<p><tt>ubsb_file_name(FileName, Suffix) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ubsb_write_file-2">ubsb_write_file/2 *</a></h3>
+<div class="spec">
+<p><tt>ubsb_write_file(FileName, Result) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ubsct_process_ds-1">ubsct_process_ds/1 *</a></h3>
+<div class="spec">
+<p><tt>ubsct_process_ds(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ubsect_process_ds-1">ubsect_process_ds/1 *</a></h3>
+<div class="spec">
+<p><tt>ubsect_process_ds(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ubsp_process_pred-1">ubsp_process_pred/1 *</a></h3>
+<div class="spec">
+<p><tt>ubsp_process_pred(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ubssit_process_ds-1">ubssit_process_ds/1 *</a></h3>
+<div class="spec">
+<p><tt>ubssit_process_ds(X1) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="ucab_each_process-2">ucab_each_process/2 *</a></h3>
 <div class="spec">
 <p><tt>ucab_each_process(R, L) -&gt; any()</tt></p>
@@ -274,9 +453,29 @@
 <p><tt>ucb_write_task(Task, Proc) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="ucp_perform-9">ucp_perform/9 *</a></h3>
+<div class="spec">
+<p><tt>ucp_perform(SrcNode, DstNode, GetCommand, PutCommand, SP, SN, P, DP, DN) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="ucr_default-0">ucr_default/0 *</a></h3>
 <div class="spec">
 <p><tt>ucr_default() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ucr_ldds-0">ucr_ldds/0 *</a></h3>
+<div class="spec">
+<p><tt>ucr_ldds() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ucr_list_debug_level-0">ucr_list_debug_level/0 *</a></h3>
+<div class="spec">
+<p><tt>ucr_list_debug_level() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ucr_list_down_data_servers-0">ucr_list_down_data_servers/0 *</a></h3>
+<div class="spec">
+<p><tt>ucr_list_down_data_servers() -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="ucr_modules-0">ucr_modules/0 *</a></h3>
@@ -319,6 +518,21 @@
 <p><tt>ucrmns_performe(Node, X2) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="udi_grep-2">udi_grep/2 *</a></h3>
+<div class="spec">
+<p><tt>udi_grep(N, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ugc_pdic-1">ugc_pdic/1 *</a></h3>
+<div class="spec">
+<p><tt>ugc_pdic(C) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ugc_perform-1">ugc_perform/1 *</a></h3>
+<div class="spec">
+<p><tt>ugc_perform(E) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="ui_all_nodes-0">ui_all_nodes/0 *</a></h3>
 <div class="spec">
 <p><tt>ui_all_nodes() -&gt; any()</tt></p>
@@ -334,14 +548,44 @@
 <p><tt>ui_b3s_property_list_kv(PropertyName) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="ui_batch_complete_queue-1">ui_batch_complete_queue/1 *</a></h3>
+<div class="spec">
+<p><tt>ui_batch_complete_queue(Job::atom()) -&gt; completed | not_found</tt><br></p>
+</div><p>Clear the complete semaphore of job from node_state:ui_queued_jobs.</p>
+
+<h3 class="function"><a name="ui_batch_complete_queue_t-0">ui_batch_complete_queue_t/0 *</a></h3>
+<div class="spec">
+<p><tt>ui_batch_complete_queue_t() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ui_batch_pull_queue-2">ui_batch_pull_queue/2 *</a></h3>
+<div class="spec">
+<p><tt>ui_batch_pull_queue(Node::atom(), Job::atom()) -&gt; ok | not_found | completed</tt><br></p>
+</div><p>Pull a job queue item from node_state:ui_queued_jobs.</p>
+
+<h3 class="function"><a name="ui_batch_pull_queue_t-0">ui_batch_pull_queue_t/0 *</a></h3>
+<div class="spec">
+<p><tt>ui_batch_pull_queue_t() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ui_batch_push_queue-2">ui_batch_push_queue/2 *</a></h3>
+<div class="spec">
+<p><tt>ui_batch_push_queue(Node::atom(), Job::atom()) -&gt; ok | already_pushed</tt><br></p>
+</div><p>Push a job queue item to node_state:ui_queued_jobs.</p>
+
+<h3 class="function"><a name="ui_batch_push_queue_t-0">ui_batch_push_queue_t/0 *</a></h3>
+<div class="spec">
+<p><tt>ui_batch_push_queue_t() -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="ui_check_all_benchmark-1">ui_check_all_benchmark/1 *</a></h3>
 <div class="spec">
-<p><tt>ui_check_all_benchmark(X1) -&gt; any()</tt></p>
+<p><tt>ui_check_all_benchmark(TF) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="ui_check_benchmark-2">ui_check_benchmark/2 *</a></h3>
 <div class="spec">
-<p><tt>ui_check_benchmark(X1, Task) -&gt; any()</tt></p>
+<p><tt>ui_check_benchmark(TF, Task) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="ui_config_report-1">ui_config_report/1 *</a></h3>
@@ -354,12 +598,12 @@
 <p><tt>ui_confirm_b3s_state_alive() -&gt; any()</tt></p>
 </div>
 
-<h3 class="function"><a name="ui_distribute-1">ui_distribute/1 *</a></h3>
+<h3 class="function"><a name="ui_distribute-2">ui_distribute/2 *</a></h3>
 <div class="spec">
-<p><tt>ui_distribute(X1) -&gt; any()</tt></p>
+<p><tt>ui_distribute(X1, X2) -&gt; any()</tt></p>
 </div>
 
-<h3 class="function"><a name="ui_interpret-1">ui_interpret/1 *</a></h3>
+<h3 class="function"><a name="ui_interpret-1">ui_interpret/1</a></h3>
 <div class="spec">
 <p><tt>ui_interpret(Cmd::(<a href="io.html#type-server_no_data">io:server_no_data()</a> | string())) -&gt; string()</tt><br></p>
 </div><p>Interpreter of user interface commands.
@@ -381,14 +625,44 @@
 <p><tt>ui_manage_datafiles(X1, NewFiles) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="ui_operate_aws-1">ui_operate_aws/1</a></h3>
+<div class="spec">
+<p><tt>ui_operate_aws(Node) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="ui_operate_kill-1">ui_operate_kill/1 *</a></h3>
 <div class="spec">
 <p><tt>ui_operate_kill(ProcessList) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="ui_operate_local-1">ui_operate_local/1 *</a></h3>
+<div class="spec">
+<p><tt>ui_operate_local(Args) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ui_operate_memory-1">ui_operate_memory/1 *</a></h3>
+<div class="spec">
+<p><tt>ui_operate_memory(X1) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="ui_operate_mnesia-1">ui_operate_mnesia/1 *</a></h3>
 <div class="spec">
 <p><tt>ui_operate_mnesia(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ui_operate_property-1">ui_operate_property/1 *</a></h3>
+<div class="spec">
+<p><tt>ui_operate_property(Args) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ui_operate_psql-1">ui_operate_psql/1</a></h3>
+<div class="spec">
+<p><tt>ui_operate_psql(Args) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ui_operate_remote-1">ui_operate_remote/1 *</a></h3>
+<div class="spec">
+<p><tt>ui_operate_remote(Args) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="ui_perform_gc-2">ui_perform_gc/2 *</a></h3>
@@ -503,14 +777,49 @@
 </div><p>Unit tests.
  </p>
 
+<h3 class="function"><a name="uid_is_finished-0">uid_is_finished/0 *</a></h3>
+<div class="spec">
+<p><tt>uid_is_finished() -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="uid_perform-1">uid_perform/1 *</a></h3>
 <div class="spec">
 <p><tt>uid_perform(File) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="uid_recdf-0">uid_recdf/0 *</a></h3>
+<div class="spec">
+<p><tt>uid_recdf() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uid_recdf_close_output_file-0">uid_recdf_close_output_file/0 *</a></h3>
+<div class="spec">
+<p><tt>uid_recdf_close_output_file() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uid_recdf_open_output_file-0">uid_recdf_open_output_file/0 *</a></h3>
+<div class="spec">
+<p><tt>uid_recdf_open_output_file() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uid_recdf_proc_file-1">uid_recdf_proc_file/1 *</a></h3>
+<div class="spec">
+<p><tt>uid_recdf_proc_file(FileName) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uid_recdf_proc_line-5">uid_recdf_proc_line/5 *</a></h3>
+<div class="spec">
+<p><tt>uid_recdf_proc_line(FileName, IoDevice, X3, Count, X5) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="uii_estimate-4">uii_estimate/4 *</a></h3>
 <div class="spec">
 <p><tt>uii_estimate(Rest, Triples, StartTime, Total) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uii_is_finished-0">uii_is_finished/0 *</a></h3>
+<div class="spec">
+<p><tt>uii_is_finished() -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="uii_kill_all-1">uii_kill_all/1 *</a></h3>
@@ -526,6 +835,11 @@
 <h3 class="function"><a name="uii_perform-1">uii_perform/1 *</a></h3>
 <div class="spec">
 <p><tt>uii_perform(File) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uii_reuse_pred_freq-0">uii_reuse_pred_freq/0 *</a></h3>
+<div class="spec">
+<p><tt>uii_reuse_pred_freq() -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="uii_status-1">uii_status/1 *</a></h3>
@@ -548,14 +862,349 @@
 <p><tt>umd_resolve_data_file(N) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="uoa_bucket-2">uoa_bucket/2 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket(TermList, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_get_column_tables-0">uoa_bucket_get_column_tables/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_get_column_tables() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_get_encoded_column_table-1">uoa_bucket_get_encoded_column_table/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_get_encoded_column_table(Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_get_encoded_column_table_force-1">uoa_bucket_get_encoded_column_table_force/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_get_encoded_column_table_force(Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_get_string_id_tables-0">uoa_bucket_get_string_id_tables/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_get_string_id_tables() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_list-2">uoa_bucket_list/2 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_list(Rest, GrepCommand) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_load_predicate_dictionaries-0">uoa_bucket_load_predicate_dictionaries/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_load_predicate_dictionaries() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_save_benchmark-1">uoa_bucket_save_benchmark/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_save_benchmark(Tasks) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_save_column_tables-0">uoa_bucket_save_column_tables/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_save_column_tables() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_save_elog-0">uoa_bucket_save_elog/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_save_elog() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_save_elog_terminate-0">uoa_bucket_save_elog_terminate/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_save_elog_terminate() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_save_encoded_column_tables-0">uoa_bucket_save_encoded_column_tables/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_save_encoded_column_tables() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_save_predicate_dictionaries-0">uoa_bucket_save_predicate_dictionaries/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_save_predicate_dictionaries() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_bucket_save_string_id_tables-0">uoa_bucket_save_string_id_tables/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_bucket_save_string_id_tables() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_create-1">uoa_create/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_create(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_delete-1">uoa_delete/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_delete(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_describe-1">uoa_describe/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_describe(Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_describe_image-0">uoa_describe_image/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_describe_image() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_describe_instances-1">uoa_describe_instances/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_describe_instances(Rest) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_is_aws_mode-0">uoa_is_aws_mode/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_is_aws_mode() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_metadata-1">uoa_metadata/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_metadata(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_reboot-1">uoa_reboot/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_reboot(Rest) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_run_instances-1">uoa_run_instances/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_run_instances(Rest) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_servers_cf-1">uoa_servers_cf/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_servers_cf(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_sns-1">uoa_sns/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_sns(Args) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_sns_publish-1">uoa_sns_publish/1</a></h3>
+<div class="spec">
+<p><tt>uoa_sns_publish(Message) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_terminate_instances-1">uoa_terminate_instances/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_terminate_instances(Rest) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_terminate_instances_quick_and_no_save-0">uoa_terminate_instances_quick_and_no_save/0 *</a></h3>
+<div class="spec">
+<p><tt>uoa_terminate_instances_quick_and_no_save() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoa_unregister-1">uoa_unregister/1 *</a></h3>
+<div class="spec">
+<p><tt>uoa_unregister(Rest) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoadi_get_node_instance_map-0">uoadi_get_node_instance_map/0</a></h3>
+<div class="spec">
+<p><tt>uoadi_get_node_instance_map() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uoadi_gnim_confirm_map-1">uoadi_gnim_confirm_map/1 *</a></h3>
+<div class="spec">
+<p><tt>uoadi_gnim_confirm_map(ANIM) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="uok_one_process-2">uok_one_process/2 *</a></h3>
 <div class="spec">
 <p><tt>uok_one_process(Node, Process) -&gt; any()</tt></p>
 </div>
 
-<h3 class="function"><a name="up_each_process-3">up_each_process/3 *</a></h3>
+<h3 class="function"><a name="uol_restart_ds-1">uol_restart_ds/1 *</a></h3>
 <div class="spec">
-<p><tt>up_each_process(R, MS, ML) -&gt; any()</tt></p>
+<p><tt>uol_restart_ds(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uol_run_nodes-1">uol_run_nodes/1 *</a></h3>
+<div class="spec">
+<p><tt>uol_run_nodes(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uol_terminate_nodes-1">uol_terminate_nodes/1 *</a></h3>
+<div class="spec">
+<p><tt>uol_terminate_nodes(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uom_summary-0">uom_summary/0 *</a></h3>
+<div class="spec">
+<p><tt>uom_summary() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uop_append_ds-1">uop_append_ds/1 *</a></h3>
+<div class="spec">
+<p><tt>uop_append_ds(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uop_backup_b3s_state-1">uop_backup_b3s_state/1 *</a></h3>
+<div class="spec">
+<p><tt>uop_backup_b3s_state(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uop_cons_crc-1">uop_cons_crc/1 *</a></h3>
+<div class="spec">
+<p><tt>uop_cons_crc(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uop_cp_property-1">uop_cp_property/1 *</a></h3>
+<div class="spec">
+<p><tt>uop_cp_property(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uop_find_property-2">uop_find_property/2 *</a></h3>
+<div class="spec">
+<p><tt>uop_find_property(Args, GetCommand) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uop_restore_b3s_state-1">uop_restore_b3s_state/1 *</a></h3>
+<div class="spec">
+<p><tt>uop_restore_b3s_state(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uop_write_property-1">uop_write_property/1 *</a></h3>
+<div class="spec">
+<p><tt>uop_write_property(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_describe-2">uops_describe/2 *</a></h3>
+<div class="spec">
+<p><tt>uops_describe(C, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_encode-2">uops_encode/2 *</a></h3>
+<div class="spec">
+<p><tt>uops_encode(C, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_encode_ds-1">uops_encode_ds/1 *</a></h3>
+<div class="spec">
+<p><tt>uops_encode_ds(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_encode_report-2">uops_encode_report/2 *</a></h3>
+<div class="spec">
+<p><tt>uops_encode_report(Rest, R) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_get_connection-0">uops_get_connection/0</a></h3>
+<div class="spec">
+<p><tt>uops_get_connection() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_load-2">uops_load/2 *</a></h3>
+<div class="spec">
+<p><tt>uops_load(C, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_load_ds-1">uops_load_ds/1 *</a></h3>
+<div class="spec">
+<p><tt>uops_load_ds(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_load_encoded_column_table-1">uops_load_encoded_column_table/1 *</a></h3>
+<div class="spec">
+<p><tt>uops_load_encoded_column_table(Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_load_encoded_column_table_force-1">uops_load_encoded_column_table_force/1 *</a></h3>
+<div class="spec">
+<p><tt>uops_load_encoded_column_table_force(Node) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_load_sit_fl-1">uops_load_sit_fl/1 *</a></h3>
+<div class="spec">
+<p><tt>uops_load_sit_fl(FileName) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_perform_cmd-1">uops_perform_cmd/1 *</a></h3>
+<div class="spec">
+<p><tt>uops_perform_cmd(C) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_perform_sql-2">uops_perform_sql/2</a></h3>
+<div class="spec">
+<p><tt>uops_perform_sql(C, Sql) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_save-2">uops_save/2 *</a></h3>
+<div class="spec">
+<p><tt>uops_save(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_save_ct_ds-1">uops_save_ct_ds/1 *</a></h3>
+<div class="spec">
+<p><tt>uops_save_ct_ds(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_save_psi-0">uops_save_psi/0 *</a></h3>
+<div class="spec">
+<p><tt>uops_save_psi() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uops_save_sit_ds-1">uops_save_sit_ds/1 *</a></h3>
+<div class="spec">
+<p><tt>uops_save_sit_ds(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uor_all_load_encoded_column_tables-0">uor_all_load_encoded_column_tables/0 *</a></h3>
+<div class="spec">
+<p><tt>uor_all_load_encoded_column_tables() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uor_all_load_encoded_column_tables_force-0">uor_all_load_encoded_column_tables_force/0 *</a></h3>
+<div class="spec">
+<p><tt>uor_all_load_encoded_column_tables_force() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uor_all_load_encoded_column_tables_skel-1">uor_all_load_encoded_column_tables_skel/1 *</a></h3>
+<div class="spec">
+<p><tt>uor_all_load_encoded_column_tables_skel(PS) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uor_all_restart_data_servers-0">uor_all_restart_data_servers/0 *</a></h3>
+<div class="spec">
+<p><tt>uor_all_restart_data_servers() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uor_help-0">uor_help/0 *</a></h3>
+<div class="spec">
+<p><tt>uor_help() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uor_restart_data_servers-1">uor_restart_data_servers/1 *</a></h3>
+<div class="spec">
+<p><tt>uor_restart_data_servers(Rest) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="up_each_process-4">up_each_process/4 *</a></h3>
+<div class="spec">
+<p><tt>up_each_process(R, MS, ML, N) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="up_wriite_process-4">up_wriite_process/4 *</a></h3>
+<div class="spec">
+<p><tt>up_wriite_process(Node, Pname, Module, Pid) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="upd_with_row-1">upd_with_row/1 *</a></h3>
+<div class="spec">
+<p><tt>upd_with_row(String) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="upp_scan_parse-1">upp_scan_parse/1 *</a></h3>
+<div class="spec">
+<p><tt>upp_scan_parse(String) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="upr_perform-2">upr_perform/2 *</a></h3>
@@ -573,14 +1222,24 @@
 <p><tt>ura_apply(R, A) -&gt; any()</tt></p>
 </div>
 
-<h3 class="function"><a name="ura_float-1">ura_float/1 *</a></h3>
+<h3 class="function"><a name="ura_expr-1">ura_expr/1 *</a></h3>
 <div class="spec">
-<p><tt>ura_float(A) -&gt; any()</tt></p>
+<p><tt>ura_expr(A) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="ura_integer-1">ura_integer/1 *</a></h3>
 <div class="spec">
 <p><tt>ura_integer(A) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="ura_term-1">ura_term/1 *</a></h3>
+<div class="spec">
+<p><tt>ura_term(A) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="urn_process_node-1">urn_process_node/1 *</a></h3>
+<div class="spec">
+<p><tt>urn_process_node(Rest) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="urns_process_ds-3">urns_process_ds/3 *</a></h3>
@@ -617,9 +1276,29 @@
 <div class="spec">
 <p><tt>ut_site(X1) -&gt; any()</tt></p>
 </div>
+
+<h3 class="function"><a name="uti_check-2">uti_check/2 *</a></h3>
+<div class="spec">
+<p><tt>uti_check(Id, DL) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uti_unregister-3">uti_unregister/3 *</a></h3>
+<div class="spec">
+<p><tt>uti_unregister(Node, Terminate, RemoveFromCRC) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="utn_process_node-1">utn_process_node/1 *</a></h3>
+<div class="spec">
+<p><tt>utn_process_node(Rest) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uwp_perform-6">uwp_perform/6 *</a></h3>
+<div class="spec">
+<p><tt>uwp_perform(X1, GC, SP, SN, PR, PT) -&gt; any()</tt></p>
+</div>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 21 2016, 14:07:01.</i></p>
+<p><i>Generated by EDoc</i></p>
 </body>
 </html>
