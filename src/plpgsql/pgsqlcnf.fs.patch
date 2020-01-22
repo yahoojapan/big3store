@@ -1,0 +1,11 @@
+--- postgresql.conf.dist	2019-11-25 12:32:24.675616859 +0900
++++ postgresql.conf	2019-11-25 13:35:36.639700052 +0900
+@@ -40,7 +40,7 @@
+ 
+ data_directory = '/var/lib/postgresql/10/main'		# use data in another directory
+ 					# (change requires restart)
+-hba_file = '/etc/postgresql/10/main/pg_hba.conf'	# host-based authentication file
++hba_file = '/home/ubuntu/big3store/src/plpgsql/pg_hba.conf'	# host-based authentication file
+ 					# (change requires restart)
+ ident_file = '/etc/postgresql/10/main/pg_ident.conf'	# ident configuration file
+ 					# (change requires restart)

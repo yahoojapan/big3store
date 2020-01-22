@@ -45,7 +45,7 @@
     %% {distribution_algorithm,   random},
     {distribution_algorithm,   predicate_based},
     {name_of_triple_table,     triplestore},
-    {name_of_pred_clm_table,   pc_yg2s_col25},
+    {name_of_pred_clm_table,   pc_yg2s_col5},
     {name_of_pred_freq_table,  pf_yg2s},
     {name_of_string_id_table,  string_id_triplestore},
     {name_of_pred_string_id,   psi_yg2s},
@@ -69,6 +69,9 @@
     {ui_run_command_terminate_ds, [
 				   "aws sns publish shutting down big3store system...",
 				   "aws terminate front server"
+			     ]},
+    {ui_run_command_finish_benchmark, [
+				   "aws sns publish all benchmark batch finished.  (total %%b3s_state:benchmark_last_batch_elapsed%% minutes)"
 			     ]},
     {store_report_frequency,   10000},
     {triple_id_skel,           "b3sid"},

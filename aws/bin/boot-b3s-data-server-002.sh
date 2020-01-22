@@ -16,6 +16,7 @@ cp $B3SAB/etc-rc-local-data-server.sh /etc/rc.local
 
 EXE=`/bin/cat <<EOS
 (cd /home/ubuntu/big3store/src;\
+ make clean;\
  make cookie;\
  make pgsql-cf-ds; make pgsql;\
  make; make hipe;\

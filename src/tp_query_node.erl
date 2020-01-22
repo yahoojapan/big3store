@@ -211,6 +211,7 @@ init([]) ->
     put(wait, true),
     put(pid, self()),
     put(start_date_time, calendar:local_time()),
+    put(mq_debug, gen_server:call(node_state, {get, mq_debug})),
 
     %% init queues and counters
     query_node:queue_init(from_parent, plain, empty),
@@ -230,22 +231,32 @@ init([]) ->
 %% 
 
 handle_call({start, QueryNodeId, QueryId, SessionId, Self, TriplePattern, SelectPred, ProjectList, ParentPid, VarsPositions, Side}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [get(self), {message,start}, {all,get()}, get(state)], message_received, 10),
     hc_start(QueryNodeId, QueryId, SessionId, Self, TriplePattern, SelectPred, ProjectList, ParentPid, VarsPositions, Side),
     {reply, ok, hc_save_pd()};
 
 handle_call({get_property, all}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [get(self), {message,get_property}, {name,all}, {value,get()}, get(state)], done, 10),
     {reply, get(), State};
 
 handle_call({get_property, Name}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [get(self),  {message,get_property}, {name,Name}, {value,get(Name)}, get(state)], done, 10),
     {reply, get(Name), State};
 
+handle_call({get, Name}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
+    hc_restore_pd(get(created), State),
+    info_msg(handle_call, [get(self), {message,get}, {get,Name}, {value,get(Name)}, get(state)], message_received, 10),
+    {reply, get(Name), State};
+
 handle_call({eval, VarsValues}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
 
     %% count number of eval message and log 
@@ -274,6 +285,7 @@ handle_call(Request, From, State) ->
 %% 
 
 handle_cast({empty, From}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
 
     %% insert into queue from parent
@@ -285,6 +297,7 @@ handle_cast({empty, From}, State) ->
     {noreply, hc_save_pd()};
 
 handle_cast({stop, From}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_cast, [get(self), {message,stop}, {from,From}, get(state)], message_received, 10),
     %% erase complete PD

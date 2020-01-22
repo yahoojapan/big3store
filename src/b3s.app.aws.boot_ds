@@ -77,6 +77,9 @@
 				   "aws sns publish shutting down big3store system...",
 				   "aws terminate front server"
 			     ]},
+    {ui_run_command_finish_benchmark, [
+				   "aws sns publish all benchmark batch finished.  (total %%b3s_state:benchmark_last_batch_elapsed%% minutes)"
+			     ]},
     {store_report_frequency,   10000},
     {triple_id_skel,           "b3sid"},
     {data_files,               [

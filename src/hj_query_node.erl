@@ -1,7 +1,7 @@
 %%
 %% Hash Join Query Node processes
 %%
-%% @copyright 2014-2016 UP FAMNIT and Yahoo Japan Corporation
+%% @copyright 2014-2019 UP FAMNIT and Yahoo Japan Corporation
 %% @version 0.3
 %% @since February, 2016
 %% @author Iztok Savnik <iztok.savnik@famnit.upr.si>
@@ -293,6 +293,7 @@ init([]) ->
     put(wait, true),
     put(pid, self()),
     put(start_date_time, calendar:local_time()),
+    put(mq_debug, gen_server:call(node_state, {get, mq_debug})),
 
     %% init queues
     query_node:queue_init(from_parent, plain, empty),
@@ -312,22 +313,32 @@ init([]) ->
 %% 
 handle_call({start, QueryNodeId, QueryId, SessionId, Self, GraphPattern, SelectPred, ProjectList, ParentPid, OuterPid, InnerPid, 
              VarsPositions, JoinVars}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [Self, {message,start}, {all,get()}, get(state)], message_received, 10),
     hc_start(QueryNodeId, QueryId, SessionId, Self, GraphPattern, SelectPred, ProjectList, ParentPid, OuterPid, InnerPid, VarsPositions, JoinVars),
     {reply, ok, hc_save_pd()};
 
 handle_call({get_property, all}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [get(self), {message,get_property}, {name,all}, {value,get()}, get(state)], message_received, 10),
     {reply, get(), hc_save_pd()};
 
 handle_call({get_property, Name}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [get(self), {message,get_property}, {name,Name}, {value,get(Name)}, get(state)], message_received, 10),
     {reply, get(Name), hc_save_pd()};
 
+handle_call({get, Name}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
+    hc_restore_pd(get(created), State),
+    info_msg(handle_call, [get(self), {message,get}, {name,Name}, {value,get(Name)}, get(state)], message_received, 10),
+    {reply, get(Name), hc_save_pd()};
+
 handle_call({eval, VarsValues}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [get(self), {message,eval}, {vars_values,VarsValues}, {all,get()}, get(state)], message_received, 10),
     hc_eval(VarsValues, get(state)),
@@ -347,6 +358,7 @@ handle_call(Request, From, State) ->
 %% @spec handle_cast(term(), jqn_state()) -> {noreply, jqn_state()}
 %% 
 handle_cast({empty, From}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
 
     %% insert into queue
@@ -358,6 +370,7 @@ handle_cast({empty, From}, State) ->
     {noreply, hc_save_pd()};
 
 handle_cast({data_inner, From, Block}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_cast, [get(self), {message,data_inner}, {from,From}, {block,Block}, get(state)], message_received, 30),
 
@@ -368,6 +381,7 @@ handle_cast({data_inner, From, Block}, State) ->
     {noreply, hc_save_pd()};
 
 handle_cast({data_outer, From, Block}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_cast, [get(self), {message,data_outer}, {from,From}, {block,Block}, get(state)], message_received, 30),
 
@@ -379,6 +393,7 @@ handle_cast({data_outer, From, Block}, State) ->
     {noreply, hc_save_pd()};
 
 handle_cast({stop, From}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_cast, [get(self), {message,stop}, {from,From}, get(state)], message_received, 10),
     %% erase complete PD

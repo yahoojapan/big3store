@@ -653,6 +653,8 @@ init([]) ->
     process_flag(trap_exit, true),
 
     {ok, RRM} = application:get_env(b3s, result_record_max),
+    {ok, BSN} = application:get_env(b3s, b3s_state_nodes),
+    BS = {b3s_state, lists:nth(1, BSN)},
     put(created,         true),
     put(pid,             self()),
     put(node,            node()),
@@ -661,6 +663,7 @@ init([]) ->
     put(dump_result,     true),
     put(result_record_max, RRM),
     put(query_tree_pid,  undefined),
+    put(mq_debug, gen_server:call(BS, {get, mq_debug})),
 
     State = hc_save_pd(),
     info_msg(init, [], State, -1),
@@ -675,25 +678,30 @@ init([]) ->
 %% term(), bm_state()}
 %% 
 handle_call({get, all}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     {reply, erlang:get(), State};
 
 handle_call({get, PropertyName}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     {reply, erlang:get(PropertyName), State};
 
 handle_call({put, PropertyName, Value}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     erlang:put(PropertyName, Value),
     erlang:put(update_date_time, calendar:local_time()),
     {reply, ok, hc_save_pd()};
 
 handle_call({update_modules, ModuleList}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     R = hc_update_modules(ModuleList),
     {reply, R, hc_save_pd()};
 
 handle_call(report, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     {reply, hc_report(), hc_save_pd()};
 
@@ -711,176 +719,211 @@ handle_call(Request, From, State) ->
 %% @spec handle_cast(term(), bm_state()) -> {noreply, bm_state()}
 %% 
 handle_cast({data_outer, Pid, Graph}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_data_outer(Pid, Graph),
     {noreply, hc_save_pd()};
 
 handle_cast({restart_record, Pid, TaskId}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_restart_record(Pid, TaskId),
     {noreply, hc_save_pd()};
 
 handle_cast({stop_record, Pid, TaskId}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_stop_record(Pid, TaskId),
     {noreply, hc_save_pd()};
 
 handle_cast(task_local2_0005, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_local2_0005(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_local2_0004, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_local2_0004(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_local2_0003, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_local2_0003(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_local2_0002, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_local2_0002(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_local2_0001, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_local2_0001(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0017, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0017(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0016, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0016(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0015m, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0015m(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0015, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0015(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0014m, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0014m(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0014, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0014(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0013m, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0013m(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0013, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0013(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0012, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0012(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0011m, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0011m(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0011, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0011(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0010m, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0010m(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0010h, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0010h(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0010, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0010(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0009, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0009(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0008m, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0008m(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0008, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0008(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0007, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0007(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0006, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0006(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0005m, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0005m(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0005, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0005(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0004m, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0004m(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0004, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0004(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0003h, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0003h(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0003, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0003(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0002, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0002(),
     {noreply, hc_save_pd()};
 
 handle_cast(task_yg_0001, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hc_task_yg_0001(),
     {noreply, hc_save_pd()};

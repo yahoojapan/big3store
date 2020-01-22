@@ -665,9 +665,20 @@ ifab_get_id(Result, Prefix) ->
     list_to_atom(RR).
 
 ids_ds_aws_boot() ->
+    {ok, [BSN | _]} = application:get_env(b3s, b3s_state_nodes),
+    idab_wait(gen_server:call({b3s_state, BSN}, lock)).
+
+idab_wait(ok) ->
     idab_collect_info(),
     idab_determine_info(),
-    idab_perform_registeration().
+    R = idab_perform_registeration(),
+    {ok, [BSN | _]} = application:get_env(b3s, b3s_state_nodes),
+    gen_server:call({b3s_state, BSN}, unlock),
+    R;
+idab_wait(_) ->
+    timer:sleep(500),
+    {ok, [BSN | _]} = application:get_env(b3s, b3s_state_nodes),
+    idab_wait(gen_server:call({b3s_state, BSN}, lock)).
 
 ids_ds_aws_boot_t() ->
     ANI = aws_node_instance_map,

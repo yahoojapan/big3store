@@ -307,8 +307,12 @@
 %% 
 init([]) ->
     process_flag(trap_exit, true),
+    {ok, BSN} = application:get_env(b3s, b3s_state_nodes),
+    BS  = {b3s_state, lists:nth(1, BSN)},
+    MQD = gen_server:call(BS, {get, mq_debug}),
     State = #{wait            => true,
 	      start_date_time => calendar:local_time(),
+	      mq_debug        => MQD,
 	      pid             => self()},
 
     %% init result queue
@@ -326,6 +330,7 @@ init([]) ->
 %% term(), qt_state()}
 %% 
 handle_call({start, Query, Self, Invoker, TreeId, SessionId}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [Self, {message,start}, {query,Query}, {self,Self}, 
                            {invoker,Invoker}, {tree_id,TreeId}, {session_id,SessionId}, get(state)], message_received, 10),
@@ -333,22 +338,33 @@ handle_call({start, Query, Self, Invoker, TreeId, SessionId}, _, State) ->
     {reply, ok, hc_save_pd()};
 
 handle_call({eval}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [get(self), {message,eval}, get(state)], message_received, 10),
     hc_eval(),
     {reply, ok, hc_save_pd()};
 
 handle_call({get, all}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [get(self), {message,get}, {get,all}, {value,get()}, get(state)], message_received, 10),
     {reply, get(), hc_save_pd()};
 
 handle_call({get, Name}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [get(self), {message,get}, {get,Name}, {value,get(Name)}, get(state)], message_received, 10),
     {reply, get(Name), hc_save_pd()};
 
+handle_call({put, Name, Value}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
+    hc_restore_pd(get(created), State),
+    put(Name, Value),
+    info_msg(handle_call, [get(self), {message,put}, {put,Name}, {value,Value}, get(state)], message_received, 10),
+    {reply, get(Name), hc_save_pd()};
+
 handle_call({read}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_call, [get(self), {message,read}, {invoker,get(invoker)}, get(state)], message_received,  30),
     Block = hc_read(),
@@ -368,6 +384,7 @@ handle_call(Request, From, State) ->
 %% @spec handle_cast(term(), qt_state()) -> {noreply, qt_state()}
 %% 
 handle_cast({data_outer, From, Block}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(get(created), State),
     info_msg(handle_cast, [get(self), {message,data_outer}, {from,From}, {block,Block}, get(state)], message_received,  30),
     hc_data_outer(From, Block),
@@ -375,6 +392,7 @@ handle_cast({data_outer, From, Block}, State) ->
 
 %% just for suppressing errors on benchmark task executions
 handle_cast({empty, From}, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     info_msg(handle_cast, [get(self), {message,empty}, {from,From}, get(state)], message_received,  30),
     {noreply, State};
 

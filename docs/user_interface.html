@@ -75,6 +75,7 @@
   at given node.</td></tr>
 <tr><td valign="top"><a href="#spawn_query_tree-1">spawn_query_tree/1*</a></td><td>Create query tree for parameter Query.</td></tr>
 <tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>Process termination.</td></tr>
+<tr><td valign="top"><a href="#uaf_each_process-5">uaf_each_process/5*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uan_append-3">uan_append/3*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uards_process_ds-1">uards_process_ds/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ubgct_process_ds-1">ubgct_process_ds/1*</a></td><td></td></tr>
@@ -203,7 +204,9 @@
 <tr><td valign="top"><a href="#uol_restart_ds-1">uol_restart_ds/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uol_run_nodes-1">uol_run_nodes/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uol_terminate_nodes-1">uol_terminate_nodes/1*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uom_message-1">uom_message/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uom_summary-0">uom_summary/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#uomm_apply_function-3">uomm_apply_function/3*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uop_append_ds-1">uop_append_ds/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uop_backup_b3s_state-1">uop_backup_b3s_state/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#uop_cons_crc-1">uop_cons_crc/1*</a></td><td></td></tr>
@@ -246,6 +249,7 @@
 <tr><td valign="top"><a href="#urn_process_node-1">urn_process_node/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#urns_process_ds-3">urns_process_ds/3*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#usb_iterate-4">usb_iterate/4*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#usb_notify-1">usb_notify/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#usb_predicate_based-1">usb_predicate_based/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#usb_random-1">usb_random/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#usb_wait_termination-1">usb_wait_termination/1*</a></td><td></td></tr>
@@ -392,6 +396,11 @@
 <p><tt>terminate(Reason::term(), State::<a href="#type-ui_state">ui_state()</a>) -&gt; none()</tt><br></p>
 </div><p>Process termination.
  </p>
+
+<h3 class="function"><a name="uaf_each_process-5">uaf_each_process/5 *</a></h3>
+<div class="spec">
+<p><tt>uaf_each_process(R, ModuleSet, ML, N, F) -&gt; any()</tt></p>
+</div>
 
 <h3 class="function"><a name="uan_append-3">uan_append/3 *</a></h3>
 <div class="spec">
@@ -642,7 +651,7 @@
 
 <h3 class="function"><a name="ui_operate_memory-1">ui_operate_memory/1 *</a></h3>
 <div class="spec">
-<p><tt>ui_operate_memory(X1) -&gt; any()</tt></p>
+<p><tt>ui_operate_memory(A) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="ui_operate_mnesia-1">ui_operate_mnesia/1 *</a></h3>
@@ -1037,9 +1046,19 @@
 <p><tt>uol_terminate_nodes(X1) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="uom_message-1">uom_message/1 *</a></h3>
+<div class="spec">
+<p><tt>uom_message(Arg) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="uom_summary-0">uom_summary/0 *</a></h3>
 <div class="spec">
 <p><tt>uom_summary() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="uomm_apply_function-3">uomm_apply_function/3 *</a></h3>
+<div class="spec">
+<p><tt>uomm_apply_function(Nodes, Modules, Func) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="uop_append_ds-1">uop_append_ds/1 *</a></h3>
@@ -1250,6 +1269,11 @@
 <h3 class="function"><a name="usb_iterate-4">usb_iterate/4 *</a></h3>
 <div class="spec">
 <p><tt>usb_iterate(BA, Rest, ElaLst, Mes) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="usb_notify-1">usb_notify/1 *</a></h3>
+<div class="spec">
+<p><tt>usb_notify(TM) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="usb_predicate_based-1">usb_predicate_based/1 *</a></h3>

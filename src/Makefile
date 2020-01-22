@@ -61,24 +61,35 @@ ports.config: ports.config.skel
 
 .erlang.cookie:
 	echo uEr8MOIP$(YMDHMS)XngY5374 > .erlang.cookie
+	chmod go-rwx .erlang.cookie
 
 cookie: .erlang.cookie
 	cp -u .erlang.cookie ~
 
-PGSDIR = plpgsql
+PGSDIR = $(PRJPTH)/big3store/src/plpgsql
 PGSSRC = encode.plpgsql user.sql postgresql.conf.fs postgresql.conf.ds
-PGCPTH = $(filter /etc/%, $(shell locate postgresql.conf))
+PGCPTH = $(filter /etc/%.conf, $(shell locate postgresql.conf))
 PGSEID = $(filter /etc/init.d/%, $(shell locate postgresql))
 PGMPFL = $(filter /var/%, $(shell locate postmaster.pid))
 PGMPID = $(shell head -1 $(PGMPFL))
 
-pgsql-cf-fs:
+$(PGSDIR)/postgresql.conf.fs: $(PGSDIR)/pgsqlcnf.fs.patch
+	cp -p $(PGCPTH) $(PGSDIR)/postgresql.conf.fs
+	patch -u $(PGSDIR)/postgresql.conf.fs < $(PGSDIR)/pgsqlcnf.fs.patch
+
+$(PGSDIR)/postgresql.conf.ds: $(PGSDIR)/pgsqlcnf.ds.patch
+	cp -p $(PGCPTH) $(PGSDIR)/postgresql.conf.ds
+	patch -u $(PGSDIR)/postgresql.conf.ds < $(PGSDIR)/pgsqlcnf.ds.patch
+
+pgsql-cf-fs: $(PGSDIR)/postgresql.conf.fs
+	mv $(PGCPTH) $(PGCPTH).dist
 	cp -p $(PGSDIR)/postgresql.conf.fs $(PGCPTH)
 
-pgsql-cf-ds:
+pgsql-cf-ds: $(PGSDIR)/postgresql.conf.ds
+	mv $(PGCPTH) $(PGCPTH).dist
 	cp -p $(PGSDIR)/postgresql.conf.ds $(PGCPTH)
 
-pgsql: $(PGSSRC:%=$(PGSDIR)/%)
+pgsql:
 	@chown postgres.postgres $(PGSDIR)/pg_hba.conf $(PGCPTH)
 	@$(PGSEID) restart
 	@sleep 10
@@ -142,7 +153,7 @@ ebin:
 edoc:
 	@mkdir -p $(EDOC)
 	@ln -sf $(EDOC) edoc
-	@ln -sf ../src/overview.edoc edoc
+	@cp -fp ../src/overview.edoc edoc
 
 elog:
 	@mkdir -p $(ELOG)
@@ -284,8 +295,8 @@ test-all-grep:
 	@echo $(SEP55) | tee -a $(TALOG)
 	@grep $(TSTPS) *.log | tee -a $(TALOG)
 
-#TSMDSKN = "[b3s]."
-# TSMDSKN = "[b3s_state]."
+# TSMDSKN = "[b3s]."
+ TSMDSKN = "[b3s_state]."
 # TSMDSKN = "[node_state]." # for initialize b3s_state
 # TSMDSKN = "[file_reader]."
 # TSMDSKN = "[tp_query_node]."
@@ -296,7 +307,7 @@ test-all-grep:
 # TSMDSKN = "[db_writer]."
 # TSMDSKN = "[query_tree]."
 # TSMDSKN = "[string_id]."
- TSMDSKN = "[user_interface]."
+# TSMDSKN = "[user_interface]."
 # TSMDSKN = "[query_node]."
 TSMDSKNS1 = "[b3s, b3s_state, node_state, file_reader, db_interface, db_writer, string_id, user_interface, query_node]." # step 1
 TSMDSKNS2 = "[tp_query_node, join_query_node, hj_query_node, mj_query_node, query_tree]." # step 2

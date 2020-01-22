@@ -129,6 +129,13 @@ to this process. Following properties includes them.</p>
   <tr> <td>ui_run_command_load_ds</td> <td>[<code><a href="user_interface.html#type-ui_statement">user_interface:ui_statement()</a></code>]</td> <td>user interface statements
   called after loading table data on all data servers.</td> </tr>
  
+  <tr> <td>ui_run_command_finish_benchmark</td> <td>[<code><a href="user_interface.html#type-ui_statement">user_interface:ui_statement()</a></code>]</td> <td>user interface statements
+  called after finishing a benchmark batch invoked by batch_benchmark
+  command.</td> </tr>
+ 
+  <tr> <td>lock_node</td> <td>[<code>pid()</code>]</td> <td>lock
+  state.</td> </tr>
+ 
   </table>
  
   <h3><a name="handle_call_(synchronous)_message_API">handle_call (synchronous) message API</a></h3>
@@ -151,6 +158,12 @@ to this process. Following properties includes them.</p>
  
   <tr> <td><a href="#propagate">propagate</a></td> <td></td> <td>[node()] | {error,
   term()}</td> <td>propergate some properties</td> </tr>
+ 
+  <tr> <td><a href="#lock">lock</a></td> <td></td> <td>ok | {locked_by,
+  pid()}</td> <td>lock all accesses</td> </tr>
+ 
+  <tr> <td><a href="#unlock">unlock</a></td> <td></td> <td>ok | {locked_by,
+  pid()} | no_lock</td> <td>unlock all accesses</td> </tr>
  
   </table>
  
@@ -185,6 +198,16 @@ to this process. Following properties includes them.</p>
   'front_server_nodes' property. It returns a list of nodes, to which
   it succeeded copying the properties.  (LINK: <a href="#propagate">propagate</a>)</p>
  
+  <h4><a name="lock">lock</a></h4>
+ 
+  <p>This message locks all accesses to the calling node. (LINK:
+  <a href="#lock">lock</a> <a href="#hc_lock-1"><code>hc_lock/1</code></a>)</p>
+ 
+  <h4><a name="unlock">unlock</a></h4>
+ 
+  <p>This message locks all accesses to the calling node. (LINK:
+  <a href="#unlock">unlock</a> <a href="#hc_unlock-1"><code>hc_unlock/1</code></a>)</p>
+ 
   <h3><a name="handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a></h3>
  
   <p>(LINK: <a href="#handle_cast_(asynchronous)_message_API">handle_cast (asynchronous) message API</a>)</p>
@@ -208,6 +231,7 @@ to this process. Following properties includes them.</p>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bs_test_-0">bs_test_/0*</a></td><td>Unit tests.</td></tr>
 <tr><td valign="top"><a href="#bt_site-1">bt_site/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#btl_clone-0">btl_clone/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#btl_lock-0">btl_lock/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#btl_propagate-0">btl_propagate/0*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#child_spec-0">child_spec/0</a></td><td>Return child spec for this process.</td></tr>
 <tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>Process code change action.</td></tr>
@@ -218,20 +242,27 @@ to this process. Following properties includes them.</p>
 <tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>Handle asynchronous query requests.</td></tr>
 <tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>Handle exceptional query requests.</td></tr>
 <tr><td valign="top"><a href="#hc_clone_process-1">hc_clone_process/1*</a></td><td>This function invokes a clone process on the specified node.</td></tr>
+<tr><td valign="top"><a href="#hc_lock-1">hc_lock/1*</a></td><td>This message locks all accesses to the calling node if no
+  process has already obtained the lock.</td></tr>
+<tr><td valign="top"><a href="#hc_monitor_mq-1">hc_monitor_mq/1</a></td><td>This function monitors message queue activities.</td></tr>
 <tr><td valign="top"><a href="#hc_propagate_properties-0">hc_propagate_properties/0*</a></td><td>This function propagates properties listed in 'push_prop_list'
   property to nodes obtained from 'clm_row_conf' and
   'front_server_nodes' property.</td></tr>
 <tr><td valign="top"><a href="#hc_restore_pd-2">hc_restore_pd/2*</a></td><td>Restore process dictionaries from state map structure.</td></tr>
 <tr><td valign="top"><a href="#hc_restore_pd_1-1">hc_restore_pd_1/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hc_save_pd-0">hc_save_pd/0*</a></td><td>Save process all dictionary contents into state map structure.</td></tr>
+<tr><td valign="top"><a href="#hc_unlock-1">hc_unlock/1*</a></td><td>This message unlocks all accesses if the calling process has
+  already obtained the lock.</td></tr>
 <tr><td valign="top"><a href="#hcp_copy_one_property-2">hcp_copy_one_property/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hcp_copy_property-1">hcp_copy_property/1*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hcp_invoke-2">hcp_invoke/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hcp_node-3">hcp_node/3*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hgn_proc_column-2">hgn_proc_column/2*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hl_check-2">hl_check/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hpp_copy_properties-2">hpp_copy_properties/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hpp_get_nodes-1">hpp_get_nodes/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hpp_get_nodes_test_-0">hpp_get_nodes_test_/0*</a></td><td></td></tr>
+<tr><td valign="top"><a href="#hu_check-2">hu_check/2*</a></td><td></td></tr>
 <tr><td valign="top"><a href="#info_msg-4">info_msg/4*</a></td><td>Report an information issue to the error_logger if current
   debug level is greater than ThresholdDL.</td></tr>
 <tr><td valign="top"><a href="#init-1">init/1</a></td><td>Initialize a b3s_state process.</td></tr>
@@ -261,6 +292,11 @@ to this process. Following properties includes them.</p>
 <h3 class="function"><a name="btl_clone-0">btl_clone/0 *</a></h3>
 <div class="spec">
 <p><tt>btl_clone() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="btl_lock-0">btl_lock/0 *</a></h3>
+<div class="spec">
+<p><tt>btl_lock() -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="btl_propagate-0">btl_propagate/0 *</a></h3>
@@ -324,6 +360,27 @@ to this process. Following properties includes them.</p>
 </div><p>This function invokes a clone process on the specified node.
  </p>
 
+<h3 class="function"><a name="hc_lock-1">hc_lock/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_lock(From::{pid(), Tag::atom()}) -&gt; ok | {locked_by, pid()}</tt><br></p>
+</div><p>This message locks all accesses to the calling node if no
+  process has already obtained the lock. The locking feature is only
+  applied to processes that use this message. Calling process must
+  wait and retry if this message didn't return 'ok'. After performing
+  a sequence of accesses, the calling process must release the lock
+  by 'unlock'.
+ </p>
+
+<h3 class="function"><a name="hc_monitor_mq-1">hc_monitor_mq/1</a></h3>
+<div class="spec">
+<p><tt>hc_monitor_mq(FL::boolean()) -&gt; ok</tt><br></p>
+</div><p>This function monitors message queue activities. It updates
+  process dictionary properties 'mq_count' and 'mq_maxlen' if true
+  was given to argument FL. Otherwise, it does nothing. Typically,
+  "erlang:get(mq_debug)" should be used as its argument for calling
+  it.
+ </p>
+
 <h3 class="function"><a name="hc_propagate_properties-0">hc_propagate_properties/0 *</a></h3>
 <div class="spec">
 <p><tt>hc_propagate_properties() -&gt; [node()]</tt><br></p>
@@ -347,6 +404,15 @@ to this process. Following properties includes them.</p>
 <div class="spec">
 <p><tt>hc_save_pd() -&gt; <a href="#type-bs_state">bs_state()</a></tt><br></p>
 </div><p>Save process all dictionary contents into state map structure.
+ </p>
+
+<h3 class="function"><a name="hc_unlock-1">hc_unlock/1 *</a></h3>
+<div class="spec">
+<p><tt>hc_unlock(From::{pid(), Tag::atom()}) -&gt; ok | {locked_by, pid()} | no_lock</tt><br></p>
+</div><p>This message unlocks all accesses if the calling process has
+  already obtained the lock. It returns 'ok' if succeeded. It returns
+  '{locked_by, Pid}' where Pid is an identifier of currently locking
+  process. It returns 'no_lock' if no process obtained the lock.
  </p>
 
 <h3 class="function"><a name="hcp_copy_one_property-2">hcp_copy_one_property/2 *</a></h3>
@@ -374,6 +440,11 @@ to this process. Following properties includes them.</p>
 <p><tt>hgn_proc_column(Rest, NodeSet) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="hl_check-2">hl_check/2 *</a></h3>
+<div class="spec">
+<p><tt>hl_check(A, LockNode) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="hpp_copy_properties-2">hpp_copy_properties/2 *</a></h3>
 <div class="spec">
 <p><tt>hpp_copy_properties(PPL, NL) -&gt; any()</tt></p>
@@ -387,6 +458,11 @@ to this process. Following properties includes them.</p>
 <h3 class="function"><a name="hpp_get_nodes_test_-0">hpp_get_nodes_test_/0 *</a></h3>
 <div class="spec">
 <p><tt>hpp_get_nodes_test_() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="hu_check-2">hu_check/2 *</a></h3>
+<div class="spec">
+<p><tt>hu_check(A, LockNode) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="info_msg-4">info_msg/4 *</a></h3>

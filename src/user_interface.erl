@@ -362,6 +362,8 @@ main() ->
     put(node,              node()),
     put(start_date_time,   calendar:local_time()),
     put(prompt_count,      0),
+    put(b3s_state_pid,     {b3s_state,  lists:nth(1, get(b3s_state_nodes))}),
+    put(node_state_pid,    {node_state, lists:nth(1, get(b3s_state_nodes))}),
 
     %% set env; put in separate function
     put(edit_file, "query_file"),
@@ -1451,19 +1453,17 @@ uan_append(DL, [F | FR], R) ->
 upr_perform(Node, ModuleList) ->
     N = ui_resolve_node_synonym(Node),
     io:fwrite("\n### ~s ###\n\n", [N]),
-    F = "| ~-20s | ~-20s | ~8s | ~8s | ~5s | ~8s |\n",
+    F = "| ~-20s | ~-20s | ~8s | ~8s | ~8s |\n",
     Hpi = string:chars($ , 5) ++ "Process Id",
     Hmn = string:chars($ , 4) ++ "Module Name",
     Hth = "To. Heap",
-    Hhs = "Heap Sz.",
-    Hss = "Stack",
-    Hrd = " Reduc. ",
-    io:fwrite(F, [Hpi, Hmn, Hth, Hhs, Hss, Hrd]),
+    Hmc = "Mes. Cnt",
+    Hmm = "Mes. Max",
+    io:fwrite(F, [Hpi, Hmn, Hth, Hmc, Hmm]),
     Spi = string:chars($-, 20),
     Smn = string:chars($-, 20),
     S08 = string:chars($-, 8),
-    S05 = string:chars($-, 5),
-    io:fwrite(F, [Spi, Smn, S08, S08, S05, S08]),
+    io:fwrite(F, [Spi, Smn, S08, S08, S08]),
 
     case ModuleList of
 	[all] ->
@@ -1510,11 +1510,22 @@ up_each_process(_, _, _, _) ->
 up_wriite_process(Node, Pname, Module, Pid) ->
     PI = rpc:call(Node, erlang, process_info, [Pid]),
     TH = element(2, lists:keyfind(total_heap_size, 1, PI)),
-    HS = element(2, lists:keyfind(heap_size, 1, PI)),
-    SS = element(2, lists:keyfind(stack_size, 1, PI)),
-    RD = element(2, lists:keyfind(reductions, 1, PI)),
-    F = "| ~-20s | ~-20s | ~8w | ~8w | ~5w | ~8w |\n",
-    io:fwrite(F, [Pname, Module, TH, HS, SS, RD]).
+    P  = {Pname, Node},
+    U  = '------',
+    MC = case gen_server:call(P, {get, mq_count}) of
+	     undefined -> U;
+	     {unknown_request, _} -> U;
+	     {recorded_handle_call, _} -> U;
+	     C -> C
+	 end,
+    MM = case gen_server:call(P, {get, mq_maxlen}) of
+	     undefined -> U;
+	     {unknown_request, _} -> U;
+	     {recorded_handle_call, _} -> U;
+	     M -> M
+	 end,
+    F = "| ~-20s | ~-20s | ~8w | ~8w | ~8w |\n",
+    io:fwrite(F, [Pname, Module, TH, MC, MM]).
 
 ui_set_debug_level() ->
     case get(cmd_params) of
@@ -1616,8 +1627,7 @@ usb_iterate(_, [], ElaLst, Mes) when length(ElaLst) > 2 ->
     ML = lists:delete(lists:min(M), M),
     AM = io_lib:format(F4, [lists:sum(ML) / length(ML)]),
 
-    SM = io_lib:format(" (total ~w minutes)", [round(TM * 1000) / 1000]),
-    uoa_sns_publish("benchmark batch finished." ++ SM),
+    usb_notify(TM),
     H ++ S ++ Mes ++ T ++ A ++ AM;
 usb_iterate(_, [], ElaLst, Mes) ->
     F1 = "\n| ~-24s | ~-10s | ~-10s |\n",
@@ -1631,8 +1641,7 @@ usb_iterate(_, [], ElaLst, Mes) ->
     T  = io_lib:format(F2, [TM]),
     A  = io_lib:format(F3, [E / length(ElaLst)]),
 
-    SM = io_lib:format(" (total ~w minutes)", [round(TM * 1000) / 1000]),
-    uoa_sns_publish("benchmark batch finished." ++ SM),
+    usb_notify(TM),
     H ++ S ++ Mes ++ T ++ A;
 usb_iterate(BA, [Task | Rest], ElaLst, Mes) ->
     TA = list_to_atom(Task),
@@ -1644,11 +1653,39 @@ usb_iterate(BA, [Task | Rest], ElaLst, Mes) ->
 	    EL = [Elapse | ElaLst]
     end,
 
-    {PE, RF} = ui_check_benchmark(BA, TA),
-    F = "| ~-24s | ~10w | ~10w |\n",
-    A = [Task, PE, RF],
-    M = io_lib:format(F, A),
-    usb_iterate(BA, Rest, EL, Mes ++ M).
+    case ui_check_benchmark(BA, TA) of
+	{PE, RF} ->
+	    F = "| ~-24s | ~10w | ~10w |\n",
+	    A = [Task, PE, RF],
+	    M = io_lib:format(F, A),
+	    usb_iterate(BA, Rest, EL, Mes ++ M);
+	E ->
+	    io_lib:format("error: ~p\n", [E])
+    end.
+
+usb_notify(TM) ->
+    NN = lists:nth(1, get(b3s_state_nodes)),
+    BS = {b3s_state, NN},
+    NS = {node_state, NN},
+    F1 = " (total ~w minutes)",
+    A1 = [round(TM * 1000) / 1000],
+    SM = lists:flatten(io_lib:format(F1, A1)),
+    gen_server:call(BS, {put, benchmark_last_batch_elapsed, SM}),
+    GC = {get, ui_run_command_finish_benchmark},
+    SL = gen_server:call(erlang:get(b3s_state_pid), GC),
+    UI = user_interface,
+    UN = usb_notify_f2,
+    FU = fun (Statement) ->
+		 S = string:split(Statement, " ", all),
+		 case (catch gen_server:call(NS, {perform_ui, S})) of
+		     {'EXIT', E} ->
+			 node_state:error_msg(UI, UN, [Statement], E),
+			 R = io_lib:format("process ~p is busy.\n", [NS]);
+		     R -> R
+		 end,
+		 node_state:info_msg(UI, UN, [Statement], R, 50)
+	 end,
+    lists:map(FU, SL).
 
 usb_wait_termination(Task) ->
     NN  = lists:nth(1, get(b3s_state_nodes)),
@@ -2964,8 +3001,12 @@ uoa_create(["template", "front", "server"]) ->
     CTA = "../aws/bin/create-tags-ami.sh",
     A = [uops_perform_cmd(CLT), uops_perform_cmd(CTA)],
     lists:flatten(io_lib:format("~s~s", A));
+uoa_create(["data", "server", "archive"]) ->
+    CL = "../aws/bin/setup-bucket.sh",
+    A = [uops_perform_cmd(CL)],
+    lists:flatten(io_lib:format("~s", A));
 uoa_create(_) ->
-    "usage: aws create {image <name>|template front server}\n".
+    "usage: aws create {image <name>|template front server|data server archive}\n".
 
 % describe images
 uoa_describe_image() ->
@@ -3811,8 +3852,12 @@ ui_operate_memory(["s"]) ->
     uom_summary();
 ui_operate_memory(["summary"]) ->
     uom_summary();
+ui_operate_memory(["m" | A]) ->
+    uom_message(A);
+ui_operate_memory(["memory" | A]) ->
+    uom_message(A);
 ui_operate_memory(_) ->
-    "usage: memory summary\n".
+    "usage: memory {summary | message [on | off]}\n".
 
 % summary
 uom_summary() ->
@@ -3845,6 +3890,55 @@ uom_summary() ->
     R1 = lists:map(FD, FN),
     R2 = lists:map(FC, CR),
     string:join([HD, DL] ++ R1 ++ R2, "\n") ++ "\n\n".
+
+% message
+uom_message([]) ->
+    L = [b3s_state, node_state, benchmark, query_tree,
+	 tp_query_node],
+    F = fun (P) -> io:fwrite("will apply: ~w\n", [P]) end,
+    uomm_apply_function(ui_all_nodes(), L, F);
+uom_message(["on"]) ->
+    L = [b3s_state, node_state, benchmark, query_tree,
+	 tp_query_node],
+    F1 = fun (X) -> gen_server:call(X, {put, mq_debug, true}) end,
+    uomm_apply_function(ui_all_nodes(), L, F1),
+    io:fwrite("turn process message logging mode on\n", []);
+uom_message(["off"]) ->
+    L = [b3s_state, node_state, benchmark, query_tree,
+	 tp_query_node],
+    F1 = fun (X) ->
+		 gen_server:call(X, {put, mq_debug,  false}),
+		 gen_server:call(X, {put, mq_count,  undefined}),
+		 gen_server:call(X, {put, mq_maxlen, undefined})
+	 end,
+    uomm_apply_function(ui_all_nodes(), L, F1),
+    io:fwrite("turn process message logging mode off\n", []);
+uom_message(Arg) ->
+    io:fwrite("unknown option: ~s\n", [Arg]),
+    "".
+
+uomm_apply_function(Nodes, Modules, Func) ->
+    F = fun (Node) ->
+		N = ui_resolve_node_synonym(Node),
+		case (catch rpc:call(N, supervisor, which_children, [b3s])) of
+		{'EXIT', E} ->
+			io:fwrite("  ~p\n", [E]);
+		R ->
+			uaf_each_process(R, sets:from_list(Modules), Modules, N, Func)
+		end
+	end,
+    lists:map(F, Nodes).
+
+uaf_each_process([], _, _, _, _) ->
+    "";
+uaf_each_process([{Id, _, _, [M]} | R], ModuleSet, ML, N, F) ->
+    case sets:is_element(M, ModuleSet) of
+	true  -> F({Id, N});
+	false -> ok
+    end,
+    uaf_each_process(R, ModuleSet, ML, N, F);
+uaf_each_process(_, _, _, _, _) ->
+    "".
 
 %% batch supporting functions
 

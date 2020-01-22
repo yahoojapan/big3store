@@ -131,6 +131,14 @@
 %% user_interface:ui_statement()}]</td> <td>user interface statements
 %% called after loading table data on all data servers.</td> </tr>
 %%
+%% <tr> <td>ui_run_command_finish_benchmark</td> <td>[{@type
+%% user_interface:ui_statement()}]</td> <td>user interface statements
+%% called after finishing a benchmark batch invoked by batch_benchmark
+%% command.</td> </tr>
+%%
+%% <tr> <td>lock_node</td> <td>[{@type pid()}]</td> <td>lock
+%% state.</td> </tr>
+%%
 %% </table>
 %% 
 %% == handle_call (synchronous) message API ==
@@ -153,6 +161,12 @@
 %% 
 %% <tr> <td>{@section propagate}</td> <td></td> <td>[node()] | {error,
 %% term()}</td> <td>propergate some properties</td> </tr>
+%% 
+%% <tr> <td>{@section lock}</td> <td></td> <td>ok | {locked_by,
+%% pid()}</td> <td>lock all accesses</td> </tr>
+%% 
+%% <tr> <td>{@section unlock}</td> <td></td> <td>ok | {locked_by,
+%% pid()} | no_lock</td> <td>unlock all accesses</td> </tr>
 %% 
 %% </table>
 %% 
@@ -188,6 +202,16 @@
 %% 'front_server_nodes' property. It returns a list of nodes, to which
 %% it succeeded copying the properties.  (LINK: {@section propagate})
 %% 
+%% === lock ===
+%% 
+%% This message locks all accesses to the calling node. (LINK:
+%% {@section lock} {@link hc_lock/1})
+%% 
+%% === unlock ===
+%% 
+%% This message locks all accesses to the calling node. (LINK:
+%% {@section unlock} {@link hc_unlock/1})
+%% 
 %% == handle_cast (asynchronous) message API ==
 %% 
 %% (LINK: {@section handle_cast (asynchronous) message API})
@@ -211,7 +235,8 @@
     get/1, put/2, sync_app_env/0, hpp_get_nodes/1,
     child_spec/0,
     init/1, handle_call/3, handle_cast/2, handle_info/2,
-    terminate/2, code_change/3
+    terminate/2, code_change/3,
+    hc_monitor_mq/1
    ]).
 
 %% ======================================================================
@@ -330,6 +355,7 @@ init([]) ->
       start_date_time  => calendar:local_time(),
       clone_date_time  => calendar:local_time(),
       update_date_time => calendar:local_time(),
+      lock_node        => [],
       push_prop_list   => [
 			   b3s_state_pid,
 			   triple_distributor_pid,
@@ -363,32 +389,79 @@ init([]) ->
 %% 
 
 handle_call({get, all}, _, State) ->
+    hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     {reply, erlang:get(), State};
 
 handle_call({get, PropertyName}, _, State) ->
+    hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     {reply, erlang:get(PropertyName), State};
 
 handle_call({put, PropertyName, Value}, _, State) ->
+    hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     erlang:put(PropertyName, Value),
     erlang:put(update_date_time, calendar:local_time()),
     {reply, ok, hc_save_pd()};
 
 handle_call({clone, Node}, _, State) ->
+    hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     {reply, hc_clone_process(Node), hc_save_pd()};
 
 handle_call(propagate, _, State) ->
+    hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     {reply, hc_propagate_properties(), hc_save_pd()};
+
+handle_call(lock, From, State) ->
+    hc_monitor_mq(erlang:get(mq_debug)),
+    hc_restore_pd(erlang:get(created), State),
+    {reply, hc_lock(From), hc_save_pd()};
+
+handle_call(unlock, From, State) ->
+    hc_monitor_mq(erlang:get(mq_debug)),
+    hc_restore_pd(erlang:get(created), State),
+    {reply, hc_unlock(From), hc_save_pd()};
 
 %% default
 handle_call(Request, From, State) ->
     R = {unknown_request, Request},
     error_msg(handle_call, [Request, From, State], R),
     {reply, R, State}.
+
+%% 
+%% hc_monitor_mq/1
+%% 
+%% @doc This function monitors message queue activities. It updates
+%% process dictionary properties 'mq_count' and 'mq_maxlen' if true
+%% was given to argument FL. Otherwise, it does nothing. Typically,
+%% "erlang:get(mq_debug)" should be used as its argument for calling
+%% it.
+%% 
+%% @spec hc_monitor_mq(FL::boolean()) -> ok
+%% 
+hc_monitor_mq(true) ->
+    MQL = message_queue_len,
+    MQC = mq_count,
+    MQM = mq_maxlen,
+    case erlang:get(MQC) of
+	undefined ->
+	    erlang:put(MQC, 0);
+	C ->
+	    erlang:put(MQC, C + 1)
+    end,
+    case ({erlang:get(MQM),
+	   erlang:process_info(self(), [MQL])}) of
+    	{M, [{MQL, L}]} when M < L ->
+    	    erlang:put(MQM, L);
+    	{undefined, [{MQL, L}]} ->
+    	    erlang:put(MQM, L);
+	_ -> ok
+    end;
+hc_monitor_mq(_) ->
+    ok.
 
 %% 
 %% handle_cast/2
@@ -586,6 +659,55 @@ hcp_node([Node | Rest], PL, Succeeded) ->
     info_msg(hcp_node, A, {updated, R}, 80),
     hcp_node(Rest, PL, [Node | Succeeded]).
 
+%% 
+%% @doc This message locks all accesses to the calling node if no
+%% process has already obtained the lock. The locking feature is only
+%% applied to processes that use this message. Calling process must
+%% wait and retry if this message didn't return 'ok'. After performing
+%% a sequence of accesses, the calling process must release the lock
+%% by 'unlock'.
+%% 
+%% @spec hc_lock({pid(), Tag::atom()}) -> ok | {locked_by, pid()}
+%% 
+hc_lock(From) ->
+    hl_check(From, erlang:get(lock_node)).
+
+hl_check({Pid, Tag}, []) ->
+    erlang:put(lock_node, [Pid]),
+    info_msg(hl_check, [{Pid, Tag}, []], {locked, ok}, 50);
+hl_check(A, [Pid]) ->
+    R = {locked_by, Pid},
+    info_msg(hl_check, [A, [Pid]], R, 80),
+    R;
+hl_check(From, LockNode) ->
+    error_msg(hl_check, [From, LockNode], illegal_state).
+
+%% 
+%% @doc This message unlocks all accesses if the calling process has
+%% already obtained the lock. It returns 'ok' if succeeded. It returns
+%% '{locked_by, Pid}' where Pid is an identifier of currently locking
+%% process. It returns 'no_lock' if no process obtained the lock.
+%% 
+%% @spec hc_unlock({pid(), Tag::atom()}) -> ok | {locked_by, pid()} |
+%% no_lock
+%% 
+hc_unlock(From) ->
+    hu_check(From, erlang:get(lock_node)).
+
+hu_check(A, []) ->
+    info_msg(hl_check, [A, []], no_lock, 80),
+    no_lock;
+hu_check({Pid, Tag}, [Pid]) ->
+    info_msg(hl_check, [{Pid, Tag}, [Pid]], {unlocked, ok}, 50),
+    erlang:put(lock_node, []),
+    ok;
+hu_check(From, [Node]) ->
+    R = {locked_by, Node},
+    info_msg(hl_check, [From, [Node]], R, 80),
+    R;
+hu_check(From, LockNode) ->
+    error_msg(hu_check, [From, LockNode], illegal_state).
+
 %% ======================================================================
 %% 
 %% utility
@@ -622,6 +744,7 @@ bt_site(local1) ->
       ?_assertMatch(ok, b3s:start()),
       ?_assertMatch(ok, b3s:bootstrap()),
       {generator, fun()-> btl_propagate() end},
+      {generator, fun()-> btl_lock() end},
       ?_assertMatch(ok, b3s:stop())
      ]};
 
@@ -632,6 +755,7 @@ bt_site(local2) ->
       ?_assertMatch(ok, b3s:bootstrap()),
       {generator, fun()-> btl_propagate() end},
       {generator, fun()-> btl_clone() end},
+      {generator, fun()-> btl_lock() end},
       ?_assertMatch(ok, b3s:stop())
      ]};
 
@@ -678,6 +802,26 @@ btl_clone() ->
       ?_assertMatch(zxc,       gen_server:call(BSC, {get, qwe})),
       ?_assertMatch(ok,        gen_server:call(BSC, {clone, NDS})),
       ?_assertMatch(zxc,       gen_server:call(BSC, {get, qwe}))
+     ]}.
+
+btl_lock() ->
+    NDS = node(),
+    BSS = {b3s_state, NDS},
+
+    R01 = {locked_by, self()},
+    R02 = no_lock,
+    R03 = {locked_by, qweasd},
+    {inorder,
+     [
+      ?_assertMatch(R02, gen_server:call(BSS, unlock)),
+      ?_assertMatch(ok,  gen_server:call(BSS, lock)),
+      ?_assertMatch(ok,  gen_server:call(BSS, unlock)),
+      ?_assertMatch(R02, gen_server:call(BSS, unlock)),
+      ?_assertMatch(ok,  gen_server:call(BSS, {put, lock_node, [qweasd]})),
+      ?_assertMatch(R03, gen_server:call(BSS, unlock)),
+      ?_assertMatch(ok,  gen_server:call(BSS, {put, lock_node, []})),
+      ?_assertMatch(ok,  gen_server:call(BSS, lock)),
+      ?_assertMatch(R01, gen_server:call(BSS, lock))
      ]}.
 
 %% ====> END OF LINE <====

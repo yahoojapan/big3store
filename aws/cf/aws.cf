@@ -1,7 +1,7 @@
 #
 #       big3store configuration file for using AWS
 #
-# 	Copyright (C) 2014-2019 UP FAMNIT and Yahoo Japan Corporation
+# 	Copyright (C) 2014-2020 UP FAMNIT and Yahoo Japan Corporation
 # 	Iztok Savnik <iztok.savnik@famnit.upr.si>
 # 	Kiyoshi Nitta <knitta@yahoo-corp.jp>
 #
@@ -16,12 +16,15 @@
 aws_ec2_region=us-east-1
 
 #
-# AMI ID of Ubuntu linux. We confirmed and tested big3store software
-# on Ubuntu. Update this parameter if instance creation failed.
+# AMI ID of Ubuntu linux. We confirmed and tested the big3store
+# software on Ubuntu 18.04 LTS. Update this parameter if instance
+# creation failed.
 #
-# See: https://cloud-images.ubuntu.com/locator/ec2/
+# See:
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html
+# http://cloud-images.ubuntu.com/locator/ec2/
 #
-aws_ec2_ubuntu_ami_id=ami-0ac019f4fcb7cb7e6
+aws_ec2_ubuntu_ami_id=ami-04b9e92b5572fa0d1
 
 #
 # AMI ID of big3store front server. It will be created during the
@@ -32,7 +35,7 @@ aws_ec2_ubuntu_ami_id=ami-0ac019f4fcb7cb7e6
 #
 # See: user_interface: aws create image <image name>
 #
-aws_ec2_ami_id_front_server=ami-07f6628db8d675806
+aws_ec2_ami_id_front_server=ami-0123456789abcdef0
 
 #
 # Key name of all AWS EC2 instances created by big3store system. The
@@ -52,7 +55,7 @@ aws_ec2_key_name=id_rsa
 # See:
 # https://docs.aws.amazon.com/batch/latest/userguide/spot_fleet_IAM_role.html
 #
-aws_ec2_iam_fleet_role=arn:aws:iam::123412341234:role/aws-service-role/ec2fleet.amazonaws.com/AWSServiceRoleForEC2Fleet
+aws_ec2_iam_fleet_role=arn:aws:iam::999999999999:role/aws-service-role/ec2fleet.amazonaws.com/AWSServiceRoleForEC2Fleet
 
 #
 # Instance profile arn. It is required for giving AWS CLI access
@@ -61,7 +64,7 @@ aws_ec2_iam_fleet_role=arn:aws:iam::123412341234:role/aws-service-role/ec2fleet.
 # See:
 # https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html
 #
-aws_ec2_instance_profile_arn=arn:aws:iam::123412341234:instance-profile/b3s
+aws_ec2_instance_profile_arn=arn:aws:iam::999999999999:instance-profile/b3s
 
 #
 # Instance profile name. It is required for giving AWS CLI access
@@ -278,7 +281,7 @@ aws_ec2_security_group_name=big3store
 #
 # See: https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
 #
-aws_ec2_security_group_id=sg-03e13e3b88a0103c7
+aws_ec2_security_group_id=sg-0123456789abcdef0
 
 #
 # The netmask cidr for local accesses. This value is used by
@@ -347,6 +350,6 @@ aws_sns_region=us-east-1
 #
 # See: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/US_SetupSNS.html
 #
-aws_sns_arn=arn:aws:sns:us-east-1:123412341234:b3s-slack
+aws_sns_arn=arn:aws:sns:us-east-1:999999999999:b3s-slack
 
 # ====> END OF LINE <====

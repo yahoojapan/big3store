@@ -168,7 +168,8 @@
     child_spec/0,
     init/1, handle_call/3, handle_cast/2, handle_info/2,
     terminate/2, code_change/3,
-    error_msg/4, info_msg/5
+    error_msg/4, info_msg/5,
+    hcuqj_perform_ui/1
    ]).
 
 %% ======================================================================
@@ -232,14 +233,17 @@ init([]) ->
 %% 
 
 handle_call({get, all}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     {reply, erlang:get(), State};
 
 handle_call({get, PropertyName}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     {reply, erlang:get(PropertyName), State};
 
 handle_call({put, PropertyName, Value}, From, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     hcp_check_ui_queued_jobs(PropertyName),
     erlang:put(PropertyName, Value),
@@ -250,6 +254,7 @@ handle_call({put, PropertyName, Value}, From, State) ->
     {reply, ok, NewState};
 
 handle_call(next_message, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     R = receive
 	    M -> M
@@ -259,6 +264,7 @@ handle_call(next_message, _, State) ->
     {reply, R, State};
 
 handle_call({perform_ui, UICommands}, _, State) ->
+    b3s_state:hc_monitor_mq(erlang:get(mq_debug)),
     hc_restore_pd(erlang:get(created), State),
     case erlang:get(front_server_nodes) of
 	undefined ->
